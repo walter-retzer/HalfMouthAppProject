@@ -1,0 +1,56 @@
+package com.plcoding.contactscomposemultiplatform.ui.theme
+
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
+
+val DarkColorScheme = darkColorScheme(
+    primary = YellowPrimaryDark,
+    secondary = YellowSecondaryDark,
+    tertiary = YellowTertiaryDark,
+    onPrimary = OnYellowDark,
+    primaryContainer = YellowContainerDark,
+    onPrimaryContainer = OnYellowContainerDark,
+    onSecondary = OnYellowSecondaryDark,
+    secondaryContainer = YellowSecondaryContainerDark,
+    onSecondaryContainer = OnYellowSecondaryContainerDark,
+    onTertiary = OnYellowTertiaryDark,
+    onTertiaryContainer = OnYellowTertiaryContainerDark,
+    tertiaryContainer = YellowTertiaryContainerDark,
+    background = BackgroundDark,
+    onBackground = OnBackgroundDark,
+    surface = SurfaceDark,
+    onSurface = OnSurfaceDark,
+    surfaceVariant = SurfaceVariantDark,
+    onSurfaceVariant = OnSurfaceVariantDark,
+    error = ErrorDark,
+    onError = OnErrorDark,
+    errorContainer = ErrorContainerDark,
+    onErrorContainer = OnErrorContainerDark,
+    outline = OutlineDark,
+)
+
+val LightColorScheme = lightColorScheme(
+    primary = YellowPrimaryLight,
+    secondary = YellowSecondaryLight,
+    tertiary = YellowTertiaryLight,
+    onPrimary = OnYellowLight,
+    primaryContainer = YellowContainerLight,
+    onPrimaryContainer = OnYellowContainerLight,
+    onSecondary = OnYellowSecondaryLight,
+    secondaryContainer = YellowSecondaryContainerLight,
+    onSecondaryContainer = OnYellowSecondaryContainerLight,
+    onTertiary = OnYellowTertiaryLight,
+    onTertiaryContainer = OnYellowTertiaryContainerLight,
+    tertiaryContainer = YellowTertiaryContainerLight,
+    background = BackgroundLight,
+    onBackground = OnBackgroundLight,
+    surface = SurfaceLight,
+    onSurface = OnSurfaceLight,
+    surfaceVariant = SurfaceVariantLight,
+    onSurfaceVariant = OnSurfaceVariantLight,
+    error = ErrorLight,
+    onError = OnErrorLight,
+    errorContainer = ErrorContainerLight,
+    onErrorContainer = OnErrorContainerLight,
+    outline = OutlineLight,
+)
