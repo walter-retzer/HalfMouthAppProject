@@ -6,7 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.plcoding.contactscomposemultiplatform.ui.theme.DarkColorScheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import screens.SplashScreen
+import screens.SignInScreen
 
 
 @Composable
@@ -17,9 +17,9 @@ fun App() {
     ) {
         Surface(
             modifier = Modifier.fillMaxSize(),
-            color = Color.White
+            color = Color.Black
         ) {
-            SplashScreen()
+            SignInScreen(Modifier)
         }
     }
 }
