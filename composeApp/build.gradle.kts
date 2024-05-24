@@ -77,3 +77,10 @@ android {
         debugImplementation(libs.compose.ui.tooling)
     }
 }
+
+dependencies {
+    //noinspection UseTomlInstead
+    commonMainApi("dev.icerock.moko:mvvm-compose:0.16.1") // api mvvm-core, getViewModel for Compose Multiplatform
+    commonMainApi("dev.icerock.moko:mvvm-flow-compose:0.16.1") // api mvvm-flow, binding extensions for Compose Multiplatform
+    commonMainApi("dev.icerock.moko:mvvm-livedata-compose:0.16.1") // api mvvm-livedata, binding extensions for Compose Multiplatform
+}
