@@ -8,7 +8,7 @@ import dev.icerock.moko.mvvm.viewmodel.ViewModel
 
 class SignInViewModel : ViewModel() {
 
-    var newContact: NewUserContact by mutableStateOf(
+    var newUser: NewUserContact by mutableStateOf(
         NewUserContact(
             name = "",
             phoneNumber = "",
@@ -24,31 +24,31 @@ class SignInViewModel : ViewModel() {
     fun onEvent(event: SignInContactEvent) {
         when (event) {
             is SignInContactEvent.OnFirstNameChanged -> {
-                newContact = newContact.copy(
+                newUser = newUser.copy(
                     name = event.value
                 )
             }
 
             is SignInContactEvent.OnPhoneNumberChanged -> {
-                newContact = newContact.copy(
+                newUser = newUser.copy(
                     phoneNumber = event.value
                 )
             }
 
             is SignInContactEvent.OnEmailChanged -> {
-                newContact = newContact.copy(
+                newUser = newUser.copy(
                     email = event.value
                 )
             }
 
             is SignInContactEvent.OnPasswordChanged -> {
-                newContact = newContact.copy(
+                newUser = newUser.copy(
                     password = event.value
                 )
             }
 
             is SignInContactEvent.OnConfirmPasswordChanged -> {
-                newContact = newContact.copy(
+                newUser = newUser.copy(
                     confirmPassword = event.value
                 )
             }

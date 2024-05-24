@@ -32,11 +32,15 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import components.ProgressButton
+import dev.icerock.moko.mvvm.compose.getViewModel
+import dev.icerock.moko.mvvm.compose.viewModelFactory
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.splashscreenlogo
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import viewmodel.SignInContactEvent
+import viewmodel.SignInViewModel
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -44,6 +48,19 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun SignInScreen(
     modifier: Modifier = Modifier,
 ) {
+    val PHONE_MAX_NUMBER = 11
+    val NAME_MAX_NUMBER = 25
+    val PASSWORD_MAX_NUMBER = 6
+
+    val viewModel = getViewModel(
+        key = "contact-list-screen",
+        factory = viewModelFactory {
+            SignInViewModel()
+        }
+    )
+    //val state by viewModel.state.collectAsState()
+
+
     BoxWithConstraints(
         modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center
     ) {
@@ -97,9 +114,11 @@ fun SignInScreen(
                     imeAction = ImeAction.Next
                 ),
                 shape = RoundedCornerShape(20.dp),
-                value = "Nome",
+                value = viewModel.newUser.name,
                 placeholder = {Text("Nome")},
-                onValueChange = { }
+                onValueChange = { if (it.length <= NAME_MAX_NUMBER) viewModel.onEvent(
+                    SignInContactEvent.OnFirstNameChanged(it)
+                )}
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -113,9 +132,13 @@ fun SignInScreen(
                     imeAction = ImeAction.Next
                 ),
                 shape = RoundedCornerShape(20.dp),
-                value = "Celular",
+                value = viewModel.newUser.phoneNumber,
                 placeholder = { Text("Celular") },
-                onValueChange = { }
+                onValueChange = {
+                    if (it.length <= PHONE_MAX_NUMBER) viewModel.onEvent(
+                        SignInContactEvent.OnPhoneNumberChanged(it)
+                    )
+                }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -129,9 +152,9 @@ fun SignInScreen(
                     imeAction = ImeAction.Next
                 ),
                 shape = RoundedCornerShape(20.dp),
-                value = "Email ",
+                value = viewModel.newUser.email,
                 placeholder = { Text(text = "Email") },
-                onValueChange = { },
+                onValueChange = { viewModel.onEvent(SignInContactEvent.OnEmailChanged(it)) },
 
                 )
 
@@ -146,10 +169,13 @@ fun SignInScreen(
                     imeAction = ImeAction.Next
                 ),
                 shape = RoundedCornerShape(20.dp),
-                value = "Senha",
+                value = viewModel.newUser.password,
                 visualTransformation = PasswordVisualTransformation(),
                 placeholder = { Text("Senha") },
-                onValueChange = { }
+                onValueChange = {
+                    if (it.length <= PASSWORD_MAX_NUMBER) viewModel.onEvent(
+                    SignInContactEvent.OnPasswordChanged(it))
+                }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -163,3 +189,4 @@ fun SignInScreen(
         }
     }
 }
+
