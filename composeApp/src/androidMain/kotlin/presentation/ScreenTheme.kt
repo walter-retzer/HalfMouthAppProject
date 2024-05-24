@@ -1,19 +1,13 @@
 package presentation
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
-import androidx.core.view.WindowCompat
-import com.plcoding.contactscomposemultiplatform.ui.theme.Typography
 import theme.darkScheme
+import theme.typography
 
 @Composable
 actual fun ScreenTheme(
@@ -30,21 +24,9 @@ actual fun ScreenTheme(
         else -> darkScheme
     }
 
-    val view = LocalView.current
-    if(!view.isInEditMode) {
-        SideEffect {
-            val window = (view.context as Activity).window
-            window.statusBarColor = Color.Black.toArgb()
-            WindowCompat.getInsetsController(
-                window,
-                view
-            ).isAppearanceLightStatusBars = darkTheme
-        }
-    }
-
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = typography,
         content = content
     )
 }

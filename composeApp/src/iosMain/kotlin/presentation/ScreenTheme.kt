@@ -2,7 +2,7 @@ package presentation
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import com.plcoding.contactscomposemultiplatform.ui.theme.Typography
+import theme.typography
 import theme.darkScheme
 
 @Composable
@@ -13,7 +13,7 @@ actual fun ScreenTheme(
 ) {
     MaterialTheme(
         colorScheme = if(darkTheme) darkScheme else darkScheme,
-        typography = Typography,
+        typography = typography,
         content = content
     )
 }
