@@ -39,6 +39,7 @@ import halfmouthappproject.composeapp.generated.resources.splashscreenlogo
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import util.MaskVisualTransformation
 import viewmodel.SignInContactEvent
 import viewmodel.SignInViewModel
 
@@ -138,7 +139,8 @@ fun SignInScreen(
                     if (it.length <= PHONE_MAX_NUMBER) viewModel.onEvent(
                         SignInContactEvent.OnPhoneNumberChanged(it)
                     )
-                }
+                },
+                visualTransformation = MaskVisualTransformation(MaskVisualTransformation.PHONE)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
