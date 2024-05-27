@@ -1,3 +1,14 @@
+# HalfMouthBeerApp
+
+Projeto utilizando Kotlin Multiplatform Mobile(KMM) para exibir informações remotas de monitoramento
+de equipamentos da crevejaria artesanal HalfMouth.
+
+## Telas do Aplicativo
+
+Tela de Cadastro de Usuário:
+![KMM-image](screen/Screen_android.png)
+![KMM-image](screen/Screen_iPhone.png)
+
 This is a Kotlin Multiplatform project targeting Android, iOS.
 
 * `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
