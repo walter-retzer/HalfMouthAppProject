@@ -22,6 +22,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,10 +37,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import components.ProgressButton
+import dev.gitlive.firebase.Firebase
+import dev.gitlive.firebase.auth.FirebaseUser
+import dev.gitlive.firebase.auth.auth
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.splashscreenlogo
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -52,6 +61,13 @@ fun SignInScreen(
     val PHONE_MAX_NUMBER = 11
     val NAME_MAX_NUMBER = 25
     val PASSWORD_MAX_NUMBER = 6
+
+    val scope = rememberCoroutineScope()
+    val auth = remember { Firebase.auth }
+    var firebaseUser: FirebaseUser? by remember{ mutableStateOf(null) }
+    var userEmail by remember{ mutableStateOf("") }
+    var userPassword by remember{ mutableStateOf("") }
+    var progressButtonIsActivated by remember{ mutableStateOf(false) }
 
     val viewModel = getViewModel(
         key = "contact-list-screen",
@@ -156,7 +172,10 @@ fun SignInScreen(
                 shape = RoundedCornerShape(20.dp),
                 value = viewModel.newUser.email,
                 placeholder = { Text(text = "Email") },
-                onValueChange = { viewModel.onEvent(SignInContactEvent.OnEmailChanged(it)) },
+                onValueChange = {
+                    viewModel.onEvent(SignInContactEvent.OnEmailChanged(it))
+                    userEmail = it
+                },
 
                 )
 
@@ -177,6 +196,7 @@ fun SignInScreen(
                 onValueChange = {
                     if (it.length <= PASSWORD_MAX_NUMBER) viewModel.onEvent(
                     SignInContactEvent.OnPasswordChanged(it))
+                    userPassword = it
                 }
             )
 
@@ -185,8 +205,25 @@ fun SignInScreen(
             ProgressButton(
                 modifier = Modifier.padding(top = 16.dp).fillMaxWidth(),
                 text = "Cadastrar",
-                isLoading = false,
-                onClick = { }
+                isLoading = progressButtonIsActivated,
+                onClick = {
+                    progressButtonIsActivated = !progressButtonIsActivated
+                    scope.launch {
+                        try{
+                            auth.createUserWithEmailAndPassword(
+                                email = userEmail,
+                                password = userPassword
+                            )
+                            progressButtonIsActivated = !progressButtonIsActivated
+                        } catch(e: Exception){
+                            auth.signInWithEmailAndPassword(
+                                email = userEmail,
+                                password = userPassword
+                            )
+                            progressButtonIsActivated = !progressButtonIsActivated
+                        }
+                    }
+                }
             )
         }
     }
