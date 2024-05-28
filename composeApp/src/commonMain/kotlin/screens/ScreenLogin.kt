@@ -51,6 +51,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import theme.mainYellowColor
+import util.ConstantsApp
 import viewmodel.LoginUserViewModel
 
 
@@ -60,12 +61,6 @@ import viewmodel.LoginUserViewModel
 fun LoginScreen(
     modifier: Modifier = Modifier,
 ) {
-    val PASSWORD_MAX_NUMBER = 6
-    val scope = rememberCoroutineScope()
-    val auth = remember { Firebase.auth }
-    var firebaseUser: FirebaseUser? by remember{ mutableStateOf(null) }
-    var progressButtonIsActivated by remember{ mutableStateOf(false) }
-
     val viewModel = getViewModel(
         key = "login-screen",
         factory = viewModelFactory {
@@ -75,7 +70,10 @@ fun LoginScreen(
     val uiState by viewModel.uiState.collectAsState()
     val emailError by viewModel.emailError.collectAsState()
     val passwordError by viewModel.passwordError.collectAsState()
-
+    val scope = rememberCoroutineScope()
+    val auth = remember { Firebase.auth }
+    var firebaseUser: FirebaseUser? by remember{ mutableStateOf(null) }
+    var progressButtonIsActivated by remember{ mutableStateOf(false) }
 
 
     BoxWithConstraints(
@@ -160,7 +158,7 @@ fun LoginScreen(
                 visualTransformation = PasswordVisualTransformation(),
                 placeholder = { Text("Senha (6 dígitos)") },
                 onValueChange = {
-                    if (it.length <= PASSWORD_MAX_NUMBER) viewModel.onPasswordChange(it)
+                    if (it.length <= ConstantsApp.PASSWORD_MAX_NUMBER) viewModel.onPasswordChange(it)
                 }
             )
 
