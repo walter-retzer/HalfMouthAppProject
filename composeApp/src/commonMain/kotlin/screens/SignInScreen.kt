@@ -48,6 +48,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import util.ConstantsApp
 import util.MaskVisualTransformation
 import viewmodel.SignInContactEvent
 import viewmodel.SignInViewModel
@@ -58,10 +59,6 @@ import viewmodel.SignInViewModel
 fun SignInScreen(
     modifier: Modifier = Modifier,
 ) {
-    val PHONE_MAX_NUMBER = 11
-    val NAME_MAX_NUMBER = 25
-    val PASSWORD_MAX_NUMBER = 6
-
     val scope = rememberCoroutineScope()
     val auth = remember { Firebase.auth }
     var firebaseUser: FirebaseUser? by remember{ mutableStateOf(null) }
@@ -75,8 +72,6 @@ fun SignInScreen(
             SignInViewModel()
         }
     )
-    //val state by viewModel.state.collectAsState()
-
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center
@@ -133,7 +128,7 @@ fun SignInScreen(
                 shape = RoundedCornerShape(20.dp),
                 value = viewModel.newUser.name,
                 placeholder = {Text("Nome")},
-                onValueChange = { if (it.length <= NAME_MAX_NUMBER) viewModel.onEvent(
+                onValueChange = { if (it.length <= ConstantsApp.NAME_MAX_NUMBER) viewModel.onEvent(
                     SignInContactEvent.OnFirstNameChanged(it)
                 )}
             )
@@ -152,7 +147,7 @@ fun SignInScreen(
                 value = viewModel.newUser.phoneNumber,
                 placeholder = { Text("Celular") },
                 onValueChange = {
-                    if (it.length <= PHONE_MAX_NUMBER) viewModel.onEvent(
+                    if (it.length <= ConstantsApp.PHONE_MAX_NUMBER) viewModel.onEvent(
                         SignInContactEvent.OnPhoneNumberChanged(it)
                     )
                 },
@@ -194,7 +189,7 @@ fun SignInScreen(
                 visualTransformation = PasswordVisualTransformation(),
                 placeholder = { Text("Senha") },
                 onValueChange = {
-                    if (it.length <= PASSWORD_MAX_NUMBER) viewModel.onEvent(
+                    if (it.length <= ConstantsApp.PASSWORD_MAX_NUMBER) viewModel.onEvent(
                     SignInContactEvent.OnPasswordChanged(it))
                     userPassword = it
                 }
