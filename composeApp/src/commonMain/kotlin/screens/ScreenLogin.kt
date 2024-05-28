@@ -22,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,8 +51,8 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import theme.mainYellowColor
-import viewmodel.SignInContactEvent
-import viewmodel.SignInViewModel
+import viewmodel.LoginUserViewModel
+
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -63,17 +64,19 @@ fun LoginScreen(
     val scope = rememberCoroutineScope()
     val auth = remember { Firebase.auth }
     var firebaseUser: FirebaseUser? by remember{ mutableStateOf(null) }
-    var userEmail by remember{ mutableStateOf("") }
-    var userPassword by remember{ mutableStateOf("") }
     var progressButtonIsActivated by remember{ mutableStateOf(false) }
 
-    //TODO: Criar uma ViewModel para o Login!!
     val viewModel = getViewModel(
-        key = "contact-list-screen",
+        key = "login-screen",
         factory = viewModelFactory {
-            SignInViewModel()
+            LoginUserViewModel()
         }
     )
+    val uiState by viewModel.uiState.collectAsState()
+    val emailError by viewModel.emailError.collectAsState()
+    val passwordError by viewModel.passwordError.collectAsState()
+
+
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center
@@ -128,9 +131,13 @@ fun LoginScreen(
                     imeAction = ImeAction.Next
                 ),
                 shape = RoundedCornerShape(20.dp),
-                value = userEmail,
+                value = uiState.email,
+                isError = emailError,
+                supportingText = {
+                    if (emailError) Text(text = viewModel.validateEmail(uiState.email))
+                },
                 placeholder = { Text(text = "Email") },
-                onValueChange = { userEmail = it },
+                onValueChange = { viewModel.onEmailChange(it) },
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -144,14 +151,16 @@ fun LoginScreen(
                     imeAction = ImeAction.Next
                 ),
                 shape = RoundedCornerShape(20.dp),
-                value = viewModel.newUser.password,
+                value = uiState.password,
+                isError = passwordError,
+                supportingText = {
+                    if (passwordError)
+                        Text(text = viewModel.validatePassword(uiState.password))
+                },
                 visualTransformation = PasswordVisualTransformation(),
-                placeholder = { Text("Senha") },
+                placeholder = { Text("Senha (6 dígitos)") },
                 onValueChange = {
-                    if (it.length <= PASSWORD_MAX_NUMBER) viewModel.onEvent(
-                        SignInContactEvent.OnPasswordChanged(it)
-                    )
-                    userPassword = it
+                    if (it.length <= PASSWORD_MAX_NUMBER) viewModel.onPasswordChange(it)
                 }
             )
 
@@ -162,17 +171,20 @@ fun LoginScreen(
                 text = "Entrar",
                 isLoading = progressButtonIsActivated,
                 onClick = {
-                    progressButtonIsActivated = !progressButtonIsActivated
-                    scope.launch {
-                        try {
-                            auth.signInWithEmailAndPassword(
-                                email = userEmail,
-                                password = userPassword
-                            )
-                            progressButtonIsActivated = !progressButtonIsActivated
-                            firebaseUser = auth.currentUser
-                        } catch (e: Exception) {
-                            progressButtonIsActivated = !progressButtonIsActivated
+                    viewModel.validateEmail(uiState.email)
+                    viewModel.validatePassword(uiState.password)
+                    if(!emailError || !passwordError){
+                        scope.launch {
+                            try {
+                                progressButtonIsActivated = true
+                                auth.signInWithEmailAndPassword(
+                                    email = uiState.email,
+                                    password = uiState.password
+                                )
+                                firebaseUser = auth.currentUser
+                            } catch (e: Exception) {
+                                progressButtonIsActivated = false
+                            }
                         }
                     }
                 }
