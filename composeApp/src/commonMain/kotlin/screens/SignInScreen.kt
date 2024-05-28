@@ -22,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,7 +51,6 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import util.ConstantsApp
 import util.MaskVisualTransformation
-import viewmodel.SignInContactEvent
 import viewmodel.SignInViewModel
 
 @OptIn(ExperimentalResourceApi::class)
@@ -59,19 +59,21 @@ import viewmodel.SignInViewModel
 fun SignInScreen(
     modifier: Modifier = Modifier,
 ) {
-    val scope = rememberCoroutineScope()
-    val auth = remember { Firebase.auth }
-    var firebaseUser: FirebaseUser? by remember{ mutableStateOf(null) }
-    var userEmail by remember{ mutableStateOf("") }
-    var userPassword by remember{ mutableStateOf("") }
-    var progressButtonIsActivated by remember{ mutableStateOf(false) }
-
     val viewModel = getViewModel(
-        key = "contact-list-screen",
+        key = "sign-in",
         factory = viewModelFactory {
             SignInViewModel()
         }
     )
+    val uiState by viewModel.uiState.collectAsState()
+    val nameError by viewModel.nameError.collectAsState()
+    val phoneError by viewModel.phoneNumberError.collectAsState()
+    val emailError by viewModel.emailError.collectAsState()
+    val passwordError by viewModel.passwordError.collectAsState()
+    val scope = rememberCoroutineScope()
+    val auth = remember { Firebase.auth }
+    var firebaseUser: FirebaseUser? by remember { mutableStateOf(null) }
+    var progressButtonIsActivated by remember { mutableStateOf(false) }
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center
@@ -79,7 +81,7 @@ fun SignInScreen(
         val width = this.maxWidth
         val finalModifier = if (width >= 780.dp) modifier.width(400.dp) else modifier.fillMaxWidth()
         Column(
-            modifier = finalModifier.padding(start = 16.dp, end= 16.dp).fillMaxHeight()
+            modifier = finalModifier.padding(start = 16.dp, end = 16.dp).fillMaxHeight()
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -126,11 +128,15 @@ fun SignInScreen(
                     imeAction = ImeAction.Next
                 ),
                 shape = RoundedCornerShape(20.dp),
-                value = viewModel.newUser.name,
-                placeholder = {Text("Nome")},
-                onValueChange = { if (it.length <= ConstantsApp.NAME_MAX_NUMBER) viewModel.onEvent(
-                    SignInContactEvent.OnFirstNameChanged(it)
-                )}
+                value = uiState.name,
+                isError = nameError,
+                supportingText = {
+                    if (nameError) Text(text = viewModel.validateName(uiState.name))
+                },
+                placeholder = { Text("Nome") },
+                onValueChange = {
+                    if (it.length <= ConstantsApp.NAME_MAX_NUMBER) viewModel.onNameChange(it)
+                }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -144,12 +150,14 @@ fun SignInScreen(
                     imeAction = ImeAction.Next
                 ),
                 shape = RoundedCornerShape(20.dp),
-                value = viewModel.newUser.phoneNumber,
+                value = uiState.phoneNumber,
+                isError = phoneError,
+                supportingText = {
+                    if (phoneError) Text(text = viewModel.validatePhoneNumber(uiState.phoneNumber))
+                },
                 placeholder = { Text("Celular") },
                 onValueChange = {
-                    if (it.length <= ConstantsApp.PHONE_MAX_NUMBER) viewModel.onEvent(
-                        SignInContactEvent.OnPhoneNumberChanged(it)
-                    )
+                    if (it.length <= ConstantsApp.PHONE_MAX_NUMBER) viewModel.onPhoneNumberChange(it)
                 },
                 visualTransformation = MaskVisualTransformation(MaskVisualTransformation.PHONE)
             )
@@ -165,14 +173,14 @@ fun SignInScreen(
                     imeAction = ImeAction.Next
                 ),
                 shape = RoundedCornerShape(20.dp),
-                value = viewModel.newUser.email,
-                placeholder = { Text(text = "Email") },
-                onValueChange = {
-                    viewModel.onEvent(SignInContactEvent.OnEmailChanged(it))
-                    userEmail = it
+                value = uiState.email,
+                isError = emailError,
+                supportingText = {
+                    if (emailError) Text(text = viewModel.validateEmail(uiState.email))
                 },
-
-                )
+                placeholder = { Text(text = "Email") },
+                onValueChange = { viewModel.onEmailChange(it) },
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -182,16 +190,19 @@ fun SignInScreen(
                     capitalization = KeyboardCapitalization.None,
                     autoCorrect = true,
                     keyboardType = KeyboardType.NumberPassword,
-                    imeAction = ImeAction.Next
+                    imeAction = ImeAction.Done
                 ),
                 shape = RoundedCornerShape(20.dp),
-                value = viewModel.newUser.password,
+                value = uiState.password,
+                isError = passwordError,
+                supportingText = {
+                    if (passwordError)
+                        Text(text = viewModel.validatePassword(uiState.password))
+                },
                 visualTransformation = PasswordVisualTransformation(),
-                placeholder = { Text("Senha") },
+                placeholder = { Text("Senha (6 dígitos)") },
                 onValueChange = {
-                    if (it.length <= ConstantsApp.PASSWORD_MAX_NUMBER) viewModel.onEvent(
-                    SignInContactEvent.OnPasswordChanged(it))
-                    userPassword = it
+                    if (it.length <= ConstantsApp.PASSWORD_MAX_NUMBER) viewModel.onPasswordChange(it)
                 }
             )
 
@@ -202,20 +213,21 @@ fun SignInScreen(
                 text = "Cadastrar",
                 isLoading = progressButtonIsActivated,
                 onClick = {
-                    progressButtonIsActivated = !progressButtonIsActivated
-                    scope.launch {
-                        try{
-                            auth.createUserWithEmailAndPassword(
-                                email = userEmail,
-                                password = userPassword
-                            )
-                            progressButtonIsActivated = !progressButtonIsActivated
-                        } catch(e: Exception){
-                            auth.signInWithEmailAndPassword(
-                                email = userEmail,
-                                password = userPassword
-                            )
-                            progressButtonIsActivated = !progressButtonIsActivated
+                    viewModel.validateName(uiState.name)
+                    viewModel.validatePhoneNumber(uiState.phoneNumber)
+                    viewModel.validateEmail(uiState.email)
+                    viewModel.validatePassword(uiState.password)
+                    if (!nameError || !phoneError || !emailError || !passwordError) {
+                        scope.launch {
+                            try {
+                                auth.createUserWithEmailAndPassword(
+                                    email = uiState.email,
+                                    password = uiState.password
+                                )
+                                progressButtonIsActivated = true
+                            } catch (e: Exception) {
+                                progressButtonIsActivated = false
+                            }
                         }
                     }
                 }
@@ -223,4 +235,3 @@ fun SignInScreen(
         }
     }
 }
-
