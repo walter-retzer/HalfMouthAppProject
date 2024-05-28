@@ -38,7 +38,7 @@ class LoginUserViewModel : ViewModel(){
     }
 
     fun validatePassword(password: String): String {
-        if(password.length <= ConstantsApp.PASSWORD_MAX_NUMBER) {
+        if(password.length != ConstantsApp.PASSWORD_MAX_NUMBER) {
             _passwordError.value = true
         }
         return "A senha deve conter 6 dígitos"
