@@ -39,12 +39,22 @@ de equipamentos da cervejaria artesanal HalfMouth.
  </table>
 
 
-### Tela de Login do Usuário:
-![Screen-image](screen/android/login/login.png)
-![Screen-image](screen/iOS/login/login-ios.png)
-![Screen-image](screen/android/login/login-complete-fields.png)
-![Screen-image](screen/iOS/login/login-complete-ios.png)
-![Screen-image](screen/android/login/login-fields-error.png)
-![Screen-image](screen/iOS/login/login-fields-error-ios.png)
-![Screen-image](screen/android/login/login-progress-bar.png)
-![Screen-image](screen/iOS/login/login-progress-bar-ios.png)
+### Tela de Login do Usuário (Android)
+<table>
+  <tr>
+    <td><img src="screen/android/login/login.png" width=250 height=500></td>
+    <td><img src="screen/android/login/login-complete-fields.png" width=250 height=500></td>
+    <td><img src="screen/android/login/login-fields-error.png" width=250 height=500></td>
+    <td><img src="screen/android/login/login-progress-bar.png" width=250 height=500></td>
+  </tr>
+ </table>
+
+### Tela de Login do Usuário (iOS)
+<table>
+  <tr>
+    <td><img src="screen/iOS/login/login-ios.png" width=250 height=500></td>
+    <td><img src="screen/iOS/login/login-complete-ios.png" width=250 height=500></td>
+    <td><img src="screen/iOS/login/login-fields-error-ios.png" width=250 height=500></td>
+    <td><img src="screen/iOS/login/login-progress-bar-ios.png" width=250 height=500></td>
+  </tr>
+ </table>
