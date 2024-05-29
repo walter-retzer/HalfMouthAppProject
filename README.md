@@ -1,7 +1,7 @@
 # HalfMouthBeerApp
 
 Projeto utilizando Kotlin Multiplatform Mobile(KMM) para exibir informações remotas de monitoramento
-de equipamentos da crevejaria artesanal HalfMouth.
+de equipamentos da cervejaria artesanal HalfMouth.
 
 ## Telas do Aplicativo
 
