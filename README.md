@@ -6,8 +6,17 @@ de equipamentos da cervejaria artesanal HalfMouth.
 ## Telas do Aplicativo
 
 ### Splash Screen
-![Screen-image](screen/android/splash-screen/splash-screen.png)
-![Screen-image](screen/iOS/splash-screen/splash-screen-ios.png)
+<table>
+  <tr>
+     <td>Splash Screen Android</td>
+     <td>Splash Screen iOS</td>
+  </tr>
+  <tr>
+    <td><img src="screen/android/splash-screen/splash-screen.png" width=270 height=480></td>
+    <td><img src="screen/iOS/splash-screen/splash-screen-ios.png" width=270 height=480></td>
+  </tr>
+ </table>
+
 
 ### Tela de Cadastro de Usuário:
 ![Screen-image](screen/android/sign-in/sign-in-android.png)
