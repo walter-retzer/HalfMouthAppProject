@@ -8,25 +8,35 @@ de equipamentos da cervejaria artesanal HalfMouth.
 ### Splash Screen
 <table>
   <tr>
-     <td>Splash Screen Android</td>
-     <td>Splash Screen iOS</td>
+     <td>Android</td>
+     <td>iOS</td>
   </tr>
   <tr>
-    <td><img src="screen/android/splash-screen/splash-screen.png" width=270 height=480></td>
-    <td><img src="screen/iOS/splash-screen/splash-screen-ios.png" width=270 height=480></td>
+    <td><img src="screen/android/splash-screen/splash-screen.png" width=230 height=500></td>
+    <td><img src="screen/iOS/splash-screen/splash-screen-ios.png" width=230 height=500></td>
   </tr>
  </table>
 
 
 ### Tela de Cadastro de Usuário:
-![Screen-image](screen/android/sign-in/sign-in-android.png)
-![Screen-image](screen/iOS/sign-in/sign-in-ios.png)
-![Screen-image](screen/android/sign-in/sign-in-complete-fields.png)
-![Screen-image](screen/iOS/sign-in/sign-in-error-fields-ios.png)
-![Screen-image](screen/android/sign-in/sign-in-error-fields.png)
-![Screen-image](screen/iOS/sign-in/sign-in-complete-ios.png)
-![Screen-image](screen/android/sign-in/sign-in-progress-bar.png)
-![Screen-image](screen/iOS/sign-in/sign-in-progress-bar-ios.png)
+<table>
+  <tr>
+    <td><img src="screen/android/sign-in/sign-in-android.png" width=230 height=500></td>
+    <td><img src="screen/android/sign-in/sign-in-complete-fields.png" width=230 height=500></td>
+    <td><img src="screen/android/sign-in/sign-in-error-fields.png" width=230 height=500></td>
+    <td><img src="screen/android/sign-in/sign-in-progress-bar.png" width=230 height=500></td>
+  </tr>
+ </table>
+
+<table>
+  <tr>
+    <td><img src="screen/iOS/sign-in/sign-in-ios.png" width=230 height=500></td>
+    <td><img src="screen/iOS/sign-in/sign-in-error-fields-ios.png" width=230 height=500></td>
+    <td><img src="screen/iOS/sign-in/sign-in-complete-ios.png" width=230 height=500></td>
+    <td><img src="screen/iOS/sign-in/sign-in-progress-bar-ios.png" width=230 height=500></td>
+  </tr>
+ </table>
+
 
 ### Tela de Login do Usuário:
 ![Screen-image](screen/android/login/login.png)
