@@ -138,7 +138,7 @@ fun LoginScreen(
                 onValueChange = { viewModel.onEmailChange(it) },
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(6.dp))
 
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
@@ -156,13 +156,13 @@ fun LoginScreen(
                         Text(text = viewModel.validatePassword(uiState.password))
                 },
                 visualTransformation = PasswordVisualTransformation(),
-                placeholder = { Text("Senha (6 dígitos)") },
+                placeholder = { Text("Senha") },
                 onValueChange = {
                     if (it.length <= ConstantsApp.PASSWORD_MAX_NUMBER) viewModel.onPasswordChange(it)
                 }
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             ProgressButton(
                 modifier = Modifier.padding(top = 16.dp).fillMaxWidth(),
