@@ -17,8 +17,14 @@ firebaseAuth = "1.12.0"
 junit = "4.13.2"
 kotlin = "1.9.23"
 gservices = "4.4.1"
+extensionsComposeJetbrains = "2.1.4-compose-experimental"
+decompose = "2.2.0-alpha03"
+kotlinxSerializationJson = "1.6.1"
 
 [libraries]
+decompose-jetbrains = { module = "com.arkivanov.decompose:extensions-compose-jetbrains", version.ref = "extensionsComposeJetbrains"}
+decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose"}
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson"}
 androidx-animation = { module = "androidx.compose.animation:animation", version.ref = "animation" }
 firebase-auth = { module = "dev.gitlive:firebase-auth", version.ref = "firebaseAuth" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -35,6 +41,7 @@ compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = 
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 
 [plugins]
+kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin"}
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
