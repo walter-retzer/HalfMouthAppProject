@@ -219,10 +219,10 @@ fun SignInScreen(
                     viewModel.validatePassword(uiState.password)
                     if (!nameError || !phoneError || !emailError || !passwordError) {
                         scope.launch {
+                            if(uiState.password.isBlank() || uiState.email.isBlank()) return@launch
                             try {
                                 auth.createUserWithEmailAndPassword(
-                                    email = uiState.email,
-                                    password = uiState.password
+                                    email = uiState.email, password = uiState.password
                                 )
                                 progressButtonIsActivated = true
                             } catch (e: Exception) {
