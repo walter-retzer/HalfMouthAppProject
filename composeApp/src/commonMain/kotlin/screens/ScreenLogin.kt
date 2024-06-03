@@ -3,6 +3,7 @@ package screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -47,6 +48,8 @@ import dev.icerock.moko.mvvm.compose.viewModelFactory
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.splashscreenlogo
 import kotlinx.coroutines.launch
+import navigation.LoginComponentNavigation
+import navigation.LoginNavigationEvent
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -60,6 +63,7 @@ import viewmodel.LoginUserViewModel
 @Preview
 fun LoginScreen(
     modifier: Modifier = Modifier,
+    component: LoginComponentNavigation
 ) {
     val viewModel = getViewModel(
         key = "login-screen",
@@ -203,6 +207,9 @@ fun LoginScreen(
                 text = "Cadastre-se",
                 style = MaterialTheme.typography.bodyLarge,
                 color = mainYellowColor,
+                modifier = Modifier.clickable {
+                    component.onEvent(LoginNavigationEvent.NavigateToSignIn)
+                }
             )
 
             //TODO: Remover após testes de login com Firebase!!

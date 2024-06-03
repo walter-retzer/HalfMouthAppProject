@@ -4,7 +4,6 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
-import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.router.stack.pushNew
 import kotlinx.serialization.Serializable
 
@@ -37,7 +36,10 @@ class RootComponentNavigation(
             )
 
             is Configuration.ScreenLogin -> Child.ScreenLoginChild(
-                LoginComponentNavigation(context)
+                LoginComponentNavigation(
+                    componentContext = context,
+                    onNavigateToSignIn = { navigation.pushNew(Configuration.ScreenSignIn) }
+                )
             )
 
             is Configuration.ScreenSignIn -> Child.ScreenSignIn(

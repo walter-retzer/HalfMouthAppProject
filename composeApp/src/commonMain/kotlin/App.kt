@@ -11,6 +11,7 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import navigation.RootComponentNavigation
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import screens.LoginScreen
+import screens.SignInScreen
 import screens.SplashScreen
 import theme.darkScheme
 import theme.typography
@@ -33,8 +34,8 @@ fun App(rootComponent: RootComponentNavigation) {
         ) { child ->
             when(val instance = child.instance){
                 is RootComponentNavigation.Child.ScreenSplashScreen -> SplashScreen(instance.component)
-                is RootComponentNavigation.Child.ScreenLoginChild -> LoginScreen()
-                is RootComponentNavigation.Child.ScreenSignIn -> LoginScreen()
+                is RootComponentNavigation.Child.ScreenLoginChild -> LoginScreen(component= instance.component)
+                is RootComponentNavigation.Child.ScreenSignIn -> SignInScreen()
             }
         }
     }
