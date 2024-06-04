@@ -1,6 +1,6 @@
 package half.mouth.app
 
-import NavHostMain
+import navigation.NavHostMain
 import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity

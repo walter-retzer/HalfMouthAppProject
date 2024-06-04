@@ -1,3 +1,5 @@
+package navigation
+
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,7 +10,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import navigation.AppNavigation
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import presentation.ScreenTheme
 import screens.LoginScreen
