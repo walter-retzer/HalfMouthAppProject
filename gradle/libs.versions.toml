@@ -17,8 +17,16 @@ firebaseAuth = "1.12.0"
 junit = "4.13.2"
 kotlin = "1.9.23"
 gservices = "4.4.1"
+composeNavigation = "2.7.0-alpha07"
+mvvmCompose = "0.16.1"
+mvvmFlowCompose = "0.16.1"
+mvvmLivedataCompose = "0.16.1"
 
 [libraries]
+moko-mvvm-flow-compose = { module = "dev.icerock.moko:mvvm-flow-compose", version.ref = "mvvmFlowCompose" }
+moko-mvvm-livedata-compose = { module = "dev.icerock.moko:mvvm-livedata-compose", version.ref = "mvvmLivedataCompose" }
+mvvm-compose = { module = "dev.icerock.moko:mvvm-compose", version.ref = "mvvmCompose" }
+navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "composeNavigation" }
 androidx-animation = { module = "androidx.compose.animation:animation", version.ref = "animation" }
 firebase-auth = { module = "dev.gitlive:firebase-auth", version.ref = "firebaseAuth" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }

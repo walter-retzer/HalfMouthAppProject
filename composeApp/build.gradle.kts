@@ -42,6 +42,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(compose.animation)
             implementation(libs.firebase.auth)
+            implementation(libs.navigation.compose)
         }
     }
 }
@@ -81,8 +82,7 @@ android {
 }
 
 dependencies {
-    //noinspection UseTomlInstead
-    commonMainApi("dev.icerock.moko:mvvm-compose:0.16.1") // api mvvm-core, getViewModel for Compose Multiplatform
-    commonMainApi("dev.icerock.moko:mvvm-flow-compose:0.16.1") // api mvvm-flow, binding extensions for Compose Multiplatform
-    commonMainApi("dev.icerock.moko:mvvm-livedata-compose:0.16.1") // api mvvm-livedata, binding extensions for Compose Multiplatform
+    commonMainApi(libs.mvvm.compose) // api mvvm-core, getViewModel for Compose Multiplatform
+    commonMainApi(libs.moko.mvvm.flow.compose) // api mvvm-flow, binding extensions for Compose Multiplatform
+    commonMainApi(libs.moko.mvvm.livedata.compose) // api mvvm-livedata, binding extensions for Compose Multiplatform
 }
