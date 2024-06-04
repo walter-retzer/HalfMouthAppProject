@@ -1,6 +1,6 @@
 package half.mouth.app
 
-import App
+import NavHostMain
 import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
         window.statusBarColor= Color.BLACK
         WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = false
         setContent {
-            App(
+            NavHostMain(
                 darkTheme = isSystemInDarkTheme(),
                 dynamicColor = false,
             )
@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
 @Preview
 @Composable
 fun AppAndroidPreview() {
-    App(
+    NavHostMain(
         darkTheme = isSystemInDarkTheme(),
         dynamicColor = true,
     )
