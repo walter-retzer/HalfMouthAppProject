@@ -3,6 +3,7 @@ package screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -60,6 +61,7 @@ import viewmodel.LoginUserViewModel
 @Preview
 fun LoginScreen(
     modifier: Modifier = Modifier,
+    onNavigateToSignIn: () -> Unit
 ) {
     val viewModel = getViewModel(
         key = "login-screen",
@@ -200,6 +202,7 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
+                modifier = Modifier.clickable { onNavigateToSignIn() },
                 text = "Cadastre-se",
                 style = MaterialTheme.typography.bodyLarge,
                 color = mainYellowColor,
