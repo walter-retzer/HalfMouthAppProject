@@ -4,6 +4,7 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -19,6 +20,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.logohalfmouth
+import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -27,7 +29,9 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 @Preview
-fun SplashScreen() {
+fun SplashScreen(
+    onNavigateToLogin: () -> Unit
+) {
     val scale = remember { Animatable(0f) }
     LaunchedEffect(key1 = true) {
         scale.animateTo(
@@ -37,7 +41,10 @@ fun SplashScreen() {
                 stiffness = Spring.StiffnessMedium
             )
         )
+        delay(3000L)
+        onNavigateToLogin()
     }
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
