@@ -23,6 +23,7 @@ Cards das tarefas implementadas para a construção do aplicativo.
 </table>
 
 ## Telas do Aplicativo
+Telas Desenvolvidas para as Plataformas Android e iOS.
 
 ### Splash Screen
 <table>
