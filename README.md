@@ -3,6 +3,25 @@
 Projeto utilizando Kotlin Multiplatform Mobile(KMM) para exibir informações remotas de monitoramento
 de equipamentos da cervejaria artesanal HalfMouth.
 
+## Ferramentas Utilizadas 🛠
+- [Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform) - Compose Multiplatform, moderno UI framework para Kotlin.
+- [Android Studio](https://developer.android.com/studio/intro) - Android Studio é o oficial IDE (Integrated Development Environment) para desenvolvimento de aplicativos Androi.
+- [XCode](https://developer.apple.com/xcode/) - Xcode 15.4 para desenvolvimento, integração e testes de aplicativos da plataforma Apple.
+- [Trello](https://trello.com/b/Jz2V5Q2t/aplicativo-half-mouth) - É uma ferramenta visual que possibilita o gerenciamento de projetos, fluxo de trabalho e monitoramento de tarefas.
+
+## Trello
+Cards das tarefas implementadas para a construção do aplicativo.
+![Screen](screen/Trello/QuadroTrello.png)
+
+### Exemplo de informacões incluídas no Card da tarefa.
+<table>
+  <tr>
+    <td><img src="screen/Trello/CardTrello_1.png"></td>
+    <td><img src="screen/Trello/CardTrello_2.png"></td>
+    <td><img src="screen/Trello/CardTrello_3.png"></td>
+  </tr>
+</table>
+
 ## Telas do Aplicativo
 
 ### Splash Screen
