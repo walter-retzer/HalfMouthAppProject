@@ -13,7 +13,7 @@ de equipamentos da cervejaria artesanal HalfMouth.
 Cards das tarefas implementadas para a construção do aplicativo.
 ![Screen](screen/Trello/QuadroTrello.png)
 
-### Exemplo de informacões incluídas no Card da tarefa.
+Exemplo de informacões incluídas no Card da tarefa.
 <table>
   <tr>
     <td><img src="screen/Trello/CardTrello_1.png"></td>
