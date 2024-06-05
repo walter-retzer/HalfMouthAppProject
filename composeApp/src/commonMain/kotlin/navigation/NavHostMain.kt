@@ -10,6 +10,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import navigation.NavAnimations.popEnterRightAnimation
+import navigation.NavAnimations.popExitRightAnimation
+import navigation.NavAnimations.slideLeftEnterAnimation
+import navigation.NavAnimations.slideLeftExitAnimation
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import presentation.ScreenTheme
 import screens.LoginScreen
@@ -32,30 +36,10 @@ fun NavHostMain(
             NavHost(
                 navController = navController,
                 startDestination = AppNavigation.SplashScreenRoute.name,
-                enterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Left,
-                        animationSpec = tween(500)
-                    )
-                },
-                exitTransition = {
-                    slideOutOfContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Left,
-                        animationSpec = tween(500)
-                    )
-                },
-                popEnterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Right,
-                        animationSpec = tween(500)
-                    )
-                },
-                popExitTransition = {
-                    slideOutOfContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Right,
-                        animationSpec = tween(500)
-                    )
-                }
+                enterTransition = slideLeftEnterAnimation,
+                exitTransition = slideLeftExitAnimation,
+                popEnterTransition = popEnterRightAnimation,
+                popExitTransition = popExitRightAnimation
             ) {
                 composable(route = AppNavigation.SplashScreenRoute.name) {
                     SplashScreen(
