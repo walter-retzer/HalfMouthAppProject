@@ -1,51 +1,61 @@
 package components
 
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.dp
-import theme.mainYellowColor
+import androidx.compose.ui.graphics.Color
+import theme.primaryDark
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyAppToolbar(
+fun AppToolbarLarge(
+    color: Color = Color.Black,
+    titleColor: Color = primaryDark,
     title: String,
-    onNavigationIconClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    navigationIcon :ImageVector = Icons.Filled.KeyboardArrowLeft,
-    actions: @Composable RowScope.() -> Unit = {},
+    onNavigationLeftIconClick: () -> Unit,
+    onNavigationSettingsIconClick: () -> Unit,
+    onNavigationProfileIconClick: () -> Unit,
+    scrollBehavior:  TopAppBarScrollBehavior? = null,
+
 ) {
-    CenterAlignedTopAppBar(
-        modifier = modifier.clip(RoundedCornerShape(8.dp)),
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = mainYellowColor),
-        title = {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-        },
+    LargeTopAppBar(
+        colors = TopAppBarDefaults.largeTopAppBarColors(
+            containerColor = color,
+            scrolledContainerColor = color,
+            titleContentColor = titleColor,
+        ),
+        title = { Text(title) },
         navigationIcon = {
-            IconButton(onClick = onNavigationIconClick) {
+            IconButton(onClick = { onNavigationLeftIconClick() }) {
                 Icon(
-                    imageVector = navigationIcon,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimary
+                    imageVector = Icons.Filled.Menu,
+                    contentDescription = "Localized description"
                 )
             }
         },
-        actions = actions
+        actions = {
+            IconButton(onClick = { onNavigationProfileIconClick() }) {
+                Icon(
+                    imageVector = Icons.Filled.AccountCircle,
+                    contentDescription = "Localized description"
+                )
+            }
+            IconButton(onClick = { onNavigationSettingsIconClick() }) {
+                Icon(
+                    imageVector = Icons.Default.Settings,
+                    contentDescription = "Localized description"
+                )
+            }
+        },
+        scrollBehavior = scrollBehavior
     )
 }
