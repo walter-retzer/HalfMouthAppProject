@@ -15,6 +15,7 @@ import navigation.NavAnimations.slideLeftExitAnimation
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import presentation.ScreenTheme
 import screens.LoginScreen
+import screens.MainMenuScreen
 import screens.SignInScreen
 import screens.SplashScreen
 
@@ -49,6 +50,8 @@ fun NavHostMain(
                             }
                         }
                     )
+
+                    //MainMenuScreen()
                 }
                 composable(route = AppNavigation.LoginRoute.name) {
                     LoginScreen(
@@ -58,7 +61,8 @@ fun NavHostMain(
                     )
                 }
                 composable(route = AppNavigation.SignInRoute.name) {
-                    SignInScreen()
+                    //SignInScreen()
+                    MainMenuScreen()
                 }
             }
         }
