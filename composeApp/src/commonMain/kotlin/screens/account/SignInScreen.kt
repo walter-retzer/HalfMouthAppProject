@@ -1,9 +1,8 @@
-package screens
+package screens.account
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -32,7 +31,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -51,32 +49,31 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import theme.mainYellowColor
 import util.ConstantsApp
-import viewmodel.LoginUserViewModel
-
+import util.MaskVisualTransformation
+import viewmodel.SignInViewModel
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 @Preview
-fun LoginScreen(
+fun SignInScreen(
     modifier: Modifier = Modifier,
-    onNavigateToSignIn: () -> Unit
 ) {
     val viewModel = getViewModel(
-        key = "login-screen",
+        key = "sign-in",
         factory = viewModelFactory {
-            LoginUserViewModel()
+            SignInViewModel()
         }
     )
     val uiState by viewModel.uiState.collectAsState()
+    val nameError by viewModel.nameError.collectAsState()
+    val phoneError by viewModel.phoneNumberError.collectAsState()
     val emailError by viewModel.emailError.collectAsState()
     val passwordError by viewModel.passwordError.collectAsState()
     val scope = rememberCoroutineScope()
     val auth = remember { Firebase.auth }
-    var firebaseUser: FirebaseUser? by remember{ mutableStateOf(null) }
-    var progressButtonIsActivated by remember{ mutableStateOf(false) }
-
+    var firebaseUser: FirebaseUser? by remember { mutableStateOf(null) }
+    var progressButtonIsActivated by remember { mutableStateOf(false) }
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center
@@ -84,7 +81,7 @@ fun LoginScreen(
         val width = this.maxWidth
         val finalModifier = if (width >= 780.dp) modifier.width(400.dp) else modifier.fillMaxWidth()
         Column(
-            modifier = finalModifier.padding(start = 16.dp, end= 16.dp).fillMaxHeight()
+            modifier = finalModifier.padding(start = 16.dp, end = 16.dp).fillMaxHeight()
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -93,7 +90,7 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "Seja Bem Vindo!",
+                text = "Criar uma conta",
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.secondary
             )
@@ -107,20 +104,65 @@ fun LoginScreen(
                 modifier = Modifier
                     .size(180.dp)
                     .clip(CircleShape)
-                    .border(2.dp, Color.White, CircleShape)
-                    .background(Color.White)
+                    .border(2.dp, androidx.compose.ui.graphics.Color.White, CircleShape)
+                    .background(androidx.compose.ui.graphics.Color.White)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
                 modifier = Modifier.align(alignment = Alignment.Start),
-                text = "Informe seus dados:",
+                text = "Inscreva-se para começar:",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.secondary,
             )
 
             Spacer(modifier = Modifier.height(10.dp))
+
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Words,
+                    autoCorrect = true,
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next
+                ),
+                shape = RoundedCornerShape(20.dp),
+                value = uiState.name,
+                isError = nameError,
+                supportingText = {
+                    if (nameError) Text(text = viewModel.validateName(uiState.name))
+                },
+                placeholder = { Text("Nome") },
+                onValueChange = {
+                    if (it.length <= ConstantsApp.NAME_MAX_NUMBER) viewModel.onNameChange(it)
+                }
+            )
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.None,
+                    autoCorrect = true,
+                    keyboardType = KeyboardType.Phone,
+                    imeAction = ImeAction.Next
+                ),
+                shape = RoundedCornerShape(20.dp),
+                value = uiState.phoneNumber,
+                isError = phoneError,
+                supportingText = {
+                    if (phoneError) Text(text = viewModel.validatePhoneNumber(uiState.phoneNumber))
+                },
+                placeholder = { Text("Celular") },
+                onValueChange = {
+                    if (it.length <= ConstantsApp.PHONE_MAX_NUMBER) viewModel.onPhoneNumberChange(it)
+                },
+                visualTransformation = MaskVisualTransformation(MaskVisualTransformation.PHONE)
+            )
+
+            Spacer(modifier = Modifier.height(6.dp))
 
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
@@ -148,7 +190,7 @@ fun LoginScreen(
                     capitalization = KeyboardCapitalization.None,
                     autoCorrect = true,
                     keyboardType = KeyboardType.NumberPassword,
-                    imeAction = ImeAction.Next
+                    imeAction = ImeAction.Done
                 ),
                 shape = RoundedCornerShape(20.dp),
                 value = uiState.password,
@@ -168,20 +210,21 @@ fun LoginScreen(
 
             ProgressButton(
                 modifier = Modifier.padding(top = 16.dp).fillMaxWidth(),
-                text = "Entrar",
+                text = "Cadastrar",
                 isLoading = progressButtonIsActivated,
                 onClick = {
+                    viewModel.validateName(uiState.name)
+                    viewModel.validatePhoneNumber(uiState.phoneNumber)
                     viewModel.validateEmail(uiState.email)
                     viewModel.validatePassword(uiState.password)
-                    if(!emailError || !passwordError){
+                    if (!nameError || !phoneError || !emailError || !passwordError) {
                         scope.launch {
                             try {
-                                progressButtonIsActivated = true
-                                auth.signInWithEmailAndPassword(
+                                auth.createUserWithEmailAndPassword(
                                     email = uiState.email,
                                     password = uiState.password
                                 )
-                                firebaseUser = auth.currentUser
+                                progressButtonIsActivated = true
                             } catch (e: Exception) {
                                 progressButtonIsActivated = false
                             }
@@ -189,29 +232,6 @@ fun LoginScreen(
                     }
                 }
             )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                modifier = Modifier,
-                text = "Ainda não tem uma conta?",
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.secondary,
-            )
-
-            Spacer(modifier = Modifier.height(6.dp))
-
-            Text(
-                modifier = Modifier.clickable { onNavigateToSignIn() },
-                text = "Cadastre-se",
-                style = MaterialTheme.typography.bodyLarge,
-                color = mainYellowColor,
-            )
-
-            //TODO: Remover após testes de login com Firebase!!
-            if(firebaseUser != null){
-                Text("ID = ${firebaseUser?.uid ?: "Nulo"}")
-            }
         }
     }
 }

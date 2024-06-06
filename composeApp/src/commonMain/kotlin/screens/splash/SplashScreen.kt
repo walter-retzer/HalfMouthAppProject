@@ -1,4 +1,4 @@
-package screens
+package screens.splash
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
