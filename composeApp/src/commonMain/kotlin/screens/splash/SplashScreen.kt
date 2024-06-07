@@ -4,7 +4,6 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -18,6 +17,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import com.russhwolf.settings.Settings
+import com.russhwolf.settings.get
+import data.UserPreferences
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.logohalfmouth
 import kotlinx.coroutines.delay
@@ -30,10 +32,15 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 @Preview
 fun SplashScreen(
-    onNavigateToLogin: () -> Unit
+    onNavigateToLogin: () -> Unit,
+    onNavigateToHome: () -> Unit,
 ) {
     val scale = remember { Animatable(0f) }
+    val settingsPref = Settings()
+
     LaunchedEffect(key1 = true) {
+        val uid: String? = settingsPref[UserPreferences.UID]
+
         scale.animateTo(
             targetValue = 1f,
             animationSpec = spring(
@@ -42,7 +49,9 @@ fun SplashScreen(
             )
         )
         delay(3000L)
-        onNavigateToLogin()
+
+        if (uid != null) onNavigateToHome()
+        else onNavigateToLogin()
     }
 
     Box(
