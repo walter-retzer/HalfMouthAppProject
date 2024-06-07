@@ -14,10 +14,10 @@ import navigation.NavAnimations.slideLeftEnterAnimation
 import navigation.NavAnimations.slideLeftExitAnimation
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import presentation.ScreenTheme
-import screens.LoginScreen
-import screens.MainMenuScreen
-import screens.SignInScreen
-import screens.SplashScreen
+import screens.account.LoginScreen
+import screens.account.SignInScreen
+import screens.home.HomeScreen
+import screens.splash.SplashScreen
 
 
 @Composable
@@ -50,19 +50,26 @@ fun NavHostMain(
                             }
                         }
                     )
-
-                    //MainMenuScreen()
                 }
                 composable(route = AppNavigation.LoginRoute.name) {
                     LoginScreen(
                         onNavigateToSignIn = {
                             navController.navigate(AppNavigation.SignInRoute.name)
+                        },
+                        onNavigateToHome = {
+                            navController.navigate(AppNavigation.HomeRoute.name){
+                                popUpTo(AppNavigation.LoginRoute.name) {
+                                    inclusive = true
+                                }
+                            }
                         }
                     )
                 }
                 composable(route = AppNavigation.SignInRoute.name) {
-                    //SignInScreen()
-                    MainMenuScreen()
+                    SignInScreen()
+                }
+                composable(route = AppNavigation.HomeRoute.name) {
+                    HomeScreen()
                 }
             }
         }
