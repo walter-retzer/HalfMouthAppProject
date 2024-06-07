@@ -3,4 +3,5 @@
     <string name="splash_screen_name">SplashScreen</string>
     <string name="screen_login_name">LoginScreen</string>
     <string name="sign_in_name">SignInScreen</string>
+    <string name="home_name">HomeScreen</string>
 </resources>
