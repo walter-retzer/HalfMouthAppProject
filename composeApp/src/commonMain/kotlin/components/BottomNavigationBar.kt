@@ -12,7 +12,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import navigation.home.NavItem
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.vectorResource
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
     val navItems = listOf(NavItem.Home, NavItem.Search, NavItem.List, NavItem.Profile)
@@ -25,7 +28,7 @@ fun BottomNavigationBar(navController: NavHostController) {
         navItems.forEachIndexed { index, item ->
             NavigationBarItem(
                 alwaysShowLabel = true,
-                icon = { Icon(item.icon, contentDescription = item.title) },
+                icon = { Icon(vectorResource( item.icon), contentDescription = item.title) },
                 label = { Text(item.title) },
                 selected = selectedItem == index,
                 onClick = {
