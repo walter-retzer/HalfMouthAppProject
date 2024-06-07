@@ -21,6 +21,10 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -48,12 +52,14 @@ import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.splashscreenlogo
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import theme.mainYellowColor
 import util.ConstantsApp
+import util.snackBarOnlyMessage
 import viewmodel.LoginUserViewModel
 
 
@@ -75,146 +81,165 @@ fun LoginScreen(
     val emailError by viewModel.emailError.collectAsState()
     val passwordError by viewModel.passwordError.collectAsState()
     val scope = rememberCoroutineScope()
+    val snackBarHostState = remember { SnackbarHostState() }
     val auth = remember { Firebase.auth }
-    var firebaseUser: FirebaseUser? by remember{ mutableStateOf(null) }
-    var progressButtonIsActivated by remember{ mutableStateOf(false) }
+    var firebaseUser: FirebaseUser? by remember { mutableStateOf(null) }
+    var progressButtonIsActivated by remember { mutableStateOf(false) }
 
 
-    BoxWithConstraints(
-        modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center
+    Scaffold(
+       snackbarHost =  { SnackbarHost(hostState = snackBarHostState) }
     ) {
-        val width = this.maxWidth
-        val finalModifier = if (width >= 780.dp) modifier.width(400.dp) else modifier.fillMaxWidth()
-        Column(
-            modifier = finalModifier.padding(start = 16.dp, end= 16.dp).fillMaxHeight()
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
+        BoxWithConstraints(
+            modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center
         ) {
+            val width = this.maxWidth
+            val finalModifier =
+                if (width >= 780.dp) modifier.width(400.dp) else modifier.fillMaxWidth()
+            Column(
+                modifier = finalModifier.padding(start = 16.dp, end = 16.dp).fillMaxHeight()
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
-                text = "Seja Bem Vindo!",
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.secondary
-            )
+                Text(
+                    text = "Seja Bem Vindo!",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.secondary
+                )
 
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-            Image(
-                painter = painterResource(Res.drawable.splashscreenlogo),
-                contentDescription = null,
-                contentScale = ContentScale.Inside,
-                modifier = Modifier
-                    .size(180.dp)
-                    .clip(CircleShape)
-                    .border(2.dp, Color.White, CircleShape)
-                    .background(Color.White)
-            )
+                Image(
+                    painter = painterResource(Res.drawable.splashscreenlogo),
+                    contentDescription = null,
+                    contentScale = ContentScale.Inside,
+                    modifier = Modifier
+                        .size(180.dp)
+                        .clip(CircleShape)
+                        .border(2.dp, Color.White, CircleShape)
+                        .background(Color.White)
+                )
 
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
-                modifier = Modifier.align(alignment = Alignment.Start),
-                text = "Informe seus dados:",
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.secondary,
-            )
+                Text(
+                    modifier = Modifier.align(alignment = Alignment.Start),
+                    text = "Informe seus dados:",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.secondary,
+                )
 
-            Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(10.dp))
 
-            OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.None,
-                    autoCorrect = true,
-                    keyboardType = KeyboardType.Email,
-                    imeAction = ImeAction.Next
-                ),
-                shape = RoundedCornerShape(20.dp),
-                value = uiState.email,
-                isError = emailError,
-                supportingText = {
-                    if (emailError) Text(text = viewModel.validateEmail(uiState.email))
-                },
-                placeholder = { Text(text = "Email") },
-                onValueChange = { viewModel.onEmailChange(it) },
-            )
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.None,
+                        autoCorrect = true,
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Next
+                    ),
+                    shape = RoundedCornerShape(20.dp),
+                    value = uiState.email,
+                    isError = emailError,
+                    supportingText = {
+                        if (emailError) Text(text = viewModel.validateEmail(uiState.email))
+                    },
+                    placeholder = { Text(text = "Email") },
+                    onValueChange = { viewModel.onEmailChange(it) },
+                )
 
-            Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(6.dp))
 
-            OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.None,
-                    autoCorrect = true,
-                    keyboardType = KeyboardType.NumberPassword,
-                    imeAction = ImeAction.Next
-                ),
-                shape = RoundedCornerShape(20.dp),
-                value = uiState.password,
-                isError = passwordError,
-                supportingText = {
-                    if (passwordError)
-                        Text(text = viewModel.validatePassword(uiState.password))
-                },
-                visualTransformation = PasswordVisualTransformation(),
-                placeholder = { Text("Senha") },
-                onValueChange = {
-                    if (it.length <= ConstantsApp.PASSWORD_MAX_NUMBER) viewModel.onPasswordChange(it)
-                }
-            )
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.None,
+                        autoCorrect = true,
+                        keyboardType = KeyboardType.NumberPassword,
+                        imeAction = ImeAction.Next
+                    ),
+                    shape = RoundedCornerShape(20.dp),
+                    value = uiState.password,
+                    isError = passwordError,
+                    supportingText = {
+                        if (passwordError)
+                            Text(text = viewModel.validatePassword(uiState.password))
+                    },
+                    visualTransformation = PasswordVisualTransformation(),
+                    placeholder = { Text("Senha") },
+                    onValueChange = {
+                        if (it.length <= ConstantsApp.PASSWORD_MAX_NUMBER) viewModel.onPasswordChange(
+                            it
+                        )
+                    }
+                )
 
-            Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(10.dp))
 
-            ProgressButton(
-                modifier = Modifier.padding(top = 16.dp).fillMaxWidth(),
-                text = "Entrar",
-                isLoading = progressButtonIsActivated,
-                onClick = {
-                    viewModel.validateEmail(uiState.email)
-                    viewModel.validatePassword(uiState.password)
-                    if(!emailError || !passwordError){
-                        scope.launch {
-                            try {
-                                progressButtonIsActivated = true
-                                auth.signInWithEmailAndPassword(
-                                    email = uiState.email,
-                                    password = uiState.password
-                                )
-                                firebaseUser = auth.currentUser
-                            } catch (e: Exception) {
-                                progressButtonIsActivated = false
+                ProgressButton(
+                    modifier = Modifier.padding(top = 16.dp).fillMaxWidth(),
+                    text = "Entrar",
+                    isLoading = progressButtonIsActivated,
+                    onClick = {
+                        viewModel.validateEmail(uiState.email)
+                        viewModel.validatePassword(uiState.password)
+                        if (!emailError || !passwordError) {
+                            scope.launch {
+                                try {
+                                    progressButtonIsActivated = true
+                                    auth.signInWithEmailAndPassword(
+                                        email = uiState.email,
+                                        password = uiState.password
+                                    )
+                                    firebaseUser = auth.currentUser
+                                } catch (e: Exception) {
+                                    progressButtonIsActivated = false
+                                    snackBarOnlyMessage(
+                                        snackBarHostState = snackBarHostState,
+                                        coroutineScope = scope,
+                                        message = "Não foi possível criar a sua conta, por favor, tente mais tarde.",
+                                        duration = SnackbarDuration.Long
+                                    )
+                                }
                             }
                         }
                     }
-                }
-            )
+                )
 
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
-                modifier = Modifier,
-                text = "Ainda não tem uma conta?",
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.secondary,
-            )
+                Text(
+                    modifier = Modifier,
+                    text = "Ainda não tem uma conta?",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.secondary,
+                )
 
-            Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(6.dp))
 
-            Text(
-                modifier = Modifier.clickable { onNavigateToSignIn() },
-                text = "Cadastre-se",
-                style = MaterialTheme.typography.bodyLarge,
-                color = mainYellowColor,
-            )
+                Text(
+                    modifier = Modifier.clickable { onNavigateToSignIn() },
+                    text = "Cadastre-se",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = mainYellowColor,
+                )
 
-            //TODO: Remover após testes de login com Firebase!!
-            if(firebaseUser != null){
-                Text("ID = ${firebaseUser?.uid ?: "Nulo"}")
-                LaunchedEffect(key1 = true) {
-                    onNavigateToHome()
+                if (firebaseUser != null) {
+                    LaunchedEffect(key1 = true) {
+                        snackBarOnlyMessage(
+                            snackBarHostState = snackBarHostState,
+                            coroutineScope = scope,
+                            message = "Conta criada com Sucesso!"
+                        )
+                        delay(2000L)
+                        progressButtonIsActivated = false
+                        onNavigateToHome()
+                    }
                 }
             }
         }
