@@ -48,6 +48,13 @@ fun NavHostMain(
                                     inclusive = true
                                 }
                             }
+                        },
+                        onNavigateToHome = {
+                            navController.navigate(AppNavigation.HomeRoute.name){
+                                popUpTo(AppNavigation.SplashScreenRoute.name) {
+                                    inclusive = true
+                                }
+                            }
                         }
                     )
                 }
@@ -66,7 +73,11 @@ fun NavHostMain(
                     )
                 }
                 composable(route = AppNavigation.SignInRoute.name) {
-                    SignInScreen()
+                    SignInScreen(
+                        onNavigateToHome = {
+                            navController.navigate(AppNavigation.HomeRoute.name)
+                        }
+                    )
                 }
                 composable(route = AppNavigation.HomeRoute.name) {
                     HomeScreen()
