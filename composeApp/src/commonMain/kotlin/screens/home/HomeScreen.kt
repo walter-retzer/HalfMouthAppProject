@@ -23,10 +23,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -39,17 +43,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.compose.rememberNavController
+import com.russhwolf.settings.Settings
+import com.russhwolf.settings.get
 import components.AppToolbarLarge
 import components.BottomNavigationBar
+import data.UserPreferences
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.ipa_beer
 import halfmouthappproject.composeapp.generated.resources.splashscreenlogo
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import theme.onSecondaryContainerDark
 import theme.secondaryContainerDark
+import util.snackBarOnlyMessage
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,13 +66,28 @@ import theme.secondaryContainerDark
 @Preview
 fun HomeScreen() {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+    val scope = rememberCoroutineScope()
+    val settingsPref = Settings()
+    val snackBarHostState = remember { SnackbarHostState() }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        snackbarHost =  { SnackbarHost(hostState = snackBarHostState) },
         topBar = {
             AppToolbarLarge(
                 title = "Nossas Cervejas",
-                onNavigationLeftIconClick = { },
+                onNavigationLeftIconClick = {
+                    scope.launch {
+                        val test: String? = settingsPref[UserPreferences.UID]
+                        println(test)
+                        snackBarOnlyMessage(
+                            snackBarHostState = snackBarHostState,
+                            coroutineScope = scope,
+                            message = test.toString()
+                        )
+                    }
+
+                },
                 onNavigationProfileIconClick = { },
                 onNavigationSettingsIconClick = { },
                 scrollBehavior = scrollBehavior
