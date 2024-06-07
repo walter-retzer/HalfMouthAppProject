@@ -62,7 +62,7 @@ fun HomeScreen() {
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             AppToolbarLarge(
-                title = "Menu Pricipal",
+                title = "Nossas Cervejas",
                 onNavigationLeftIconClick = { },
                 onNavigationProfileIconClick = { },
                 onNavigationSettingsIconClick = { },
