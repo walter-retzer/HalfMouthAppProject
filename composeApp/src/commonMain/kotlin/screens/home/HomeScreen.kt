@@ -1,6 +1,5 @@
 package screens.home
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,15 +14,19 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -45,6 +48,7 @@ import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import theme.onSecondaryContainerDark
 import theme.secondaryContainerDark
 
 
@@ -88,11 +92,11 @@ fun HomeScreen() {
 }
 
 
-@OptIn(ExperimentalResourceApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun BeerCard() {
     ConstraintLayout {
-        val (card, logo, imageBeer, text1, text2) = createRefs()
+        val (card, logo, imageBeer, text1, text2, icon1, text3) = createRefs()
         Row(modifier = Modifier.constrainAs(card) {
             top.linkTo(parent.top, margin = 40.dp)
         }
@@ -101,7 +105,7 @@ fun BeerCard() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
-                    .height(200.dp)
+                    .height(205.dp)
                     .shadow(16.dp, shape = RectangleShape)
             ) {
 
@@ -127,7 +131,7 @@ fun BeerCard() {
             contentDescription = null,
             contentScale = ContentScale.FillBounds,
             modifier = Modifier
-                .width(170.dp)
+                .width(160.dp)
                 .height(150.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .constrainAs(imageBeer) {
@@ -137,7 +141,9 @@ fun BeerCard() {
         )
         Text(
             text = "HalfMouth\nIpa",
-            fontSize = 18.sp,
+            style = MaterialTheme.typography.titleLarge,
+            fontSize = 22.sp,
+            color = Color.White,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .constrainAs(text1) {
@@ -148,7 +154,8 @@ fun BeerCard() {
         )
         Text(
             text = "Nossa Ipa oferece uma intensidade de sabores dos maltes e lupulos.",
-            fontSize = 14.sp,
+            style = MaterialTheme.typography.bodyMedium,
+            fontSize = 15.sp,
             textAlign = TextAlign.Justify,
             modifier = Modifier
                 .padding(start = 26.dp, end =26.dp, top= 16.dp)
@@ -158,16 +165,38 @@ fun BeerCard() {
                     end.linkTo(parent.end)
                 }
         )
-
+        IconButton(
+            modifier = Modifier
+                .padding(start = 16.dp)
+                .constrainAs(icon1) {
+                    top.linkTo(text2.bottom)
+                    start.linkTo(parent.start)
+                },
+            onClick = { }
+        ) {
+            Icon(
+                imageVector = Icons.Default.Info,
+                contentDescription = "Localized description",
+                tint = onSecondaryContainerDark
+            )
+        }
+        Text(
+            text = "IBU = 9 | ABV = 4,5% | Temp. Ideal = ±3°C",
+            style = MaterialTheme.typography.bodySmall,
+            color = onSecondaryContainerDark,
+            fontSize = 12.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .constrainAs(text3) {
+                    top.linkTo(icon1.top)
+                    bottom.linkTo(icon1.bottom)
+                    start.linkTo(icon1.end)
+                }
+        )
     }
 }
 
-@Composable
-fun MyCircle() {
-    Canvas(modifier = Modifier.size(100.dp), onDraw = {
-        drawCircle(color = Color.White)
-    })
-}
+
 data class ItemBeerMainMenu @OptIn(ExperimentalResourceApi::class) constructor(
     val id: Int,
     val title: String,
