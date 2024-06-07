@@ -44,7 +44,9 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import com.russhwolf.settings.Settings
 import components.ProgressButton
+import data.UserPreferences
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.FirebaseUser
 import dev.gitlive.firebase.auth.auth
@@ -83,12 +85,13 @@ fun LoginScreen(
     val scope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
     val auth = remember { Firebase.auth }
+    val settings = Settings()
     var firebaseUser: FirebaseUser? by remember { mutableStateOf(null) }
     var progressButtonIsActivated by remember { mutableStateOf(false) }
 
 
     Scaffold(
-       snackbarHost =  { SnackbarHost(hostState = snackBarHostState) }
+        snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
     ) {
         BoxWithConstraints(
             modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center
@@ -202,7 +205,7 @@ fun LoginScreen(
                                     snackBarOnlyMessage(
                                         snackBarHostState = snackBarHostState,
                                         coroutineScope = scope,
-                                        message = "Não foi possível criar a sua conta, por favor, tente mais tarde.",
+                                        message = "Não foi possível acessar a sua conta, por favor, tente mais tarde.",
                                         duration = SnackbarDuration.Long
                                     )
                                 }
@@ -231,13 +234,13 @@ fun LoginScreen(
 
                 if (firebaseUser != null) {
                     LaunchedEffect(key1 = true) {
+                        settings.putString(UserPreferences.UID, firebaseUser?.uid.toString())
                         snackBarOnlyMessage(
                             snackBarHostState = snackBarHostState,
                             coroutineScope = scope,
-                            message = "Conta criada com Sucesso!"
+                            message = "Login realizado com Sucesso!"
                         )
                         delay(2000L)
-                        progressButtonIsActivated = false
                         onNavigateToHome()
                     }
                 }
