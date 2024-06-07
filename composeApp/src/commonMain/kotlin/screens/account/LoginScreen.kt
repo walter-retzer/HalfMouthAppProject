@@ -23,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -61,7 +62,8 @@ import viewmodel.LoginUserViewModel
 @Preview
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    onNavigateToSignIn: () -> Unit
+    onNavigateToSignIn: () -> Unit,
+    onNavigateToHome: () -> Unit
 ) {
     val viewModel = getViewModel(
         key = "login-screen",
@@ -211,6 +213,9 @@ fun LoginScreen(
             //TODO: Remover após testes de login com Firebase!!
             if(firebaseUser != null){
                 Text("ID = ${firebaseUser?.uid ?: "Nulo"}")
+                LaunchedEffect(key1 = true) {
+                    onNavigateToHome()
+                }
             }
         }
     }
