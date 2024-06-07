@@ -18,7 +18,7 @@ import org.jetbrains.compose.resources.vectorResource
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
-    val navItems = listOf(NavItem.Home, NavItem.Search, NavItem.List, NavItem.Profile)
+    val navItems = listOf(NavItem.Home, NavItem.Production, NavItem.Notification, NavItem.Profile)
     var selectedItem by rememberSaveable { mutableStateOf(0) }
 
     NavigationBar(
