@@ -22,8 +22,12 @@ composeNavigation = "2.7.0-alpha07"
 mvvmCompose = "0.16.1"
 mvvmFlowCompose = "0.16.1"
 mvvmLivedataCompose = "0.16.1"
+multiplatformSettings = "1.1.1"
 
 [libraries]
+#Preference Library
+multiplatformSettings-noargs = { module = "com.russhwolf:multiplatform-settings-no-arg", version.ref = "multiplatformSettings" }
+
 constraintlayout-compose-multiplatform = { module = "tech.annexflow.compose:constraintlayout-compose-multiplatform", version.ref = "constraintlayoutComposeMultiplatform" }
 moko-mvvm-flow-compose = { module = "dev.icerock.moko:mvvm-flow-compose", version.ref = "mvvmFlowCompose" }
 moko-mvvm-livedata-compose = { module = "dev.icerock.moko:mvvm-livedata-compose", version.ref = "mvvmLivedataCompose" }

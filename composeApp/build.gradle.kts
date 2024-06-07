@@ -44,6 +44,7 @@ kotlin {
             implementation(libs.firebase.auth)
             implementation(libs.navigation.compose)
             implementation(libs.constraintlayout.compose.multiplatform)
+            implementation(libs.multiplatformSettings.noargs)
         }
     }
 }
