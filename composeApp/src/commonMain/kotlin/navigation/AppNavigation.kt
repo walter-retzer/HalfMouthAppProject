@@ -1,6 +1,7 @@
 package navigation
 
 import halfmouthappproject.composeapp.generated.resources.Res
+import halfmouthappproject.composeapp.generated.resources.home_name
 import halfmouthappproject.composeapp.generated.resources.screen_login_name
 import halfmouthappproject.composeapp.generated.resources.sign_in_name
 import halfmouthappproject.composeapp.generated.resources.splash_screen_name
@@ -12,4 +13,5 @@ enum class AppNavigation(val title: StringResource) {
     SplashScreenRoute(title = Res.string.splash_screen_name),
     LoginRoute(title = Res.string.screen_login_name),
     SignInRoute(title = Res.string.sign_in_name),
+    HomeRoute(title = Res.string.home_name),
 }
