@@ -4,10 +4,13 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -15,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.russhwolf.settings.Settings
@@ -64,8 +68,11 @@ fun SplashScreen(
             contentScale = ContentScale.FillBounds,
             modifier = Modifier
                 .scale(scale.value)
-                .size(200.dp)
-                .clip(RoundedCornerShape(50.dp))
+                .size(180.dp)
+                .clip(CircleShape)
+                .border(4.dp, Color.White, CircleShape)
+                .background(Color.White, CircleShape)
+                .padding(16.dp)
         )
     }
 }
