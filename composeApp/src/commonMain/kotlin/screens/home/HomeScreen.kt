@@ -79,11 +79,14 @@ fun HomeScreen() {
                 onNavigationLeftIconClick = {
                     scope.launch {
                         val test: String? = settingsPref[UserPreferences.UID]
+                        val name: String? = settingsPref[UserPreferences.NAME]
+                        val email: String? = settingsPref[UserPreferences.EMAIL]
+                        val phone: String? = settingsPref[UserPreferences.PHONE]
                         println(test)
                         snackBarOnlyMessage(
                             snackBarHostState = snackBarHostState,
                             coroutineScope = scope,
-                            message = test.toString()
+                            message = "$test $email $name $phone"
                         )
                     }
 
