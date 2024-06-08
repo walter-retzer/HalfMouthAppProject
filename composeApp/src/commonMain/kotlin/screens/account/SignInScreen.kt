@@ -262,6 +262,9 @@ fun SignInScreen(
                 if (firebaseUser != null) {
                     LaunchedEffect(key1 = true) {
                         settings.putString(UserPreferences.UID, firebaseUser?.uid.toString())
+                        settings.putString(UserPreferences.EMAIL, firebaseUser?.email.toString())
+                        settings.putString(UserPreferences.NAME, uiState.name)
+                        settings.putString(UserPreferences.PHONE, uiState.phoneNumber)
                         snackBarOnlyMessage(
                             snackBarHostState = snackBarHostState,
                             coroutineScope = scope,
