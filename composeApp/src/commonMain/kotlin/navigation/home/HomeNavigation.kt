@@ -5,6 +5,8 @@ import halfmouthappproject.composeapp.generated.resources.icon_account
 import halfmouthappproject.composeapp.generated.resources.icon_beer
 import halfmouthappproject.composeapp.generated.resources.icon_home
 import halfmouthappproject.composeapp.generated.resources.icon_notifications
+import navigation.AppGraphNav
+import navigation.AppNavigation
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
@@ -24,16 +26,16 @@ open class Item(val path: String, val title: String, val icon: DrawableResource)
 @OptIn(ExperimentalResourceApi::class)
 sealed class NavItem {
     object Home :
-        Item(path = NavPath.HOME.toString(), title = NavTitle.HOME, icon = Res.drawable.icon_home)
+        Item(path = AppGraphNav.HomeGraph.name, title = NavTitle.HOME, icon = Res.drawable.icon_home)
 
     object Production :
-        Item(path = NavPath.PRODUCTION.toString(), title = NavTitle.PRODUCTION, icon = Res.drawable.icon_beer )
+        Item(path = AppGraphNav.ProductionGraph.name, title = NavTitle.PRODUCTION, icon = Res.drawable.icon_beer )
 
     object Notification :
-        Item(path = NavPath.NOTIFICATION.toString(), title = NavTitle.NOTIFICATIONS, icon = Res.drawable.icon_notifications)
+        Item(path = AppGraphNav.NotificationGraph.name, title = NavTitle.NOTIFICATIONS, icon = Res.drawable.icon_notifications)
 
     object Profile :
         Item(
-            path = NavPath.PROFILE.toString(), title = NavTitle.PROFILE, icon = Res.drawable.icon_account
+            path = AppGraphNav.ProfileGraph.name, title = NavTitle.PROFILE, icon = Res.drawable.icon_account
         )
 }
