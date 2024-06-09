@@ -4,4 +4,10 @@
     <string name="screen_login_name">LoginScreen</string>
     <string name="sign_in_name">SignInScreen</string>
     <string name="home_name">HomeScreen</string>
+    <string name="profile_name">ProfileScreen</string>
+    <string name="login_graph_name">LoginGraph</string>
+    <string name="home_graph_name">HomeGraph</string>
+    <string name="profile_graph_name">ProfileGraph</string>
+    <string name="production_graph_name">ProductionGraph</string>
+    <string name="notification_graph_name">NotificationGraph</string>
 </resources>
