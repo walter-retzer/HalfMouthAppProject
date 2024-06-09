@@ -3,7 +3,6 @@ package screens.profile
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -22,7 +21,7 @@ import util.snackBarOnlyMessage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenProfile() {
+fun ProfileScreen() {
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val scope = rememberCoroutineScope()
@@ -59,7 +58,7 @@ fun ScreenProfile() {
                 containerColor = Color.Black
             )
             {
-                BottomNavigationBar(navController = rememberNavController())
+                BottomNavigationBar(navController = rememberNavController(), {})
             }
         }
     ) {
