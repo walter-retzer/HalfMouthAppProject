@@ -42,6 +42,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.get
@@ -64,7 +65,11 @@ import util.snackBarOnlyMessage
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview
-fun HomeScreen() {
+fun HomeScreen(
+    onNavigateToProfile: () -> Unit,
+    navController: NavHostController
+
+) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val scope = rememberCoroutineScope()
     val settingsPref = Settings()
@@ -102,7 +107,7 @@ fun HomeScreen() {
                 containerColor = Color.Black
             )
             {
-                BottomNavigationBar(navController = rememberNavController())
+                BottomNavigationBar(navController = navController, onNavigateToProfile = onNavigateToProfile)
             }
         }
     ) { innerPadding ->
