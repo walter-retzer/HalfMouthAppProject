@@ -16,7 +16,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -42,12 +41,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.get
 import components.AppToolbarLarge
-import components.BottomNavigationBar
 import data.UserPreferences
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.ipa_beer
@@ -66,9 +62,7 @@ import util.snackBarOnlyMessage
 @Composable
 @Preview
 fun HomeScreen(
-    onNavigateToProfile: () -> Unit,
-    navController: NavHostController
-
+    onNavigateToSettings: () -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val scope = rememberCoroutineScope()
@@ -96,26 +90,16 @@ fun HomeScreen(
                     }
 
                 },
-                onNavigationProfileIconClick = { },
+                onNavigationProfileIconClick = { onNavigateToSettings() },
                 onNavigationSettingsIconClick = { },
                 scrollBehavior = scrollBehavior
             )
         },
-        bottomBar = {
-            BottomAppBar(
-                contentColor = Color.Black,
-                containerColor = Color.Black
-            )
-            {
-                BottomNavigationBar(navController = navController, onNavigateToProfile = onNavigateToProfile)
-            }
-        }
     ) { innerPadding ->
 
         LazyColumn(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(bottom = 50.dp),
+                .fillMaxSize(),
             contentPadding = innerPadding,
         ) {
             items(itemList) { BeerCard() }
