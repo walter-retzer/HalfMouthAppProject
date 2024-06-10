@@ -46,13 +46,17 @@ import com.russhwolf.settings.get
 import components.AppToolbarLarge
 import data.UserPreferences
 import halfmouthappproject.composeapp.generated.resources.Res
-import halfmouthappproject.composeapp.generated.resources.ipa_beer
+import halfmouthappproject.composeapp.generated.resources.beer_craft_glass
+import halfmouthappproject.composeapp.generated.resources.beer_growler
+import halfmouthappproject.composeapp.generated.resources.beer_mug_ipa
+import halfmouthappproject.composeapp.generated.resources.brewingbeer
 import halfmouthappproject.composeapp.generated.resources.splashscreenlogo
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import theme.onBackgroundDark
 import theme.onSecondaryContainerDark
 import theme.secondaryContainerDark
 import util.snackBarOnlyMessage
@@ -64,14 +68,15 @@ import util.snackBarOnlyMessage
 fun HomeScreen(
     onNavigateToSettings: () -> Unit,
 ) {
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+    val scrollBehavior =
+        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val scope = rememberCoroutineScope()
     val settingsPref = Settings()
     val snackBarHostState = remember { SnackbarHostState() }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        snackbarHost =  { SnackbarHost(hostState = snackBarHostState) },
+        snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
         topBar = {
             AppToolbarLarge(
                 title = "Nossas Cervejas",
@@ -102,7 +107,9 @@ fun HomeScreen(
                 .fillMaxSize(),
             contentPadding = innerPadding,
         ) {
-            items(itemList) { BeerCard() }
+            items(itemList) { itemList ->
+                BeerCard(itemList)
+            }
         }
     }
 }
@@ -110,7 +117,7 @@ fun HomeScreen(
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun BeerCard() {
+fun BeerCard(itemList: ItemBeerMainMenu) {
     ConstraintLayout {
         val (card, logo, imageBeer, text1, text2, icon1, text3) = createRefs()
         Row(modifier = Modifier.constrainAs(card) {
@@ -137,26 +144,28 @@ fun BeerCard() {
                 .border(4.dp, secondaryContainerDark, CircleShape)
                 .background(Color.White, CircleShape)
                 .padding(16.dp)
-                .constrainAs(logo){
+                .constrainAs(logo) {
                     top.linkTo(parent.top, margin = 20.dp)
                     start.linkTo(parent.start, margin = 40.dp)
                 }
         )
+        val shape = RoundedCornerShape(10.dp)
         Image(
-            painter = painterResource(Res.drawable.ipa_beer),
+            painter = painterResource(itemList.imageId),
             contentDescription = null,
             contentScale = ContentScale.FillBounds,
             modifier = Modifier
                 .width(160.dp)
                 .height(150.dp)
-                .clip(RoundedCornerShape(8.dp))
+                .border(1.dp, onBackgroundDark, shape)
+                .clip(RoundedCornerShape(10.dp))
                 .constrainAs(imageBeer) {
                     top.linkTo(parent.top, margin = 20.dp)
                     end.linkTo(parent.end, margin = 40.dp)
                 }
         )
         Text(
-            text = "HalfMouth\nIpa",
+            text = itemList.title,
             style = MaterialTheme.typography.titleLarge,
             fontSize = 22.sp,
             color = Color.White,
@@ -169,12 +178,12 @@ fun BeerCard() {
                 }
         )
         Text(
-            text = "Nossa Ipa oferece uma intensidade de sabores dos maltes e lupulos.",
+            text = itemList.subtitle,
             style = MaterialTheme.typography.bodyMedium,
             fontSize = 15.sp,
             textAlign = TextAlign.Justify,
             modifier = Modifier
-                .padding(start = 26.dp, end =26.dp, top= 16.dp)
+                .padding(start = 26.dp, end = 26.dp, top = 16.dp)
                 .constrainAs(text2) {
                     top.linkTo(text1.bottom)
                     start.linkTo(parent.start)
@@ -197,7 +206,7 @@ fun BeerCard() {
             )
         }
         Text(
-            text = "IBU = 9 | ABV = 4,5% | Temp. Ideal = ±3°C",
+            text = itemList.info,
             style = MaterialTheme.typography.bodySmall,
             color = onSecondaryContainerDark,
             fontSize = 12.sp,
@@ -214,84 +223,48 @@ fun BeerCard() {
 
 
 data class ItemBeerMainMenu @OptIn(ExperimentalResourceApi::class) constructor(
-    val id: Int,
     val title: String,
     val subtitle: String,
+    val info: String,
     val imageId: DrawableResource,
 )
 
 @OptIn(ExperimentalResourceApi::class)
 val itemList = listOf(
     ItemBeerMainMenu(
-        1,
-        "Fresh Vegges and Greens",
-        "Very awesome list item has very awesome subtitle. This is bit long",
-        Res.drawable.splashscreenlogo
+        "HalfMouth\nIpa",
+        "Nossa Ipa oferece uma intensidade de sabores dos maltes e lupulos.",
+        "IBU = 9 | ABV = 4,5% | Temp. Ideal = ±3°C",
+        Res.drawable.brewingbeer
     ),
     ItemBeerMainMenu(
-        2,
-        "Best blue berries",
-        "Very awesome list item has very awesome subtitle. This is bit long",
-        Res.drawable.splashscreenlogo
+        "HalfMouth\nSession Ipa",
+        "Nossa Session Ipa oferece uma intensidade de sabores dos maltes e lupulos.",
+        "IBU = 8 | ABV = 4,5% | Temp. Ideal = ±6°C",
+        Res.drawable.beer_mug_ipa
     ),
     ItemBeerMainMenu(
-        3,
-        "Cherries La Bloom",
-        "Very awesome list item has very awesome subtitle. This is bit long",
-        Res.drawable.splashscreenlogo
+        "HalfMouth\nPilsen",
+        "Nossa Pilsen oferece uma intensidade de sabores dos maltes e lupulos.",
+        "IBU = 7 | ABV = 3,5% | Temp. Ideal = ±5°C",
+        Res.drawable.beer_craft_glass
     ),
     ItemBeerMainMenu(
-        4,
-        "Fruits everyday",
-        "Very awesome list item has very awesome subtitle. This is bit long",
-        Res.drawable.splashscreenlogo
+        "HalfMouth\nIpa",
+        "Nossa Ipa oferece uma intensidade de sabores dos maltes e lupulos.",
+        "IBU = 9 | ABV = 4,5% | Temp. Ideal = ±3°C",
+        Res.drawable.beer_growler
     ),
     ItemBeerMainMenu(
-        5,
-        "Sweet and sour",
-        "Very awesome list item has very awesome subtitle. This is bit long",
-        Res.drawable.splashscreenlogo
+        "HalfMouth\nSession Ipa",
+        "Nossa Session Ipa oferece uma intensidade de sabores dos maltes e lupulos.",
+        "IBU = 8 | ABV = 4,5% | Temp. Ideal = ±6°C",
+        Res.drawable.beer_growler
     ),
     ItemBeerMainMenu(
-        6,
-        "Pancakes for everyone",
-        "Very awesome list item has very awesome subtitle. This is bit long",
-        Res.drawable.splashscreenlogo
+        "HalfMouth\nPilsen",
+        "Nossa Pilsen oferece uma intensidade de sabores dos maltes e lupulos.",
+        "IBU = 7 | ABV = 3,5% | Temp. Ideal = ±5°C",
+        Res.drawable.beer_growler
     ),
-    ItemBeerMainMenu(
-        5,
-        "Sweet and sour",
-        "Very awesome list item has very awesome subtitle. This is bit long",
-        Res.drawable.splashscreenlogo
-    ),
-    ItemBeerMainMenu(
-        6,
-        "Pancakes for everyone",
-        "Very awesome list item has very awesome subtitle. This is bit long",
-        Res.drawable.splashscreenlogo
-    ),
-    ItemBeerMainMenu(
-        5,
-        "Sweet and sour",
-        "Very awesome list item has very awesome subtitle. This is bit long",
-        Res.drawable.splashscreenlogo
-    ),
-    ItemBeerMainMenu(
-        6,
-        "Pancakes for everyone",
-        "Very awesome list item has very awesome subtitle. This is bit long",
-        Res.drawable.splashscreenlogo
-    ),
-    ItemBeerMainMenu(
-        5,
-        "Sweet and sour",
-        "Very awesome list item has very awesome subtitle. This is bit long",
-        Res.drawable.splashscreenlogo
-    ),
-    ItemBeerMainMenu(
-        6,
-        "Pancakes for everyone",
-        "Very awesome list item has very awesome subtitle. This is bit long",
-        Res.drawable.splashscreenlogo
-    )
 )
