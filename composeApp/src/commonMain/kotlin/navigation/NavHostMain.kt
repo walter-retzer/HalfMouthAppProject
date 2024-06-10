@@ -1,19 +1,33 @@
 package navigation
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import navigation.NavAnimations.popEnterRightAnimation
 import navigation.NavAnimations.popExitRightAnimation
+import navigation.NavAnimations.slideFadeInAnimation
+import navigation.NavAnimations.slideFadeOutAnimation
 import navigation.NavAnimations.slideLeftEnterAnimation
 import navigation.NavAnimations.slideLeftExitAnimation
+import navigation.home.NavItem
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import presentation.ScreenTheme
 import screens.account.LoginScreen
@@ -44,9 +58,6 @@ fun NavHostMain(
                 popExitTransition = popExitRightAnimation
             ) {
                 loginNavGraph(navController)
-                homeNavGraph(navController)
-                notificationNavGraph(navController)
-                profileNavGraph(navController)
             }
         }
     }
@@ -58,7 +69,7 @@ private fun NavGraphBuilder.loginNavGraph(
 ) {
     navigation(
         route = AppGraphNav.LoginGraph.name,
-        startDestination = AppNavigation.HomeRoute.name
+        startDestination = AppNavigation.SplashScreenRoute.name
     ) {
         composable(route = AppNavigation.SplashScreenRoute.name) {
             SplashScreen(
@@ -99,60 +110,92 @@ private fun NavGraphBuilder.loginNavGraph(
                 }
             )
         }
-        composable(route = AppNavigation.HomeRoute.name) {
-            HomeScreen(
-                onNavigateToProfile = {
-                    navController.navigate(AppNavigation.ProfileRoute.name)
-                },
-                navController = navController
-            )
-        }
+        homeNavGraph()
     }
 }
 
 
+
+@OptIn(ExperimentalResourceApi::class)
 private fun NavGraphBuilder.homeNavGraph(
-    navController: NavHostController,
 ) {
-    navigation(
-        route = AppGraphNav.HomeGraph.name,
-        startDestination = AppNavigation.ProfileRoute.name
-    ) {
+    composable(
+            route = AppGraphNav.HomeGraph.name,
+            enterTransition = slideFadeInAnimation,
+            exitTransition = slideFadeOutAnimation,
+            popEnterTransition = slideFadeInAnimation,
+            popExitTransition = slideFadeOutAnimation
+        ) {
 
-        composable(route = AppNavigation.ProfileRoute.name) {
-            HomeScreen(
-                onNavigateToProfile = {
-                    navController.navigate(AppNavigation.ProfileRoute.name)
-                },
-                navController = navController
+        val items = remember {
+            listOf(
+                NavItem.Home,
+                NavItem.Production,
+                NavItem.Notification,
+                NavItem.Profile
             )
         }
-    }
-}
-private fun NavGraphBuilder.notificationNavGraph(
-    navController: NavHostController,
-) {
-    navigation(
-        route = AppGraphNav.ProfileGraph.name,
-        startDestination = AppNavigation.ProfileRoute.name
-    ) {
+        val navController = rememberNavController()
+        val currentBackStack by navController.currentBackStackEntryAsState()
+        val currentDestination = currentBackStack?.destination?.route
 
-        composable(route = AppNavigation.ProfileRoute.name) {
-            ProfileScreen()
-        }
-    }
-}
+        Column(Modifier.fillMaxSize()) {
+            NavHost(
+                navController = navController,
+                startDestination = AppNavigation.HomeRoute.name,
+                Modifier.weight(1f)
+            ) {
+                composable(route = AppNavigation.HomeRoute.name) {
+                    HomeScreen(
+                        onNavigateToSettings = {},
+                    )
+                }
 
-private fun NavGraphBuilder.profileNavGraph(
-    navController: NavHostController,
-) {
-    navigation(
-        route = AppGraphNav.NotificationGraph.name,
-        startDestination = AppNavigation.ProfileRoute.name
-    ) {
+                composable(
+                    route = AppNavigation.ProductionRoute.name,
+                ) {
+                    ProfileScreen()
+                }
 
-        composable(route = AppNavigation.ProfileRoute.name) {
-            ProfileScreen()
+                composable(
+                    route = AppNavigation.NotificationRoute.name,
+                ) {
+                    ProfileScreen()
+                }
+
+                composable(
+                    route = AppNavigation.ProfileRoute.name,
+                ) {
+                    ProfileScreen()
+                }
+
+            }
+            BottomAppBar(
+                actions = {
+                    items.forEach { item ->
+                            NavigationBarItem(
+                                selected = currentDestination == item.pathRoute,
+                                onClick = {
+                                    navController.navigate(item.pathRoute,
+//                                        navOptions {
+//                                            launchSingleTop = true
+//                                            popUpTo(navController.graph.startDestinationId)
+//                                        }
+                                    )
+                                },
+                                icon = {
+                                    Icon(vectorResource( item.icon), contentDescription = item.title)
+                                },
+                                label = {
+                                    Text(text = item.title)
+                                }
+                            )
+                        }
+                    },
+                containerColor = Color.Black,
+                contentColor = Color.Black
+                )
+
         }
     }
 }
