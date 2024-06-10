@@ -18,6 +18,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navOptions
 import androidx.navigation.navigation
 import navigation.NavAnimations.popEnterRightAnimation
 import navigation.NavAnimations.popExitRightAnimation
@@ -177,10 +178,12 @@ private fun NavGraphBuilder.homeNavGraph(
                                 selected = currentDestination == item.pathRoute,
                                 onClick = {
                                     navController.navigate(item.pathRoute,
-//                                        navOptions {
-//                                            launchSingleTop = true
-//                                            popUpTo(navController.graph.startDestinationId)
-//                                        }
+                                        navOptions {
+                                            launchSingleTop = true
+                                            navController.graph.startDestinationRoute?.let { route ->
+                                                popUpTo(route) { saveState = true }
+                                            }
+                                        }
                                     )
                                 },
                                 icon = {
