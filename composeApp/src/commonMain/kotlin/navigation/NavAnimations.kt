@@ -4,6 +4,8 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.navigation.NavBackStackEntry
 
 
@@ -41,7 +43,7 @@ object NavAnimations {
             )
         }
 
-    val slideUpEnterAnimation: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?) =
+    val slideUpEnterAnimation: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition) =
         {
             slideIntoContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Companion.Up,
@@ -49,7 +51,7 @@ object NavAnimations {
             )
         }
 
-    val slideDownExitAnimation: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?) =
+    val slideDownExitAnimation: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition) =
         {
             slideOutOfContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Companion.Down,
@@ -57,7 +59,7 @@ object NavAnimations {
             )
         }
 
-    val popEnterDownAnimation: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?) =
+    val popEnterDownAnimation: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition) =
         {
             slideIntoContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Companion.Down,
@@ -65,7 +67,7 @@ object NavAnimations {
             )
         }
 
-    val popExitDownAnimation: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?) =
+    val popExitDownAnimation: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition) =
         {
             slideOutOfContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Companion.Down,
@@ -73,10 +75,23 @@ object NavAnimations {
             )
         }
 
-    val slideRightExitAnimation: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?) =
+    val slideRightExitAnimation: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition) =
         {
             slideOutOfContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
+                animationSpec = tween(500)
+            )
+        }
+
+    val slideFadeInAnimation: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition) =
+        {
+            fadeIn(
+                animationSpec = tween(500)
+            )
+        }
+    val slideFadeOutAnimation: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition) =
+        {
+            fadeOut(
                 animationSpec = tween(500)
             )
         }
