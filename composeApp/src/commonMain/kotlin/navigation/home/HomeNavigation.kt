@@ -5,14 +5,10 @@ import halfmouthappproject.composeapp.generated.resources.icon_account
 import halfmouthappproject.composeapp.generated.resources.icon_beer
 import halfmouthappproject.composeapp.generated.resources.icon_home
 import halfmouthappproject.composeapp.generated.resources.icon_notifications
-import navigation.AppGraphNav
 import navigation.AppNavigation
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
-enum class NavPath {
-    HOME, PRODUCTION, NOTIFICATION, PROFILE
-}
 
 object NavTitle {
     const val HOME = "Menu"
@@ -22,20 +18,39 @@ object NavTitle {
 }
 
 @OptIn(ExperimentalResourceApi::class)
-open class Item(val path: String, val title: String, val icon: DrawableResource)
+open class Item(
+    val pathRoute: String,
+    val title: String,
+    val icon: DrawableResource,
+)
+
 @OptIn(ExperimentalResourceApi::class)
 sealed class NavItem {
     object Home :
-        Item(path = AppGraphNav.HomeGraph.name, title = NavTitle.HOME, icon = Res.drawable.icon_home)
+        Item(
+            pathRoute = AppNavigation.HomeRoute.name,
+            title = NavTitle.HOME,
+            icon = Res.drawable.icon_home
+        )
 
     object Production :
-        Item(path = AppGraphNav.ProductionGraph.name, title = NavTitle.PRODUCTION, icon = Res.drawable.icon_beer )
+        Item(
+            pathRoute = AppNavigation.ProductionRoute.name,
+            title = NavTitle.PRODUCTION,
+            icon = Res.drawable.icon_beer
+        )
 
     object Notification :
-        Item(path = AppGraphNav.NotificationGraph.name, title = NavTitle.NOTIFICATIONS, icon = Res.drawable.icon_notifications)
+        Item(
+            pathRoute = AppNavigation.NotificationRoute.name,
+            title = NavTitle.NOTIFICATIONS,
+            icon = Res.drawable.icon_notifications
+        )
 
     object Profile :
         Item(
-            path = AppGraphNav.ProfileGraph.name, title = NavTitle.PROFILE, icon = Res.drawable.icon_account
+            pathRoute = AppNavigation.ProfileRoute.name,
+            title = NavTitle.PROFILE,
+            icon = Res.drawable.icon_account
         )
 }
