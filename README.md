@@ -1,3 +1,5 @@
+<img align="left" width="70" src="screen/logo.jpeg" />
+
 # HalfMouthBeerApp
 
 Projeto utilizando Kotlin Multiplatform Mobile(KMM) para exibir informações remotas de monitoramento
@@ -74,5 +76,21 @@ Telas Desenvolvidas para as Plataformas Android e iOS.
     <td><img src="screen/iOS/sign-in/sign-in-complete-ios.png" width=250 height=500></td>
     <td><img src="screen/iOS/sign-in/sign-in-error-fields-ios.png" width=250 height=500></td>
     <td><img src="screen/iOS/sign-in/sign-in-progress-bar-ios.png" width=250 height=500></td>
+  </tr>
+</table>
+
+### Tela do Menu Principal (Android)
+<table>
+  <tr>
+    <td><img src="screen/android/menu/menu-android.png" width=250 height=500></td>
+    <td><img src="screen/android/menu/menu2-android.png" width=250 height=500></td
+  </tr>
+</table>
+
+### Tela do Menu Principal (iOS)
+<table>
+  <tr>
+    <td><img src="screen/iOS/menu/menu-ios.png" width=250 height=500></td>
+    <td><img src="screen/iOS/menu/menu2-ios.png" width=250 height=500></td>
   </tr>
 </table>
