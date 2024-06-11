@@ -83,7 +83,7 @@ Telas Desenvolvidas para as Plataformas Android e iOS.
 <table>
   <tr>
     <td><img src="screen/android/menu/menu-android.png" width=250 height=500></td>
-    <td><img src="screen/android/menu/menu2-android.png" width=250 height=500></td
+    <td><img src="screen/android/menu/menu2-android.png" width=250 height=500></td>
   </tr>
 </table>
 
