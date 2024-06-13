@@ -25,6 +25,7 @@ import presentation.ScreenTheme
 import screens.account.LoginScreen
 import screens.account.SignInScreen
 import screens.home.HomeScreen
+import screens.production.ProductionScreen
 import screens.profile.ProfileScreen
 import screens.splash.SplashScreen
 
@@ -141,13 +142,13 @@ private fun NavGraphBuilder.homeNavGraph(
                 composable(
                     route = AppNavigation.ProductionRoute.name,
                 ) {
-                    ProfileScreen()
+                    ProductionScreen()
                 }
 
                 composable(
                     route = AppNavigation.NotificationRoute.name,
                 ) {
-                    ProfileScreen()
+                    ProductionScreen()
                 }
 
                 composable(
