@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.googleServices)
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 kotlin {
@@ -32,6 +33,7 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.ktor.client.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -45,6 +47,17 @@ kotlin {
             implementation(libs.navigation.compose)
             implementation(libs.constraintlayout.compose.multiplatform)
             implementation(libs.multiplatformSettings.noargs)
+
+            implementation(libs.bundles.ktor)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.kotlin.serialization)
+            implementation(libs.ktor.client.logging)
+
+            implementation(libs.logback.classic)
+        }
+
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
     }
 }
