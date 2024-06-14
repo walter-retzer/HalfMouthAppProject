@@ -47,13 +47,12 @@ kotlin {
             implementation(libs.navigation.compose)
             implementation(libs.constraintlayout.compose.multiplatform)
             implementation(libs.multiplatformSettings.noargs)
-
             implementation(libs.bundles.ktor)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.kotlin.serialization)
             implementation(libs.ktor.client.logging)
-
             implementation(libs.logback.classic)
+            implementation(libs.kotlinx.datetime)
         }
 
         iosMain.dependencies {

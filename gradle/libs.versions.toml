@@ -19,6 +19,7 @@ junit = "4.13.2"
 kotlin = "1.9.23"
 gservices = "4.4.1"
 composeNavigation = "2.7.0-alpha07"
+kotlinxDatetime = "0.6.0"
 logbackClassic = "1.2.3"
 mvvmCompose = "0.16.1"
 mvvmFlowCompose = "0.16.1"
@@ -28,6 +29,7 @@ ktor = "2.3.7"
 
 [libraries]
 #Ktor Library
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
