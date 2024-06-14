@@ -26,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,6 +41,7 @@ import halfmouthappproject.composeapp.generated.resources.icon_freezer
 import halfmouthappproject.composeapp.generated.resources.icon_thermostat
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.vectorResource
+import util.snackBarOnlyMessage
 import viewmodel.ProductionViewModel
 import viewmodel.ProductionViewState
 
@@ -57,13 +59,14 @@ fun ProductionScreen() {
     val scrollBehavior =
         TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val snackBarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
         topBar = {
             AppToolbarLarge(
-                title = "Perfil",
+                title = "Produção",
                 onNavigationLeftIconClick = { },
                 onNavigationProfileIconClick = { },
                 onNavigationSettingsIconClick = { },
@@ -163,7 +166,13 @@ fun ProductionScreen() {
                 }
             }
 
-            is ProductionViewState.Error -> {}
+            is ProductionViewState.Error -> {
+                snackBarOnlyMessage(
+                    snackBarHostState = snackBarHostState,
+                    coroutineScope = scope,
+                    message = state.message
+                )
+            }
             is ProductionViewState.Loading -> {
                 Box(
                     modifier = Modifier.fillMaxSize(),

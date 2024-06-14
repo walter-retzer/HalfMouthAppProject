@@ -95,15 +95,11 @@ class ProductionViewModel : ViewModel() {
             _uiState.value = ProductionViewState.Dashboard(newFeedList)
         }
     }
-
-
 }
 
 
 sealed interface ProductionViewState {
-    data class Dashboard(
-        val sensorsValues: MutableList<Feeds> = mutableListOf(),
-    ) : ProductionViewState
+    data class Dashboard(val sensorsValues: MutableList<Feeds> = mutableListOf()) : ProductionViewState
 
     data class Error(val message: String) : ProductionViewState
 
