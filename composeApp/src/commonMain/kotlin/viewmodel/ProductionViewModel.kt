@@ -4,6 +4,7 @@ import data.Feeds
 import data.ThingSpeakResponse
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import network.ApiService
@@ -23,6 +24,14 @@ class ProductionViewModel : ViewModel() {
         )
     )
     val uiState = _uiState.asStateFlow()
+
+    private val _uiState1 = MutableStateFlow<ProductionViewState>(ProductionViewState.Loading)
+    val uiState1: StateFlow<ProductionViewState> = _uiState1.asStateFlow()
+
+    //val listFeedReceive1: MutableList<Feeds>
+
+//    private val _uiStateFeed = MutableStateFlow(MutableList( Feeds()))
+//    val uiStateFeed = _uiStateFeed.asStateFlow()
 
     init {
         loadFirstShimmer()
@@ -89,8 +98,18 @@ class ProductionViewModel : ViewModel() {
                     fieldData = response.feeds[i2]?.created_at
                 ),
             )
+            _uiState1.value = ProductionViewState.Dashboard(newFeedList)
         }
         return newFeedList
     }
 }
 
+sealed interface ProductionViewState {
+    data class Dashboard(
+        val sensorsValues: MutableList<Feeds> = mutableListOf(),
+    ) : ProductionViewState
+
+    data class Error(val message: String) : ProductionViewState
+
+    data object Loading : ProductionViewState
+}
