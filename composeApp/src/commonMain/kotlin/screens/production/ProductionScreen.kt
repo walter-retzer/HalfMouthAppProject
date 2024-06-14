@@ -39,6 +39,9 @@ import dev.icerock.moko.mvvm.compose.viewModelFactory
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.icon_freezer
 import halfmouthappproject.composeapp.generated.resources.icon_thermostat
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.format.FormatStringsInDatetimeFormats
+import kotlinx.datetime.format.byUnicodePattern
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.vectorResource
 import util.snackBarOnlyMessage
@@ -154,8 +157,19 @@ fun ProductionScreen() {
                                 ) {
                                     if (it.fieldData != null) {
                                         val date = it.fieldData.toString()
+
+                                        val formatPattern = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+
+                                        @OptIn(FormatStringsInDatetimeFormats::class)
+                                        val dateTimeFormat = LocalDateTime.Format {
+                                            byUnicodePattern(formatPattern)
+                                        }
+
+                                        dateTimeFormat.parse(date)
+                                        dateTimeFormat
+
                                         Text(
-                                            text = "Data: $date",
+                                            text = "Data: ${dateTimeFormat.parse(date)}",
                                             style = MaterialTheme.typography.bodySmall,
                                         )
                                     }
