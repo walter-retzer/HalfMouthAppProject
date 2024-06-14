@@ -17,7 +17,7 @@ class ApiServiceImpl(
     private val client: HttpClient
 ) : ApiService {
 
-    override suspend fun getThingSpeakValues(results: String): ResultType<ThingSpeakResponse> =
+    override suspend fun getThingSpeakValues(results: String): ResultNetwork<ThingSpeakResponse> =
         makeRequest {
             client.get{
                 url(HttpRoutes.REQUEST_URL)
@@ -29,35 +29,35 @@ class ApiServiceImpl(
 }
 
 
-private suspend inline fun <reified T> makeRequest(crossinline request: suspend () -> HttpResponse): ResultType<T> {
+private suspend inline fun <reified T> makeRequest(crossinline request: suspend () -> HttpResponse): ResultNetwork<T> {
     return try {
         val response: HttpResponse = request()
         if (response.status == HttpStatusCode.OK) {
-            ResultType.success(response.body())
+            ResultNetwork.success(response.body())
         } else {
-            ResultType.failure(Exception("HTTP ${response.status.value}: ${response.status.description}"))
+            ResultNetwork.failure(Exception("HTTP ${response.status.value}: ${response.status.description}"))
         }
     } catch (e: Exception) {
         e.printStackTrace()
-        ResultType.failure(e)
+        ResultNetwork.failure(e)
     } catch (e: RedirectResponseException) {
         // 3xx - response
         println("Error: ${e.response.status.description}")
-        ResultType.failure(e)
+        ResultNetwork.failure(e)
         //ThingSpeakResponse(null, emptyList())
     } catch (e: ClientRequestException) {
         // 4xx - response
         println("Error: ${e.response.status.description}")
-        ResultType.failure(e)
+        ResultNetwork.failure(e)
         //ThingSpeakResponse(null, emptyList())
     } catch (e: ServerResponseException) {
         // 5xx - response
         println("Error: ${e.response.status.description}")
-        ResultType.failure(e)
+        ResultNetwork.failure(e)
         //ThingSpeakResponse(null, emptyList())
     } catch (e: Exception) {
         println("Error: ${e.message}")
-        ResultType.failure(e)
+        ResultNetwork.failure(e)
         //ThingSpeakResponse(null, emptyList())
     }
 }
