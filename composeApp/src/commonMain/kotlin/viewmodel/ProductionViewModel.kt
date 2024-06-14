@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import network.ApiService
 import network.ResultNetwork
+import util.ConstantsApp
 
 
 class ProductionViewModel : ViewModel() {
@@ -33,18 +34,23 @@ class ProductionViewModel : ViewModel() {
 
     private fun handleResponseApi(responseApi: ResultNetwork<ThingSpeakResponse>): ThingSpeakResponse {
         return when (responseApi) {
-            is ResultNetwork.Failure -> throw responseApi.exception
+            is ResultNetwork.Failure -> ThingSpeakResponse(null, emptyList())
             is ResultNetwork.Success -> responseApi.data
         }
     }
 
 
-    private fun adjustValuesInListFeed(listReceive: List<ThingSpeakResponse>): MutableList<Feeds> {
-        var newFeedList = mutableListOf(Feeds())
+    private fun adjustValuesInListFeed(listReceive: List<ThingSpeakResponse>){
+
+        if (listReceive.first().feeds.isEmpty() || listReceive.first().channel == null) {
+            _uiState.value = ProductionViewState.Error(ConstantsApp.ERROR_API)
+            return
+        }
+
         listReceive.forEach { response ->
             val i1 = if (response.feeds.first()?.field1 == null) 1 else 0
             val i2 = if (response.feeds.first()?.field5 == null) 1 else 0
-            newFeedList = mutableListOf(
+            val newFeedList = mutableListOf(
                 Feeds(
                     fieldName = response.channel?.field1,
                     fieldValue = response.feeds[i1]?.field1,
@@ -88,8 +94,9 @@ class ProductionViewModel : ViewModel() {
             )
             _uiState.value = ProductionViewState.Dashboard(newFeedList)
         }
-        return newFeedList
     }
+
+
 }
 
 
