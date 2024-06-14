@@ -15,8 +15,8 @@ class ProductionViewModel : ViewModel() {
 
     private val service = ApiService.create()
     private val results = "2"
-    private val _uiState1 = MutableStateFlow<ProductionViewState>(ProductionViewState.Loading)
-    val uiState1: StateFlow<ProductionViewState> = _uiState1.asStateFlow()
+    private val _uiState = MutableStateFlow<ProductionViewState>(ProductionViewState.Loading)
+    val uiState: StateFlow<ProductionViewState> = _uiState.asStateFlow()
 
     init {
         fetchThingSpeakInformation()
@@ -86,7 +86,7 @@ class ProductionViewModel : ViewModel() {
                     fieldData = response.feeds[i2]?.created_at
                 ),
             )
-            _uiState1.value = ProductionViewState.Dashboard(newFeedList)
+            _uiState.value = ProductionViewState.Dashboard(newFeedList)
         }
         return newFeedList
     }

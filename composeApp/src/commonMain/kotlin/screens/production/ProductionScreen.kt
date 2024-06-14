@@ -3,6 +3,7 @@ package screens.production
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,11 +24,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,8 +37,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import components.AppToolbarLarge
-import components.MyAppCircularProgressIndicator
-import data.Feeds
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import halfmouthappproject.composeapp.generated.resources.Res
@@ -61,8 +58,9 @@ fun ProductionScreen() {
             ProductionViewModel()
         }
     )
-    val uiState1 by viewModel.uiState1.collectAsState()
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+    val uiState by viewModel.uiState.collectAsState()
+    val scrollBehavior =
+        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val snackBarHostState = remember { SnackbarHostState() }
 
     Scaffold(
@@ -78,10 +76,9 @@ fun ProductionScreen() {
             )
         }
     ) { innerPadding ->
-        LazyColumn(modifier = Modifier.fillMaxWidth(), contentPadding = innerPadding) {
-
-            when (val state = uiState1){
-                is ProductionViewState.Dashboard -> {
+        when (val state = uiState) {
+            is ProductionViewState.Dashboard -> {
+                LazyColumn(modifier = Modifier.fillMaxWidth(), contentPadding = innerPadding) {
                     items(state.sensorsValues) {
                         Spacer(modifier = Modifier.height(4.dp))
                         Card(
@@ -200,14 +197,21 @@ fun ProductionScreen() {
                         }
                     }
                 }
-                is ProductionViewState.Error -> {}
-                is ProductionViewState.Loading -> {
-//                    CircularProgressIndicator(
-//                        modifier = Modifier,
-//                        color = mainYellowColor
-//                    )
+            }
+
+            is ProductionViewState.Error -> {}
+            is ProductionViewState.Loading -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier,
+                        color = mainYellowColor
+                    )
                 }
             }
         }
+
     }
 }
