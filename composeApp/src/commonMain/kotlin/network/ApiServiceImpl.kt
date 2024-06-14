@@ -37,27 +37,20 @@ private suspend inline fun <reified T> makeRequest(crossinline request: suspend 
         } else {
             ResultNetwork.failure(Exception("HTTP ${response.status.value}: ${response.status.description}"))
         }
-    } catch (e: Exception) {
-        e.printStackTrace()
-        ResultNetwork.failure(e)
     } catch (e: RedirectResponseException) {
         // 3xx - response
         println("Error: ${e.response.status.description}")
         ResultNetwork.failure(e)
-        //ThingSpeakResponse(null, emptyList())
     } catch (e: ClientRequestException) {
         // 4xx - response
         println("Error: ${e.response.status.description}")
         ResultNetwork.failure(e)
-        //ThingSpeakResponse(null, emptyList())
     } catch (e: ServerResponseException) {
         // 5xx - response
         println("Error: ${e.response.status.description}")
         ResultNetwork.failure(e)
-        //ThingSpeakResponse(null, emptyList())
     } catch (e: Exception) {
-        println("Error: ${e.message}")
+        println("Error: ${e.printStackTrace()}")
         ResultNetwork.failure(e)
-        //ThingSpeakResponse(null, emptyList())
     }
 }
