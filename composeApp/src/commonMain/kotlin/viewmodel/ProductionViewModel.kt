@@ -15,44 +15,32 @@ class ProductionViewModel : ViewModel() {
 
     private val service = ApiService.create()
     private val results = "2"
-    var newFeedList = mutableListOf(Feeds())
-
-    private val _uiState = MutableStateFlow(
-        ThingSpeakResponse(
-            channel = null,
-            feeds = emptyList()
-        )
-    )
-    val uiState = _uiState.asStateFlow()
-
     private val _uiState1 = MutableStateFlow<ProductionViewState>(ProductionViewState.Loading)
     val uiState1: StateFlow<ProductionViewState> = _uiState1.asStateFlow()
 
-    //val listFeedReceive1: MutableList<Feeds>
-
-//    private val _uiStateFeed = MutableStateFlow(MutableList( Feeds()))
-//    val uiStateFeed = _uiStateFeed.asStateFlow()
-
     init {
-        loadFirstShimmer()
+        fetchThingSpeakInformation()
     }
 
-    fun loadFirstShimmer() {
+    private fun fetchThingSpeakInformation() {
         viewModelScope.launch {
-            val response = service.getThingSpeakValues(results = results)
-            _uiState.value = handleResult(response)
-            adjustValuesInListFeed(mutableListOf(uiState.value))
+            val responseApi = service.getThingSpeakValues(results = results)
+            val thingSpeakResponse = handleResponseApi(responseApi)
+            adjustValuesInListFeed(mutableListOf(thingSpeakResponse))
         }
     }
 
-    private fun handleResult(result: ResultNetwork<ThingSpeakResponse>): ThingSpeakResponse {
-        return when (result) {
-            is ResultNetwork.Failure -> throw result.exception
-            is ResultNetwork.Success -> result.data
+
+    private fun handleResponseApi(responseApi: ResultNetwork<ThingSpeakResponse>): ThingSpeakResponse {
+        return when (responseApi) {
+            is ResultNetwork.Failure -> throw responseApi.exception
+            is ResultNetwork.Success -> responseApi.data
         }
     }
+
 
     private fun adjustValuesInListFeed(listReceive: List<ThingSpeakResponse>): MutableList<Feeds> {
+        var newFeedList = mutableListOf(Feeds())
         listReceive.forEach { response ->
             val i1 = if (response.feeds.first()?.field1 == null) 1 else 0
             val i2 = if (response.feeds.first()?.field5 == null) 1 else 0
@@ -103,6 +91,7 @@ class ProductionViewModel : ViewModel() {
         return newFeedList
     }
 }
+
 
 sealed interface ProductionViewState {
     data class Dashboard(
