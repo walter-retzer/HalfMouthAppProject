@@ -1,7 +1,5 @@
 package screens.production
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,8 +13,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -31,20 +30,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import components.AppToolbarLarge
+import components.MyAppCircularProgressIndicator
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import halfmouthappproject.composeapp.generated.resources.Res
-import halfmouthappproject.composeapp.generated.resources.icon_beer
+import halfmouthappproject.composeapp.generated.resources.icon_freezer
+import halfmouthappproject.composeapp.generated.resources.icon_thermostat
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
-import theme.mainYellowColor
-import theme.onSurfaceVariantLight
+import org.jetbrains.compose.resources.vectorResource
 import viewmodel.ProductionViewModel
 import viewmodel.ProductionViewState
 
@@ -91,26 +86,6 @@ fun ProductionScreen() {
                                 ),
                             shape = RoundedCornerShape(16.dp),
                         ) {
-
-                            Row(
-                                modifier = Modifier
-                                    .padding(
-                                        top = 24.dp,
-                                        end = 16.dp,
-                                    )
-                                    .fillMaxSize(),
-                                horizontalArrangement = Arrangement.End,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Image(
-                                    painter = painterResource(Res.drawable.icon_beer),
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .padding(5.dp)
-                                        .clickable(onClick = { }),
-                                    alignment = Alignment.BottomEnd,
-                                )
-                            }
                             Column(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -120,39 +95,36 @@ fun ProductionScreen() {
                                     modifier = Modifier
                                         .padding(
                                             start = 16.dp,
-                                            top = 16.dp,
+                                            top = 6.dp,
                                             end = 0.dp,
-                                            bottom = 4.dp
+                                            bottom = 6.dp
                                         )
                                         .fillMaxSize(),
                                 ) {
-//                            val drawable =
-//                                if (it.fieldName.toString() == "CAMARA FRIA") Res.drawable.icon_freezer
-//                                else if (it.fieldName.toString() == "CHILLER") Res.drawable.icon_freezer
-//                                else if (it.fieldName.toString() == "BOMBA RECIRCULAÇÃO") Res.drawable.icon_freezer
-//                                else Res.drawable.icon_thermostat
-                                    Image(
-                                        painter = painterResource(Res.drawable.icon_beer),
-                                        contentDescription = null,
-                                        modifier = Modifier.padding(5.dp)
+                                    val drawable =
+                                        if (it.fieldName.toString() == "CAMARA FRIA") Res.drawable.icon_freezer
+                                        else if (it.fieldName.toString() == "CHILLER") Res.drawable.icon_freezer
+                                        else if (it.fieldName.toString() == "BOMBA RECIRCULAÇÃO") Res.drawable.icon_freezer
+                                        else Res.drawable.icon_thermostat
+                                    Icon(
+                                        vectorResource(drawable),
+                                        contentDescription = " ",
+                                        tint = Color.White
                                     )
+
                                     val name =
                                         if (it.fieldName.toString() == "BOMBA RECIRCULAÇÃO") "MBO-001"
                                         else it.fieldName.toString()
                                     Text(
+                                        modifier = Modifier.padding(start = 6.dp),
                                         text = name,
-                                        style = TextStyle(
-                                            color = Color.Black,
-                                            fontSize = 20.sp,
-                                            fontWeight = FontWeight.Bold,
-                                            fontFamily = FontFamily.SansSerif
-                                        )
+                                        style = MaterialTheme.typography.bodyMedium,
                                     )
                                     val valueFormatted = it.fieldValue.toString()
                                     val text =
                                         when (it.fieldValue) {
-                                            "0.00000" -> " = 0"
-                                            "1.00000" -> " = 1"
+                                            "0.00000" -> " = Desligado"
+                                            "1.00000" -> " = Ligado"
                                             else -> " = ${
                                                 valueFormatted.replace(
                                                     ",",
@@ -162,11 +134,7 @@ fun ProductionScreen() {
                                         }
                                     Text(
                                         text = text,
-                                        style = TextStyle(
-                                            color = Color.Black,
-                                            fontSize = 20.sp,
-                                            fontWeight = FontWeight.Bold,
-                                        )
+                                        style = MaterialTheme.typography.bodyMedium,
                                     )
                                 }
 
@@ -185,11 +153,7 @@ fun ProductionScreen() {
                                         val date = it.fieldData.toString()
                                         Text(
                                             text = "Data: $date",
-                                            style = TextStyle(
-                                                color = onSurfaceVariantLight,
-                                                fontSize = 14.sp,
-                                                fontWeight = FontWeight.Normal,
-                                            )
+                                            style = MaterialTheme.typography.bodySmall,
                                         )
                                     }
                                 }
@@ -205,13 +169,9 @@ fun ProductionScreen() {
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator(
-                        modifier = Modifier,
-                        color = mainYellowColor
-                    )
+                    MyAppCircularProgressIndicator()
                 }
             }
         }
-
     }
 }
