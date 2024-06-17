@@ -104,18 +104,17 @@ fun String.formattedAsTime(): String {
     }
 }
 
-fun String.adjustString() : String {
+fun String.adjustString(): String {
     var text = ""
-    try {
-        text =
-            when (val value = this.toDouble().formatDecimal()) {
-                "0.00000" -> " = Desligado"
-                "1.00000" -> " = Ligado"
-                else -> " = ${value.replace(",", ".")}°C"
-            }
-    } catch (e: Exception) {
-        text = " "
-        println("Erro ao Converter a String: $e")
+    if (this == "0.00000") text = " = Desligado"
+    else if (this == "1.00000") text = " = Ligado"
+    else {
+        try {
+            val value = this.toDouble().formatDecimal()
+            text = " = ${value.replace(",", ".")}°C"
+        } catch (e: Exception) {
+            println("Erro ao Converter a String: $e")
+        }
     }
     return text
 }
