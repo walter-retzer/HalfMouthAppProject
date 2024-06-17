@@ -41,6 +41,7 @@ import halfmouthappproject.composeapp.generated.resources.icon_freezer
 import halfmouthappproject.composeapp.generated.resources.icon_thermostat
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.vectorResource
+import util.adjustString
 import util.formattedAsDate
 import util.formattedAsTime
 import util.snackBarOnlyMessage
@@ -125,22 +126,13 @@ fun ProductionScreen() {
                                         text = name,
                                         style = MaterialTheme.typography.bodyMedium,
                                     )
-                                    val valueFormatted = it.fieldValue.toString()
-                                    val text =
-                                        when (it.fieldValue) {
-                                            "0.00000" -> " = Desligado"
-                                            "1.00000" -> " = Ligado"
-                                            else -> " = ${
-                                                valueFormatted.replace(
-                                                    ",",
-                                                    "."
-                                                )
-                                            }°C"
-                                        }
-                                    Text(
-                                        text = text,
-                                        style = MaterialTheme.typography.bodyMedium,
-                                    )
+
+                                    it.fieldValue?.adjustString()?.let { value ->
+                                        Text(
+                                            text = value,
+                                            style = MaterialTheme.typography.bodyMedium,
+                                        )
+                                    }
                                 }
 
                                 Row(
@@ -197,6 +189,7 @@ fun ProductionScreen() {
                     message = state.message
                 )
             }
+
             is ProductionViewState.Loading -> {
                 Box(
                     modifier = Modifier.fillMaxSize(),
