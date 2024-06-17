@@ -4,9 +4,14 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
+import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
 import kotlinx.datetime.format.FormatStringsInDatetimeFormats
 import kotlinx.datetime.format.byUnicodePattern
+import kotlinx.datetime.minus
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 import kotlin.math.absoluteValue
 
 class MaskVisualTransformation(private val mask: String) : VisualTransformation {
@@ -68,25 +73,32 @@ fun String.formattedAsPhone(): String {
     }
 }
 
+@OptIn(FormatStringsInDatetimeFormats::class)
 fun String.formattedAsDate(): String {
-    val formatPattern = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+    val formatPattern = "yyyy-MM-dd'T'HH:mm:ss'Z'xxx"
 
-    @OptIn(FormatStringsInDatetimeFormats::class)
-    val dateTimeFormat = LocalDateTime.Format {
-        byUnicodePattern(formatPattern)
+    return try {
+        val dateTimeFormat = LocalDateTime.Format { byUnicodePattern(formatPattern) }
+        val localDateTime = dateTimeFormat.parse(this)
+        localDateTime.dayOfMonth.toString() + "/" + localDateTime.monthNumber + "/" + localDateTime.year
+    } catch (e: Exception) {
+        "##/##/####"
     }
-    val localDateTime = dateTimeFormat.parse(this)
-    return localDateTime.dayOfMonth.toString() + "/" + localDateTime.monthNumber + "/" + localDateTime.year
-
 }
 
+@OptIn(FormatStringsInDatetimeFormats::class)
 fun String.formattedAsTime(): String {
     val formatPattern = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+    val timeZone = TimeZone.of("America/Los_Angeles")
 
-    @OptIn(FormatStringsInDatetimeFormats::class)
-    val dateTimeFormat = LocalDateTime.Format {
-        byUnicodePattern(formatPattern)
+    return try {
+        val dateTimeFormat = LocalDateTime.Format { byUnicodePattern(formatPattern) }
+        val dateTimeReceiver = dateTimeFormat.parse(this)
+        val adjustTimeZone = dateTimeReceiver.toInstant(timeZone)
+        val time = adjustTimeZone.minus(3, DateTimeUnit.HOUR, timeZone).toLocalDateTime(timeZone)
+        time.hour.toString() + ":" + time.minute.toString() + ":" + time.second.toString()
+
+    } catch (e: Exception) {
+        "##:##:##"
     }
-    val localDateTime = dateTimeFormat.parse(this)
-    return localDateTime.hour.toString() + ":" + localDateTime.minute.toString() + ":" + localDateTime.second.toString()
 }
