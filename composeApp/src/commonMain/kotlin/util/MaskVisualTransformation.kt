@@ -4,6 +4,9 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.format.FormatStringsInDatetimeFormats
+import kotlinx.datetime.format.byUnicodePattern
 import kotlin.math.absoluteValue
 
 class MaskVisualTransformation(private val mask: String) : VisualTransformation {
@@ -63,4 +66,27 @@ fun String.formattedAsPhone(): String {
 
         else -> this
     }
+}
+
+fun String.formattedAsDate(): String {
+    val formatPattern = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+
+    @OptIn(FormatStringsInDatetimeFormats::class)
+    val dateTimeFormat = LocalDateTime.Format {
+        byUnicodePattern(formatPattern)
+    }
+    val localDateTime = dateTimeFormat.parse(this)
+    return localDateTime.dayOfMonth.toString() + "/" + localDateTime.monthNumber + "/" + localDateTime.year
+
+}
+
+fun String.formattedAsTime(): String {
+    val formatPattern = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+
+    @OptIn(FormatStringsInDatetimeFormats::class)
+    val dateTimeFormat = LocalDateTime.Format {
+        byUnicodePattern(formatPattern)
+    }
+    val localDateTime = dateTimeFormat.parse(this)
+    return localDateTime.hour.toString() + ":" + localDateTime.minute.toString() + ":" + localDateTime.second.toString()
 }
