@@ -39,11 +39,10 @@ import dev.icerock.moko.mvvm.compose.viewModelFactory
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.icon_freezer
 import halfmouthappproject.composeapp.generated.resources.icon_thermostat
-import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.format.FormatStringsInDatetimeFormats
-import kotlinx.datetime.format.byUnicodePattern
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.vectorResource
+import util.formattedAsDate
+import util.formattedAsTime
 import util.snackBarOnlyMessage
 import viewmodel.ProductionViewModel
 import viewmodel.ProductionViewState
@@ -158,18 +157,29 @@ fun ProductionScreen() {
                                     if (it.fieldData != null) {
                                         val date = it.fieldData.toString()
 
-                                        val formatPattern = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+                                        Text(
+                                            text = "Data: ${date.formattedAsDate()}",
+                                            style = MaterialTheme.typography.bodySmall,
+                                        )
+                                    }
+                                }
 
-                                        @OptIn(FormatStringsInDatetimeFormats::class)
-                                        val dateTimeFormat = LocalDateTime.Format {
-                                            byUnicodePattern(formatPattern)
-                                        }
-
-                                        dateTimeFormat.parse(date)
-                                        dateTimeFormat
+                                Row(
+                                    modifier = Modifier
+                                        .padding(
+                                            start = 24.dp,
+                                            top = 0.dp,
+                                            end = 16.dp,
+                                            bottom = 8.dp
+                                        )
+                                        .fillMaxSize(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                ) {
+                                    if (it.fieldData != null) {
+                                        val time = it.fieldData.toString()
 
                                         Text(
-                                            text = "Data: ${dateTimeFormat.parse(date)}",
+                                            text = "Enviado: ${time.formattedAsTime()}",
                                             style = MaterialTheme.typography.bodySmall,
                                         )
                                     }

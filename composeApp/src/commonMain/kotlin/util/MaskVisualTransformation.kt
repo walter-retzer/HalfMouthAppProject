@@ -75,12 +75,12 @@ fun String.formattedAsPhone(): String {
 
 @OptIn(FormatStringsInDatetimeFormats::class)
 fun String.formattedAsDate(): String {
-    val formatPattern = "yyyy-MM-dd'T'HH:mm:ss'Z'xxx"
+    val formatPattern = "yyyy-MM-dd'T'HH:mm:ss'Z'"
 
     return try {
         val dateTimeFormat = LocalDateTime.Format { byUnicodePattern(formatPattern) }
-        val localDateTime = dateTimeFormat.parse(this)
-        localDateTime.dayOfMonth.toString() + "/" + localDateTime.monthNumber + "/" + localDateTime.year
+        val dateTimeReceiver = dateTimeFormat.parse(this)
+        dateTimeReceiver.dayOfMonth.toString() + "/" + dateTimeReceiver.monthNumber + "/" + dateTimeReceiver.year
     } catch (e: Exception) {
         "##/##/####"
     }
