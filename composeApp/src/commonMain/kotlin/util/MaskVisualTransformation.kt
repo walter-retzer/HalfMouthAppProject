@@ -82,6 +82,7 @@ fun String.formattedAsDate(): String {
         val dateTimeReceiver = dateTimeFormat.parse(this)
         dateTimeReceiver.dayOfMonth.toString() + "/" + dateTimeReceiver.monthNumber + "/" + dateTimeReceiver.year
     } catch (e: Exception) {
+        println("Erro ao Converter a String: $e")
         "##/##/####"
     }
 }
@@ -97,8 +98,24 @@ fun String.formattedAsTime(): String {
         val adjustTimeZone = dateTimeReceiver.toInstant(timeZone)
         val time = adjustTimeZone.minus(3, DateTimeUnit.HOUR, timeZone).toLocalDateTime(timeZone)
         time.hour.toString() + ":" + time.minute.toString() + ":" + time.second.toString()
-
     } catch (e: Exception) {
+        println("Erro ao Converter a String: $e")
         "##:##:##"
     }
+}
+
+fun String.adjustString() : String {
+    var text = ""
+    try {
+        text =
+            when (val value = this.toDouble().formatDecimal()) {
+                "0.00000" -> " = Desligado"
+                "1.00000" -> " = Ligado"
+                else -> " = ${value.replace(",", ".")}°C"
+            }
+    } catch (e: Exception) {
+        text = " "
+        println("Erro ao Converter a String: $e")
+    }
+    return text
 }
