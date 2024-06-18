@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,8 +26,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,33 +45,45 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.get
+import components.MyAppCircularProgressIndicator
 import components.profileToolbar
 import data.UserPreferences
+import dev.gitlive.firebase.Firebase
+import dev.gitlive.firebase.auth.auth
 import halfmouthappproject.composeapp.generated.resources.Res
+import halfmouthappproject.composeapp.generated.resources.icon_account
 import halfmouthappproject.composeapp.generated.resources.icon_email
 import halfmouthappproject.composeapp.generated.resources.icon_equipaments
 import halfmouthappproject.composeapp.generated.resources.icon_logout
 import halfmouthappproject.composeapp.generated.resources.icon_phone
 import halfmouthappproject.composeapp.generated.resources.splashscreenlogo
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import theme.onSurfaceVariantDark
+import util.RestartApp
 import util.formattedAsPhone
+import util.snackBarOnlyMessage
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
 @Composable
 fun ProfileScreen(
-    onNavigateToMenu: () -> Unit,
+    onNavigateBack: () -> Unit,
+    onNavigateSignOut: () -> Unit,
 ) {
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val scope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
+    val auth = remember { Firebase.auth }
     val settingsPref = Settings()
     val uid: String? = settingsPref[UserPreferences.UID]
     val name: String? = settingsPref[UserPreferences.NAME]
     val email: String? = settingsPref[UserPreferences.EMAIL]
     val phone: String? = settingsPref[UserPreferences.PHONE]
+    var progressButtonIsActivated by remember { mutableStateOf(false) }
+    var signOut by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -75,8 +91,8 @@ fun ProfileScreen(
         topBar = {
             profileToolbar(
                 title = "Perfil",
-                onNavigationIconBack = { onNavigateToMenu() },
-                onNavigationIconClose = { onNavigateToMenu() },
+                onNavigationIconBack = { onNavigateBack() },
+                onNavigationIconClose = { onNavigateBack() },
                 scrollBehavior = scrollBehavior
             )
         }
@@ -219,7 +235,73 @@ fun ProfileScreen(
                 Icon(
                     modifier = Modifier
                         .padding(8.dp)
-                        .clickable {  },
+                        .clickable {
+                            scope.launch {
+                                try {
+                                    progressButtonIsActivated = true
+                                    auth.currentUser?.delete()
+                                    auth.signOut()
+
+                                    settingsPref.clear()
+                                    delay(2000L)
+                                    signOut = true
+
+                                    //onNavigateSignOut()
+                                } catch (e: Exception) {
+                                    progressButtonIsActivated = false
+                                    println(e)
+                                    snackBarOnlyMessage(
+                                        snackBarHostState = snackBarHostState,
+                                        coroutineScope = scope,
+                                        message = "Não foi possível excluir a sua conta, por favor, tente mais tarde."
+                                    )
+                                }
+                            }
+
+                        },
+                    painter = painterResource(Res.drawable.icon_account),
+                    contentDescription = null,
+                    tint = Color.White
+                )
+                Text(
+                    modifier = Modifier.clickable {  },
+                    text = "Excluir Conta",
+                    style = TextStyle(
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = FontFamily.SansSerif,
+                        textAlign = TextAlign.Center
+                    ),
+                )
+
+                Icon(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .clickable {
+                            scope.launch {
+                                try {
+                                    progressButtonIsActivated = true
+                                    auth.signOut()
+
+                                    settingsPref.clear()
+
+
+                                    delay(2000L)
+                                    signOut = true
+
+                                } catch (e: Exception) {
+                                    progressButtonIsActivated = false
+                                    println(e)
+                                    snackBarOnlyMessage(
+                                        snackBarHostState = snackBarHostState,
+                                        coroutineScope = scope,
+                                        message = "Não foi possível deletar a sua conta, por favor, tente mais tarde."
+                                    )
+                                }
+                            }
+
+                        },
                     painter = painterResource(Res.drawable.icon_logout),
                     contentDescription = null,
                     tint = Color.White
@@ -235,6 +317,17 @@ fun ProfileScreen(
                         textAlign = TextAlign.Center
                     ),
                 )
+
+                if(progressButtonIsActivated){
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        MyAppCircularProgressIndicator()
+                    }
+                }
+
+                if(signOut) RestartApp()
             }
         }
     }
