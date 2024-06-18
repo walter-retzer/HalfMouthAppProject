@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,7 +15,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -26,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,11 +44,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.get
-import components.MyAppCircularProgressIndicator
+import components.LoadingWithLine
 import components.profileToolbar
 import data.UserPreferences
-import dev.gitlive.firebase.Firebase
-import dev.gitlive.firebase.auth.auth
+import dev.icerock.moko.mvvm.compose.getViewModel
+import dev.icerock.moko.mvvm.compose.viewModelFactory
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.icon_account
 import halfmouthappproject.composeapp.generated.resources.icon_email
@@ -57,33 +56,36 @@ import halfmouthappproject.composeapp.generated.resources.icon_equipaments
 import halfmouthappproject.composeapp.generated.resources.icon_logout
 import halfmouthappproject.composeapp.generated.resources.icon_phone
 import halfmouthappproject.composeapp.generated.resources.splashscreenlogo
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import theme.onSurfaceVariantDark
 import util.RestartApp
 import util.formattedAsPhone
 import util.snackBarOnlyMessage
+import viewmodel.ProfileViewModel
+import viewmodel.ProfileViewState
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
 @Composable
 fun ProfileScreen(
-    onNavigateBack: () -> Unit,
-    onNavigateSignOut: () -> Unit,
+    onNavigateBack: () -> Unit
 ) {
 
+    val viewModel = getViewModel(
+        key = "profile-screen",
+        factory = viewModelFactory {
+            ProfileViewModel()
+        }
+    )
+    val uiState by viewModel.uiState.collectAsState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val scope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
-    val auth = remember { Firebase.auth }
     val settingsPref = Settings()
     val uid: String? = settingsPref[UserPreferences.UID]
     val name: String? = settingsPref[UserPreferences.NAME]
     val email: String? = settingsPref[UserPreferences.EMAIL]
     val phone: String? = settingsPref[UserPreferences.PHONE]
-    var progressButtonIsActivated by remember { mutableStateOf(false) }
-    var signOut by remember { mutableStateOf(false) }
+    var isLoading by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -97,14 +99,14 @@ fun ProfileScreen(
             )
         }
     ) { innerPadding ->
-
-        Column(
+        Column (
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
                 .verticalScroll(rememberScrollState())
                 .padding(innerPadding)
         ) {
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -143,6 +145,7 @@ fun ProfileScreen(
                     ),
                 )
             }
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -168,6 +171,7 @@ fun ProfileScreen(
                     ),
                 )
             }
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -193,6 +197,7 @@ fun ProfileScreen(
                     )
                 )
             }
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -219,12 +224,7 @@ fun ProfileScreen(
                 )
             }
 
-            HorizontalDivider(
-                modifier = Modifier
-                    .padding(16.dp),
-                thickness = 1.dp,
-                color = onSurfaceVariantDark
-            )
+            LoadingWithLine(isLoading)
 
             Row(
                 modifier = Modifier
@@ -235,36 +235,13 @@ fun ProfileScreen(
                 Icon(
                     modifier = Modifier
                         .padding(8.dp)
-                        .clickable {
-                            scope.launch {
-                                try {
-                                    progressButtonIsActivated = true
-                                    auth.currentUser?.delete()
-                                    auth.signOut()
-
-                                    settingsPref.clear()
-                                    delay(2000L)
-                                    signOut = true
-
-                                    //onNavigateSignOut()
-                                } catch (e: Exception) {
-                                    progressButtonIsActivated = false
-                                    println(e)
-                                    snackBarOnlyMessage(
-                                        snackBarHostState = snackBarHostState,
-                                        coroutineScope = scope,
-                                        message = "Não foi possível excluir a sua conta, por favor, tente mais tarde."
-                                    )
-                                }
-                            }
-
-                        },
+                        .clickable { viewModel.deleteUser() },
                     painter = painterResource(Res.drawable.icon_account),
                     contentDescription = null,
                     tint = Color.White
                 )
                 Text(
-                    modifier = Modifier.clickable {  },
+                    modifier = Modifier.clickable { },
                     text = "Excluir Conta",
                     style = TextStyle(
                         color = Color.White,
@@ -274,40 +251,24 @@ fun ProfileScreen(
                         textAlign = TextAlign.Center
                     ),
                 )
+            }
 
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
+            ) {
                 Icon(
                     modifier = Modifier
                         .padding(8.dp)
-                        .clickable {
-                            scope.launch {
-                                try {
-                                    progressButtonIsActivated = true
-                                    auth.signOut()
-
-                                    settingsPref.clear()
-
-
-                                    delay(2000L)
-                                    signOut = true
-
-                                } catch (e: Exception) {
-                                    progressButtonIsActivated = false
-                                    println(e)
-                                    snackBarOnlyMessage(
-                                        snackBarHostState = snackBarHostState,
-                                        coroutineScope = scope,
-                                        message = "Não foi possível deletar a sua conta, por favor, tente mais tarde."
-                                    )
-                                }
-                            }
-
-                        },
+                        .clickable { viewModel.signOut() },
                     painter = painterResource(Res.drawable.icon_logout),
                     contentDescription = null,
                     tint = Color.White
                 )
                 Text(
-                    modifier = Modifier.clickable {  },
+                    modifier = Modifier.clickable { },
                     text = "Sair",
                     style = TextStyle(
                         color = Color.White,
@@ -317,17 +278,35 @@ fun ProfileScreen(
                         textAlign = TextAlign.Center
                     ),
                 )
+            }
 
-                if(progressButtonIsActivated){
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        MyAppCircularProgressIndicator()
-                    }
+            when (val state = uiState) {
+                is ProfileViewState.Dashboard -> { }
+
+                is ProfileViewState.Loading -> {
+                    isLoading = true
                 }
 
-                if(signOut) RestartApp()
+                is ProfileViewState.Success -> {
+                    isLoading = false
+                    RestartApp()
+                }
+
+                is ProfileViewState.SuccessClearInfoUser -> {
+                    snackBarOnlyMessage(
+                        snackBarHostState = snackBarHostState,
+                        coroutineScope = scope,
+                        message = state.message
+                    )
+                }
+
+                is ProfileViewState.Error -> {
+                    snackBarOnlyMessage(
+                        snackBarHostState = snackBarHostState,
+                        coroutineScope = scope,
+                        message = state.message
+                    )
+                }
             }
         }
     }
