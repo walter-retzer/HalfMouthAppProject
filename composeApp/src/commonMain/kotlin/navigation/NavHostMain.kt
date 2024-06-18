@@ -158,7 +158,7 @@ private fun NavGraphBuilder.homeNavGraph(
                     route = AppNavigation.ProfileRoute.name,
                 ) {
                     ProfileScreen(
-                        onNavigateToMenu = {
+                        onNavigateBack = {
                             navController.navigateUp()
                         }
                     )
@@ -168,12 +168,13 @@ private fun NavGraphBuilder.homeNavGraph(
                     route = AppNavigation.ContactRoute.name,
                 ) {
                     ProfileScreen(
-                        onNavigateToMenu = {
+                        onNavigateBack = {
                             navController.navigateUp()
                         }
                     )
                 }
             }
+
             AppBottomNavigationBar(
                 navItems = items,
                 navController = navController
