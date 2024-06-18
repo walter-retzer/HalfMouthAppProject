@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.get
-import components.AppToolbarLarge
+import components.profileToolbar
 import data.UserPreferences
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.icon_email
@@ -56,7 +56,9 @@ import util.formattedAsPhone
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(
+    onNavigateToMenu: () -> Unit,
+) {
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val scope = rememberCoroutineScope()
@@ -71,11 +73,10 @@ fun ProfileScreen() {
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         snackbarHost =  { SnackbarHost(hostState = snackBarHostState) },
         topBar = {
-            AppToolbarLarge(
+            profileToolbar(
                 title = "Perfil",
-                onNavigationLeftIconClick = { },
-                onNavigationProfileIconClick = { },
-                onNavigationSettingsIconClick = { },
+                onNavigationIconBack = { onNavigateToMenu() },
+                onNavigationIconClose = { onNavigateToMenu() },
                 scrollBehavior = scrollBehavior
             )
         }
