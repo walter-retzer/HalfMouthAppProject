@@ -1,10 +1,10 @@
 package navigation.home
 
 import halfmouthappproject.composeapp.generated.resources.Res
-import halfmouthappproject.composeapp.generated.resources.icon_account
 import halfmouthappproject.composeapp.generated.resources.icon_beer
 import halfmouthappproject.composeapp.generated.resources.icon_home
 import halfmouthappproject.composeapp.generated.resources.icon_notifications
+import halfmouthappproject.composeapp.generated.resources.icon_phone
 import navigation.AppNavigation
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -14,7 +14,7 @@ object NavTitle {
     const val HOME = "Menu"
     const val PRODUCTION = "Produção"
     const val NOTIFICATIONS = "Notificação"
-    const val PROFILE = "Perfil"
+    const val CONTACT = "Contato"
 }
 
 @OptIn(ExperimentalResourceApi::class)
@@ -47,10 +47,10 @@ sealed class NavItem {
             icon = Res.drawable.icon_notifications
         )
 
-    object Profile :
+    object Contact :
         Item(
-            pathRoute = AppNavigation.ProfileRoute.name,
-            title = NavTitle.PROFILE,
-            icon = Res.drawable.icon_account
+            pathRoute = AppNavigation.ContactRoute.name,
+            title = NavTitle.CONTACT,
+            icon = Res.drawable.icon_phone
         )
 }
