@@ -2,6 +2,8 @@ package components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -52,6 +54,44 @@ fun AppToolbarLarge(
             IconButton(onClick = { onNavigationSettingsIconClick() }) {
                 Icon(
                     imageVector = Icons.Default.Settings,
+                    contentDescription = "Localized description"
+                )
+            }
+        },
+        scrollBehavior = scrollBehavior
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun profileToolbar(
+    color: Color = Color.Black,
+    titleColor: Color = primaryDark,
+    title: String,
+    onNavigationIconBack: () -> Unit,
+    onNavigationIconClose: () -> Unit,
+    scrollBehavior:  TopAppBarScrollBehavior? = null,
+
+    ) {
+    LargeTopAppBar(
+        colors = TopAppBarDefaults.largeTopAppBarColors(
+            containerColor = color,
+            scrolledContainerColor = color,
+            titleContentColor = titleColor,
+        ),
+        title = { Text(title) },
+        navigationIcon = {
+            IconButton(onClick = { onNavigationIconBack() }) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Localized description"
+                )
+            }
+        },
+        actions = {
+            IconButton(onClick = { onNavigationIconClose() }) {
+                Icon(
+                    imageVector = Icons.Default.Close,
                     contentDescription = "Localized description"
                 )
             }
