@@ -122,7 +122,7 @@ private fun NavGraphBuilder.homeNavGraph(
                 NavItem.Home,
                 NavItem.Production,
                 NavItem.Notification,
-                NavItem.Profile
+                NavItem.Contact
             )
         }
         val navController = rememberNavController()
@@ -136,6 +136,9 @@ private fun NavGraphBuilder.homeNavGraph(
                 composable(route = AppNavigation.HomeRoute.name) {
                     HomeScreen(
                         onNavigateToSettings = {},
+                        onNavigateToProfile = {
+                            navController.navigate(AppNavigation.ProfileRoute.name)
+                        }
                     )
                 }
 
@@ -154,9 +157,22 @@ private fun NavGraphBuilder.homeNavGraph(
                 composable(
                     route = AppNavigation.ProfileRoute.name,
                 ) {
-                    ProfileScreen()
+                    ProfileScreen(
+                        onNavigateToMenu = {
+                            navController.navigateUp()
+                        }
+                    )
                 }
 
+                composable(
+                    route = AppNavigation.ContactRoute.name,
+                ) {
+                    ProfileScreen(
+                        onNavigateToMenu = {
+                            navController.navigateUp()
+                        }
+                    )
+                }
             }
             AppBottomNavigationBar(
                 navItems = items,
