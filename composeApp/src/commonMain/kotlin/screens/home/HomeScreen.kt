@@ -67,6 +67,7 @@ import util.snackBarOnlyMessage
 @Preview
 fun HomeScreen(
     onNavigateToSettings: () -> Unit,
+    onNavigateToProfile: () -> Unit,
 ) {
     val scrollBehavior =
         TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
@@ -95,8 +96,8 @@ fun HomeScreen(
                     }
 
                 },
-                onNavigationProfileIconClick = { onNavigateToSettings() },
-                onNavigationSettingsIconClick = { },
+                onNavigationProfileIconClick = { onNavigateToProfile() },
+                onNavigationSettingsIconClick = { onNavigateToSettings() },
                 scrollBehavior = scrollBehavior
             )
         },
