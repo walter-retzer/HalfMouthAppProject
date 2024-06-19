@@ -1,6 +1,7 @@
 package viewmodel
 
 import com.russhwolf.settings.Settings
+import data.UserPreferences
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.auth
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
@@ -18,12 +19,12 @@ class ProfileViewModel : ViewModel() {
     private val _uiState = MutableStateFlow<ProfileViewState>(ProfileViewState.Dashboard)
     val uiState: StateFlow<ProfileViewState> = _uiState.asStateFlow()
 
-    fun signOut() {
+    fun onSignOut() {
         _uiState.value = ProfileViewState.Loading
         viewModelScope.launch {
             try {
                 authService.signOut()
-                settingsPref.clear()
+                settingsPref.remove(UserPreferences.UID)
                 delay(3000L)
                 _uiState.value = ProfileViewState.Success
             } catch (e: Exception) {
@@ -33,7 +34,7 @@ class ProfileViewModel : ViewModel() {
         }
     }
 
-    fun deleteUser() {
+    fun onDeleteAccount() {
         _uiState.value = ProfileViewState.Loading
         viewModelScope.launch {
             try {
@@ -57,5 +58,4 @@ sealed interface ProfileViewState {
     data object Success : ProfileViewState
     data class SuccessClearInfoUser(val message: String) : ProfileViewState
     data class Error(val message: String) : ProfileViewState
-
 }

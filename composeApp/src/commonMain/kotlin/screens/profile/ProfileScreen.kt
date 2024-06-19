@@ -235,7 +235,7 @@ fun ProfileScreen(
                 Icon(
                     modifier = Modifier
                         .padding(8.dp)
-                        .clickable { viewModel.deleteUser() },
+                        .clickable { viewModel.onDeleteAccount() },
                     painter = painterResource(Res.drawable.icon_account),
                     contentDescription = null,
                     tint = Color.White
@@ -262,7 +262,7 @@ fun ProfileScreen(
                 Icon(
                     modifier = Modifier
                         .padding(8.dp)
-                        .clickable { viewModel.signOut() },
+                        .clickable { viewModel.onSignOut() },
                     painter = painterResource(Res.drawable.icon_logout),
                     contentDescription = null,
                     tint = Color.White
@@ -283,9 +283,7 @@ fun ProfileScreen(
             when (val state = uiState) {
                 is ProfileViewState.Dashboard -> { }
 
-                is ProfileViewState.Loading -> {
-                    isLoading = true
-                }
+                is ProfileViewState.Loading -> { isLoading = true }
 
                 is ProfileViewState.Success -> {
                     isLoading = false
