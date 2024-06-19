@@ -41,11 +41,16 @@ class LoginUserViewModel : ViewModel() {
                     password = password
                 )
                 delay(3000L)
+
                 firebaseUser = authService.currentUser
                 settingsPref.putString(UserPreferences.UID, firebaseUser?.uid.toString())
+                settingsPref.putString(UserPreferences.NAME, firebaseUser?.displayName.toString())
+                settingsPref.putString(UserPreferences.EMAIL, firebaseUser?.email.toString())
+
                 if (firebaseUser != null) _uiState.value =
                     LoginUserViewState.Success(ConstantsApp.SUCCESS_SIGN_IN)
                 else _uiState.value = LoginUserViewState.Error(ConstantsApp.ERROR_SIGN_IN)
+
             } catch (e: Exception) {
                 println(e)
                 _uiState.value = LoginUserViewState.Error(ConstantsApp.ERROR_SIGN_IN)
@@ -92,5 +97,4 @@ sealed interface LoginUserViewState {
     data object Dashboard : LoginUserViewState
     data class Success(val message: String) : LoginUserViewState
     data class Error(val message: String) : LoginUserViewState
-
 }
