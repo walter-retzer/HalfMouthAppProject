@@ -20,6 +20,9 @@ class LoginUserViewModel : ViewModel() {
     private val authService = Firebase.auth
     private var firebaseUser: FirebaseUser? = null
 
+    private val _emailForResetPassword = MutableStateFlow(false)
+    val emailForResetPassword = _emailForResetPassword.asStateFlow()
+
     private val _emailError = MutableStateFlow(false)
     val emailError = _emailError.asStateFlow()
 
@@ -58,6 +61,25 @@ class LoginUserViewModel : ViewModel() {
         }
     }
 
+    fun onResetPassword(email: String) {
+        viewModelScope.launch {
+            try {
+                authService.sendPasswordResetEmail(email = email)
+                delay(3000L)
+               _uiState.value = LoginUserViewState.SuccessResetPassword(ConstantsApp.SUCCESS_RESET_PASSWORD)
+            } catch (e: Exception) {
+                println(e)
+                _uiState.value = LoginUserViewState.Error(ConstantsApp.ERROR_RESET_PASSWORD)
+            }
+        }
+    }
+
+
+    fun onEmailForResetPasswordChange(newValue: String) {
+        _userLoginState.update { it.copy(email = newValue) }
+        //reset error when the user types another character
+        if (newValue.isNotBlank()) _emailError.value = false
+    }
 
     fun onEmailChange(newValue: String) {
         _userLoginState.update { it.copy(email = newValue) }
@@ -90,11 +112,13 @@ class LoginUserViewModel : ViewModel() {
 data class LoginUserData(
     val email: String = "",
     val password: String = "",
+    val emailForResetPassword: String = ""
 )
 
 sealed interface LoginUserViewState {
     data object Loading : LoginUserViewState
     data object Dashboard : LoginUserViewState
     data class Success(val message: String) : LoginUserViewState
+    data class SuccessResetPassword(val message: String) : LoginUserViewState
     data class Error(val message: String) : LoginUserViewState
 }
