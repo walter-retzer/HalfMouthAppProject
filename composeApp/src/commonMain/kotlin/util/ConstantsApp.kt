@@ -15,5 +15,7 @@ class ConstantsApp {
             val SUCCESS_CREATE_ACCOUNT = "Conta criada com Sucesso! Iremos direcionar ao menu do aplicativo."
             val MESSAGE_DELETE_ACCOUNT = "Deseja realmente excluir a conta?"
             val MESSAGE_SIGN_OUT_ACCOUNT = "Deseja realmente sair da conta?"
+            val SUCCESS_RESET_PASSWORD = "Em breve receberá um email para cadastrar uma nova senha."
+            val ERROR_RESET_PASSWORD = "Verifique o email digitado."
         }
 }
