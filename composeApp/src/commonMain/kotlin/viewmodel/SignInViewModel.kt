@@ -1,16 +1,30 @@
 package viewmodel
 
+import com.russhwolf.settings.Settings
+import data.UserPreferences
+import dev.gitlive.firebase.Firebase
+import dev.gitlive.firebase.auth.FirebaseUser
+import dev.gitlive.firebase.auth.auth
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import util.ConstantsApp
 
 
 class SignInViewModel : ViewModel() {
 
-    private val _uiState = MutableStateFlow(NewUserContact())
-    val uiState = _uiState.asStateFlow()
+    private val settingsPref = Settings()
+    private val authService = Firebase.auth
+    private var firebaseUser: FirebaseUser? = null
+
+    private val _uiState = MutableStateFlow<SignInViewState>(SignInViewState.Dashboard)
+    val uiState: StateFlow<SignInViewState> = _uiState.asStateFlow()
+
+    private val _newUserSignInState = MutableStateFlow(NewUserContact())
+    val newUserSignInState = _newUserSignInState.asStateFlow()
 
     private val _emailError = MutableStateFlow(false)
     val emailError = _emailError.asStateFlow()
@@ -25,26 +39,54 @@ class SignInViewModel : ViewModel() {
     val phoneNumberError = _phoneNumberError.asStateFlow()
 
 
+    fun onSignInUser(email: String, password: String) {
+        _uiState.value = SignInViewState.Loading
+        viewModelScope.launch {
+            try {
+                authService.createUserWithEmailAndPassword(
+                    email = email,
+                    password = password
+                )
+
+                firebaseUser = authService.currentUser
+                firebaseUser?.updateProfile(displayName = _newUserSignInState.value.name)
+
+                settingsPref.putString(UserPreferences.UID, firebaseUser?.uid.toString())
+                settingsPref.putString(UserPreferences.NAME, firebaseUser?.displayName.toString())
+                settingsPref.putString(UserPreferences.EMAIL, firebaseUser?.email.toString())
+                settingsPref.putString(UserPreferences.PHONE, _newUserSignInState.value.phoneNumber)
+
+                if (firebaseUser != null) _uiState.value =
+                    SignInViewState.Success(ConstantsApp.SUCCESS_CREATE_ACCOUNT)
+                else _uiState.value = SignInViewState.Error(ConstantsApp.ERROR_CREATE_ACCOUNT)
+
+            } catch (e: Exception) {
+                println(e)
+                _uiState.value = SignInViewState.Error(ConstantsApp.ERROR_CREATE_ACCOUNT)
+            }
+        }
+    }
+
     fun onEmailChange(newValue: String) {
-        _uiState.update { it.copy(email = newValue) }
+        _newUserSignInState.update { it.copy(email = newValue) }
         //reset error when the user types another character
         if (newValue.isNotBlank()) _emailError.value = false
     }
 
     fun onPasswordChange(newValue: String) {
-        _uiState.update { it.copy(password = newValue) }
+        _newUserSignInState.update { it.copy(password = newValue) }
         //reset error when the user types another character
         if (newValue.isNotBlank()) _passwordError.value = false
     }
 
     fun onNameChange(newValue: String) {
-        _uiState.update { it.copy(name = newValue) }
+        _newUserSignInState.update { it.copy(name = newValue) }
         //reset error when the user types another character
         if (newValue.isNotBlank()) _nameError.value = false
     }
 
     fun onPhoneNumberChange(newValue: String) {
-        _uiState.update { it.copy(phoneNumber = newValue) }
+        _newUserSignInState.update { it.copy(phoneNumber = newValue) }
         //reset error when the user types another character
         if (newValue.isNotBlank()) _phoneNumberError.value = false
     }
@@ -85,3 +127,10 @@ data class NewUserContact(
     val email: String = "",
     val password: String = "",
 )
+
+sealed interface SignInViewState {
+    data object Loading : SignInViewState
+    data object Dashboard : SignInViewState
+    data class Success(val message: String) : SignInViewState
+    data class Error(val message: String) : SignInViewState
+}
