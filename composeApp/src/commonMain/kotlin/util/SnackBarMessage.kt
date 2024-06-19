@@ -2,6 +2,7 @@ package util
 
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -20,16 +21,23 @@ fun snackBarOnlyMessage(
     }
 }
 
-fun snackBarWithCloseButton(
+fun snackBarWithActionButton(
     coroutineScope: CoroutineScope,
     snackBarHostState: SnackbarHostState,
-    message: String
+    message: String,
+    actionLabel: String,
+    onAction:() -> Unit
 ) {
     coroutineScope.launch {
-        snackBarHostState.showSnackbar(
+        val snackBarResult = snackBarHostState.showSnackbar(
             message = message,
             withDismissAction = true,
-            duration = SnackbarDuration.Indefinite
+            duration = SnackbarDuration.Indefinite,
+            actionLabel = actionLabel
         )
+        when(snackBarResult){
+            SnackbarResult.Dismissed -> {}
+            SnackbarResult.ActionPerformed -> { onAction() }
+        }
     }
 }
