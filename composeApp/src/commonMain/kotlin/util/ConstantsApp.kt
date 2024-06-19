@@ -13,5 +13,7 @@ class ConstantsApp {
             val SUCCESS_DELETE_ACCOUNT = "Sua conta foi excluída com sucesso."
             val ERROR_CREATE_ACCOUNT = "Não foi possível criar a sua conta, por favor, tente mais tarde."
             val SUCCESS_CREATE_ACCOUNT = "Conta criada com Sucesso! Iremos direcionar ao menu do aplicativo."
+            val MESSAGE_DELETE_ACCOUNT = "Deseja realmente excluir a conta?"
+            val MESSAGE_SIGN_OUT_ACCOUNT = "Deseja realmente sair da conta?"
         }
 }
