@@ -9,7 +9,9 @@ class ConstantsApp {
             val ERROR_SIGN_IN = "Não foi possível acessar a sua conta, por favor, tente mais tarde."
             val SUCCESS_SIGN_IN = "Login realizado com Sucesso!"
             val ERROR_DELETE_ACCOUNT = "Não foi possível deletar a sua conta, por favor, tente mais tarde."
-            val ERROR_SIGN_OUT = "Não foi possível sair da sua conta, por favor, tente mais tarde"
+            val ERROR_SIGN_OUT = "Não foi possível sair da sua conta, por favor, tente mais tarde."
             val SUCCESS_DELETE_ACCOUNT = "Sua conta foi excluída com sucesso."
+            val ERROR_CREATE_ACCOUNT = "Não foi possível criar a sua conta, por favor, tente mais tarde."
+            val SUCCESS_CREATE_ACCOUNT = "Conta criada com Sucesso! Iremos direcionar ao menu do aplicativo."
         }
 }
