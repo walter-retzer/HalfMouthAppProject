@@ -29,7 +29,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -41,17 +40,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.russhwolf.settings.Settings
-import com.russhwolf.settings.get
 import components.AppToolbarLarge
-import data.UserPreferences
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.beer_craft_glass
 import halfmouthappproject.composeapp.generated.resources.beer_growler
 import halfmouthappproject.composeapp.generated.resources.beer_mug_ipa
 import halfmouthappproject.composeapp.generated.resources.brewingbeer
 import halfmouthappproject.composeapp.generated.resources.splashscreenlogo
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
@@ -59,7 +54,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import theme.onBackgroundDark
 import theme.onSecondaryContainerDark
 import theme.secondaryContainerDark
-import util.snackBarOnlyMessage
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,8 +65,6 @@ fun HomeScreen(
 ) {
     val scrollBehavior =
         TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
-    val scope = rememberCoroutineScope()
-    val settingsPref = Settings()
     val snackBarHostState = remember { SnackbarHostState() }
 
     Scaffold(
@@ -81,21 +73,7 @@ fun HomeScreen(
         topBar = {
             AppToolbarLarge(
                 title = "Nossas Cervejas",
-                onNavigationLeftIconClick = {
-                    scope.launch {
-                        val test: String? = settingsPref[UserPreferences.UID]
-                        val name: String? = settingsPref[UserPreferences.NAME]
-                        val email: String? = settingsPref[UserPreferences.EMAIL]
-                        val phone: String? = settingsPref[UserPreferences.PHONE]
-                        println(test)
-                        snackBarOnlyMessage(
-                            snackBarHostState = snackBarHostState,
-                            coroutineScope = scope,
-                            message = "$test $email $name $phone"
-                        )
-                    }
-
-                },
+                onNavigationLeftIconClick = { },
                 onNavigationProfileIconClick = { onNavigateToProfile() },
                 onNavigationSettingsIconClick = { onNavigateToSettings() },
                 scrollBehavior = scrollBehavior
