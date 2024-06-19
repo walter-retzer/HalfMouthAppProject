@@ -21,6 +21,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -42,18 +43,12 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import com.russhwolf.settings.Settings
 import components.ProgressButton
-import data.UserPreferences
-import dev.gitlive.firebase.Firebase
-import dev.gitlive.firebase.auth.FirebaseUser
-import dev.gitlive.firebase.auth.auth
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.splashscreenlogo
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -61,6 +56,7 @@ import util.ConstantsApp
 import util.MaskVisualTransformation
 import util.snackBarOnlyMessage
 import viewmodel.SignInViewModel
+import viewmodel.SignInViewState
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -75,17 +71,16 @@ fun SignInScreen(
             SignInViewModel()
         }
     )
+    val newUserSignInState by viewModel.newUserSignInState.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
     val nameError by viewModel.nameError.collectAsState()
     val phoneError by viewModel.phoneNumberError.collectAsState()
     val emailError by viewModel.emailError.collectAsState()
     val passwordError by viewModel.passwordError.collectAsState()
     val scope = rememberCoroutineScope()
-    val auth = remember { Firebase.auth }
     val snackBarHostState = remember { SnackbarHostState() }
-    val settings = Settings()
-    var firebaseUser: FirebaseUser? by remember { mutableStateOf(null) }
     var progressButtonIsActivated by remember { mutableStateOf(false) }
+    var snackBarIsActivated by remember { mutableStateOf(false) }
 
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
@@ -144,10 +139,10 @@ fun SignInScreen(
                         imeAction = ImeAction.Next
                     ),
                     shape = RoundedCornerShape(20.dp),
-                    value = uiState.name,
+                    value = newUserSignInState.name,
                     isError = nameError,
                     supportingText = {
-                        if (nameError) Text(text = viewModel.validateName(uiState.name))
+                        if (nameError) Text(text = viewModel.validateName(newUserSignInState.name))
                     },
                     placeholder = { Text("Nome") },
                     onValueChange = {
@@ -166,10 +161,10 @@ fun SignInScreen(
                         imeAction = ImeAction.Next
                     ),
                     shape = RoundedCornerShape(20.dp),
-                    value = uiState.phoneNumber,
+                    value = newUserSignInState.phoneNumber,
                     isError = phoneError,
                     supportingText = {
-                        if (phoneError) Text(text = viewModel.validatePhoneNumber(uiState.phoneNumber))
+                        if (phoneError) Text(text = viewModel.validatePhoneNumber(newUserSignInState.phoneNumber))
                     },
                     placeholder = { Text("Celular") },
                     onValueChange = {
@@ -191,10 +186,10 @@ fun SignInScreen(
                         imeAction = ImeAction.Next
                     ),
                     shape = RoundedCornerShape(20.dp),
-                    value = uiState.email,
+                    value = newUserSignInState.email,
                     isError = emailError,
                     supportingText = {
-                        if (emailError) Text(text = viewModel.validateEmail(uiState.email))
+                        if (emailError) Text(text = viewModel.validateEmail(newUserSignInState.email))
                     },
                     placeholder = { Text(text = "Email") },
                     onValueChange = { viewModel.onEmailChange(it) },
@@ -211,11 +206,11 @@ fun SignInScreen(
                         imeAction = ImeAction.Done
                     ),
                     shape = RoundedCornerShape(20.dp),
-                    value = uiState.password,
+                    value = newUserSignInState.password,
                     isError = passwordError,
                     supportingText = {
                         if (passwordError)
-                            Text(text = viewModel.validatePassword(uiState.password))
+                            Text(text = viewModel.validatePassword(newUserSignInState.password))
                     },
                     visualTransformation = PasswordVisualTransformation(),
                     placeholder = { Text("Senha") },
@@ -233,45 +228,51 @@ fun SignInScreen(
                     text = "Cadastrar",
                     isLoading = progressButtonIsActivated,
                     onClick = {
-                        viewModel.validateName(uiState.name)
-                        viewModel.validatePhoneNumber(uiState.phoneNumber)
-                        viewModel.validateEmail(uiState.email)
-                        viewModel.validatePassword(uiState.password)
-                        if (!nameError || !phoneError || !emailError || !passwordError) {
-                            scope.launch {
-                                try {
-                                    progressButtonIsActivated = true
-                                    auth.createUserWithEmailAndPassword(
-                                        email = uiState.email,
-                                        password = uiState.password
-                                    )
-                                    firebaseUser = auth.currentUser
-                                } catch (e: Exception) {
-                                    progressButtonIsActivated = false
-                                    snackBarOnlyMessage(
-                                        snackBarHostState = snackBarHostState,
-                                        coroutineScope = scope,
-                                        message = "Não foi possível criar a sua conta, por favor, tente mais tarde."
-                                    )
-                                }
-                            }
-                        }
+                        viewModel.validateName(newUserSignInState.name)
+                        viewModel.validatePhoneNumber(newUserSignInState.phoneNumber)
+                        viewModel.validateEmail(newUserSignInState.email)
+                        viewModel.validatePassword(newUserSignInState.password)
+
+                        if (!nameError && !phoneError && !emailError && !passwordError &&
+                            newUserSignInState.password.length == ConstantsApp.PASSWORD_MAX_NUMBER
+                        )
+                            viewModel.onSignInUser(
+                                newUserSignInState.email,
+                                newUserSignInState.password
+                            )
                     }
                 )
 
-                if (firebaseUser != null) {
-                    LaunchedEffect(key1 = true) {
-                        settings.putString(UserPreferences.UID, firebaseUser?.uid.toString())
-                        settings.putString(UserPreferences.EMAIL, firebaseUser?.email.toString())
-                        settings.putString(UserPreferences.NAME, uiState.name)
-                        settings.putString(UserPreferences.PHONE, uiState.phoneNumber)
-                        snackBarOnlyMessage(
-                            snackBarHostState = snackBarHostState,
-                            coroutineScope = scope,
-                            message = "Conta criada com Sucesso! Iremos direcionar ao menu do aplicativo."
-                        )
-                        delay(2000L)
-                        onNavigateToHome()
+                when (val state = uiState) {
+                    is SignInViewState.Dashboard -> { }
+
+                    is SignInViewState.Error -> {
+                        progressButtonIsActivated = false
+                        snackBarIsActivated = true
+
+                        LaunchedEffect(snackBarIsActivated) {
+                            snackBarOnlyMessage(
+                                snackBarHostState = snackBarHostState,
+                                coroutineScope = scope,
+                                message = state.message,
+                                duration = SnackbarDuration.Long
+                            )
+                            snackBarIsActivated = false
+                        }
+                    }
+
+                    is SignInViewState.Loading -> { progressButtonIsActivated = true }
+
+                    is SignInViewState.Success -> {
+                        LaunchedEffect(key1 = true) {
+                            snackBarOnlyMessage(
+                                snackBarHostState = snackBarHostState,
+                                coroutineScope = scope,
+                                message = state.message
+                            )
+                            delay(2000L)
+                            onNavigateToHome()
+                        }
                     }
                 }
             }
