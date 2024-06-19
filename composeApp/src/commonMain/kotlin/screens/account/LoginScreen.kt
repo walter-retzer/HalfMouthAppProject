@@ -44,18 +44,12 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import com.russhwolf.settings.Settings
 import components.ProgressButton
-import data.UserPreferences
-import dev.gitlive.firebase.Firebase
-import dev.gitlive.firebase.auth.FirebaseUser
-import dev.gitlive.firebase.auth.auth
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.splashscreenlogo
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -63,6 +57,7 @@ import theme.mainYellowColor
 import util.ConstantsApp
 import util.snackBarOnlyMessage
 import viewmodel.LoginUserViewModel
+import viewmodel.LoginUserViewState
 
 
 @OptIn(ExperimentalResourceApi::class)
@@ -79,15 +74,14 @@ fun LoginScreen(
             LoginUserViewModel()
         }
     )
+    val userLogin by viewModel.userLoginState.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
     val emailError by viewModel.emailError.collectAsState()
     val passwordError by viewModel.passwordError.collectAsState()
     val scope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
-    val auth = remember { Firebase.auth }
-    val settings = Settings()
-    var firebaseUser: FirebaseUser? by remember { mutableStateOf(null) }
     var progressButtonIsActivated by remember { mutableStateOf(false) }
+    var snackBarIsActivated by remember { mutableStateOf(false) }
 
 
     Scaffold(
@@ -147,10 +141,10 @@ fun LoginScreen(
                         imeAction = ImeAction.Next
                     ),
                     shape = RoundedCornerShape(20.dp),
-                    value = uiState.email,
+                    value = userLogin.email,
                     isError = emailError,
                     supportingText = {
-                        if (emailError) Text(text = viewModel.validateEmail(uiState.email))
+                        if (emailError) Text(text = viewModel.validateEmail(userLogin.email))
                     },
                     placeholder = { Text(text = "Email") },
                     onValueChange = { viewModel.onEmailChange(it) },
@@ -167,11 +161,11 @@ fun LoginScreen(
                         imeAction = ImeAction.Next
                     ),
                     shape = RoundedCornerShape(20.dp),
-                    value = uiState.password,
+                    value = userLogin.password,
                     isError = passwordError,
                     supportingText = {
                         if (passwordError)
-                            Text(text = viewModel.validatePassword(uiState.password))
+                            Text(text = viewModel.validatePassword(userLogin.password))
                     },
                     visualTransformation = PasswordVisualTransformation(),
                     placeholder = { Text("Senha") },
@@ -189,27 +183,10 @@ fun LoginScreen(
                     text = "Entrar",
                     isLoading = progressButtonIsActivated,
                     onClick = {
-                        viewModel.validateEmail(uiState.email)
-                        viewModel.validatePassword(uiState.password)
-                        if (!emailError || !passwordError) {
-                            scope.launch {
-                                try {
-                                    progressButtonIsActivated = true
-                                    auth.signInWithEmailAndPassword(
-                                        email = uiState.email,
-                                        password = uiState.password
-                                    )
-                                    firebaseUser = auth.currentUser
-                                } catch (e: Exception) {
-                                    progressButtonIsActivated = false
-                                    snackBarOnlyMessage(
-                                        snackBarHostState = snackBarHostState,
-                                        coroutineScope = scope,
-                                        message = "Não foi possível acessar a sua conta, por favor, tente mais tarde.",
-                                        duration = SnackbarDuration.Long
-                                    )
-                                }
-                            }
+                        viewModel.validateEmail(userLogin.email)
+                        viewModel.validatePassword(userLogin.password)
+                        if (!emailError && !passwordError && userLogin.password.length == ConstantsApp.PASSWORD_MAX_NUMBER) {
+                            viewModel.onSignIn(userLogin.email, userLogin.password)
                         }
                     }
                 )
@@ -232,16 +209,38 @@ fun LoginScreen(
                     color = mainYellowColor,
                 )
 
-                if (firebaseUser != null) {
-                    LaunchedEffect(key1 = true) {
-                        settings.putString(UserPreferences.UID, firebaseUser?.uid.toString())
-                        snackBarOnlyMessage(
-                            snackBarHostState = snackBarHostState,
-                            coroutineScope = scope,
-                            message = "Login realizado com Sucesso!"
-                        )
-                        delay(2000L)
-                        onNavigateToHome()
+
+                when (val state = uiState) {
+                    is LoginUserViewState.Dashboard -> { }
+
+                    is LoginUserViewState.Error -> {
+                        progressButtonIsActivated = false
+                        snackBarIsActivated = true
+
+                        LaunchedEffect(snackBarIsActivated) {
+                            snackBarOnlyMessage(
+                                snackBarHostState = snackBarHostState,
+                                coroutineScope = scope,
+                                message = state.message,
+                                duration = SnackbarDuration.Long
+                            )
+                            snackBarIsActivated = false
+                        }
+                    }
+
+                    is LoginUserViewState.Loading -> { progressButtonIsActivated = true }
+
+                    is LoginUserViewState.Success -> {
+                        progressButtonIsActivated = false
+                        LaunchedEffect(key1 = true) {
+                            snackBarOnlyMessage(
+                                snackBarHostState = snackBarHostState,
+                                coroutineScope = scope,
+                                message = state.message
+                            )
+                            delay(2000L)
+                            onNavigateToHome()
+                        }
                     }
                 }
             }
