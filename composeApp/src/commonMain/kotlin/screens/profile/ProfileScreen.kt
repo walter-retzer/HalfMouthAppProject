@@ -58,9 +58,11 @@ import halfmouthappproject.composeapp.generated.resources.icon_phone
 import halfmouthappproject.composeapp.generated.resources.splashscreenlogo
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import util.ConstantsApp
 import util.RestartApp
 import util.formattedAsPhone
 import util.snackBarOnlyMessage
+import util.snackBarWithActionButton
 import viewmodel.ProfileViewModel
 import viewmodel.ProfileViewState
 
@@ -235,13 +237,29 @@ fun ProfileScreen(
                 Icon(
                     modifier = Modifier
                         .padding(8.dp)
-                        .clickable { viewModel.onDeleteAccount() },
+                        .clickable {
+                            snackBarWithActionButton(
+                                coroutineScope = scope,
+                                snackBarHostState = snackBarHostState,
+                                message = ConstantsApp.MESSAGE_DELETE_ACCOUNT,
+                                actionLabel = "Excluir",
+                                onAction = { viewModel.onDeleteAccount() }
+                            )
+                        },
                     painter = painterResource(Res.drawable.icon_account),
                     contentDescription = null,
                     tint = Color.White
                 )
                 Text(
-                    modifier = Modifier.clickable { },
+                    modifier = Modifier.clickable {
+                        snackBarWithActionButton(
+                            coroutineScope = scope,
+                            snackBarHostState = snackBarHostState,
+                            message = ConstantsApp.MESSAGE_DELETE_ACCOUNT,
+                            actionLabel = "Excluir",
+                            onAction = { viewModel.onDeleteAccount() }
+                        )
+                    },
                     text = "Excluir Conta",
                     style = TextStyle(
                         color = Color.White,
@@ -262,13 +280,29 @@ fun ProfileScreen(
                 Icon(
                     modifier = Modifier
                         .padding(8.dp)
-                        .clickable { viewModel.onSignOut() },
+                        .clickable {
+                            snackBarWithActionButton(
+                                coroutineScope = scope,
+                                snackBarHostState = snackBarHostState,
+                                message = ConstantsApp.MESSAGE_SIGN_OUT_ACCOUNT,
+                                actionLabel = "Sair",
+                                onAction = { viewModel.onSignOut() }
+                            )
+                        },
                     painter = painterResource(Res.drawable.icon_logout),
                     contentDescription = null,
                     tint = Color.White
                 )
                 Text(
-                    modifier = Modifier.clickable { },
+                    modifier = Modifier.clickable {
+                        snackBarWithActionButton(
+                            coroutineScope = scope,
+                            snackBarHostState = snackBarHostState,
+                            message = ConstantsApp.MESSAGE_SIGN_OUT_ACCOUNT,
+                            actionLabel = "Sair",
+                            onAction = { viewModel.onSignOut() }
+                        )
+                    },
                     text = "Sair",
                     style = TextStyle(
                         color = Color.White,
