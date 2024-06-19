@@ -103,3 +103,12 @@ Telas Desenvolvidas para as Plataformas Android e iOS.
     <td><img src="screen/android/profile/profile-snackbar-sign-out.png" width=250 height=500></td>
   </tr>
 </table>
+
+### Tela de Perfil (iOS)
+<table>
+  <tr>
+    <td><img src="screen/iOS/profile/profile-ios.png" width=250 height=500></td>
+    <td><img src="screen/iOS/profile/profile-snackbar-delete-ios.png" width=250 height=500></td>    
+    <td><img src="screen/iOS/profile/profile-snackbar-sign-out-ios.png" width=250 height=500></td>
+  </tr>
+</table>
