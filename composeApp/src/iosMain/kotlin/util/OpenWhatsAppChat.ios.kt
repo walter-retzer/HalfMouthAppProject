@@ -1,14 +1,15 @@
 package util
 
 import androidx.compose.runtime.Composable
+import platform.Foundation.NSURL
+import platform.UIKit.UIApplication
 
 @Composable
 actual fun OpenWhatsAppChat() {
 
-    val phoneNumber = "15551234567"
+    val urlWhats = "https://api.whatsapp.com/send?phone=+5515991080703&text=Ola"
 
-    val toNumber = "+5515991080703"
-    val msg = "Olá!"
-
+    val nsUrl = urlWhats.let { NSURL.URLWithString(it) } ?: return
+    UIApplication.sharedApplication.openURL(nsUrl)
 
 }
