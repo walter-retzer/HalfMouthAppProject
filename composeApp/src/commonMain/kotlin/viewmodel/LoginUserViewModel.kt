@@ -20,9 +20,6 @@ class LoginUserViewModel : ViewModel() {
     private val authService = Firebase.auth
     private var firebaseUser: FirebaseUser? = null
 
-    private val _emailForResetPassword = MutableStateFlow(false)
-    val emailForResetPassword = _emailForResetPassword.asStateFlow()
-
     private val _emailError = MutableStateFlow(false)
     val emailError = _emailError.asStateFlow()
 
@@ -65,20 +62,16 @@ class LoginUserViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 authService.sendPasswordResetEmail(email = email)
-                delay(3000L)
                _uiState.value = LoginUserViewState.SuccessResetPassword(ConstantsApp.SUCCESS_RESET_PASSWORD)
             } catch (e: Exception) {
-                println(e)
+                println(" Error Exception $e")
                 _uiState.value = LoginUserViewState.Error(ConstantsApp.ERROR_RESET_PASSWORD)
             }
         }
     }
 
-
     fun onEmailForResetPasswordChange(newValue: String) {
-        _userLoginState.update { it.copy(email = newValue) }
-        //reset error when the user types another character
-        if (newValue.isNotBlank()) _emailError.value = false
+        _userLoginState.update { it.copy(emailForResetPassword = newValue) }
     }
 
     fun onEmailChange(newValue: String) {
@@ -100,6 +93,7 @@ class LoginUserViewModel : ViewModel() {
         }
         return "Verifique o email digitado"
     }
+
 
     fun validatePassword(password: String): String {
         if(password.length != ConstantsApp.PASSWORD_MAX_NUMBER) {

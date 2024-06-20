@@ -8,19 +8,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.displayCutout
-import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.ime
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -44,7 +37,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -190,7 +182,9 @@ fun LoginScreen(
                 )
 
                 Text(
-                    modifier = Modifier.align(alignment = Alignment.End),
+                    modifier = Modifier
+                        .align(alignment = Alignment.End)
+                        .clickable { showBottomSheet = true },
                     text = "Esqueceu a senha?",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.secondary,
@@ -214,7 +208,7 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    modifier = Modifier.clickable { showBottomSheet = true },
+                    modifier = Modifier.clickable { },
                     text = "Ainda não tem uma conta?",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.secondary,
@@ -293,24 +287,16 @@ fun LoginScreen(
 fun BottomSheet(viewModel: LoginUserViewModel, onDismiss: () -> Unit) {
 
     val modalBottomSheetState = rememberModalBottomSheetState()
-    var email by rememberSaveable { mutableStateOf("") }
-
     val userLogin by viewModel.userLoginState.collectAsState()
-    val uiState by viewModel.uiState.collectAsState()
-    val emailError by viewModel.emailError.collectAsState()
 
     ModalBottomSheet(
-        //modifier = Modifier.displayCutoutPadding(),
         onDismissRequest = { onDismiss() },
         sheetState = modalBottomSheetState,
         dragHandle = { BottomSheetDefaults.DragHandle() },
-        //windowInsets = WindowInsets.displayCutout
     ) {
-
         Column(
             modifier = Modifier.padding(16.dp).height(250.dp)
         ) {
-
             Text(
                 modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
                 text = "Recuperar senha",
@@ -338,7 +324,7 @@ fun BottomSheet(viewModel: LoginUserViewModel, onDismiss: () -> Unit) {
                     imeAction = ImeAction.Done
                 ),
                 shape = RoundedCornerShape(20.dp),
-                value = email,
+                value = userLogin.emailForResetPassword,
                 placeholder = { Text(text = "Email") },
                 onValueChange = { viewModel.onEmailForResetPasswordChange(it) }
             )
@@ -348,7 +334,7 @@ fun BottomSheet(viewModel: LoginUserViewModel, onDismiss: () -> Unit) {
                 text = "Enviar",
                 isLoading = false,
                 onClick = {
-                    viewModel.onResetPassword(email)
+                    viewModel.onResetPassword(userLogin.emailForResetPassword)
                     onDismiss()
                 }
             )
