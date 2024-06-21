@@ -230,14 +230,14 @@ fun LazyListScope.subListHalfMouthContact(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
-            val shape = RoundedCornerShape(10.dp)
+            val shape = RoundedCornerShape(16.dp)
             Image(
                 painter = painterResource(Res.drawable.address),
                 contentDescription = null,
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(start = 24.dp, end = 24.dp, top = 16.dp, bottom = 16.dp)
+                    .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 12.dp)
                     .border(1.dp, onBackgroundDark, shape)
                     .clip(RoundedCornerShape(10.dp))
                     .clickable { onOpenGoogleMaps() }
