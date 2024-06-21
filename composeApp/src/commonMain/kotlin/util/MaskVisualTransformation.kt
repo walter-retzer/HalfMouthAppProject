@@ -97,7 +97,13 @@ fun String.formattedAsTime(): String {
         val dateTimeReceiver = dateTimeFormat.parse(this)
         val adjustTimeZone = dateTimeReceiver.toInstant(timeZone)
         val time = adjustTimeZone.minus(3, DateTimeUnit.HOUR, timeZone).toLocalDateTime(timeZone)
-        time.hour.toString() + ":" + time.minute.toString() + ":" + time.second.toString()
+        var minute = time.minute.toString()
+        var second = time.second.toString()
+        if(minute.length == 1) minute = "0$minute"
+        if(second.length == 1) second = "0$second"
+
+        time.hour.toString() + ":" + minute + ":" + second
+        //time.hour.toString() + ":" + time.minute.toString() + ":" + time.second.toString()
     } catch (e: Exception) {
         println("Erro ao Converter a String: $e")
         "##:##:##"
