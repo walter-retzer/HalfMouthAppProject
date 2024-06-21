@@ -181,7 +181,7 @@ fun BeerCard(itemList: BeerType) {
         ) {
             Icon(
                 imageVector = Icons.Default.Info,
-                contentDescription = "Localized description",
+                contentDescription = " ",
                 tint = onSecondaryContainerDark
             )
         }

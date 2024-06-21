@@ -1,6 +1,5 @@
 package screens.contactInfo
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -9,12 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -29,21 +25,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
 import components.AppToolbarLarge
 import halfmouthappproject.composeapp.generated.resources.Res
-import halfmouthappproject.composeapp.generated.resources.agua
 import halfmouthappproject.composeapp.generated.resources.icon_email
 import halfmouthappproject.composeapp.generated.resources.icon_location
 import halfmouthappproject.composeapp.generated.resources.icon_phone
-import halfmouthappproject.composeapp.generated.resources.leveduras
-import halfmouthappproject.composeapp.generated.resources.lupulo
-import halfmouthappproject.composeapp.generated.resources.malte
-import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import theme.onSurfaceDark
@@ -51,7 +39,7 @@ import util.OpenWhatsAppChat
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ContactInfoScreen() {
+fun ContactInfoScreen(onNavigateToProfile:() -> Unit) {
 
     val scrollBehavior =
         TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
@@ -65,7 +53,7 @@ fun ContactInfoScreen() {
             AppToolbarLarge(
                 title = "Nossas Cervejas",
                 onNavigationLeftIconClick = { },
-                onNavigationProfileIconClick = { },
+                onNavigationProfileIconClick = {onNavigateToProfile() },
                 onNavigationSettingsIconClick = { },
                 scrollBehavior = scrollBehavior
             )
@@ -76,8 +64,6 @@ fun ContactInfoScreen() {
                 .fillMaxSize(),
             contentPadding = innerPadding,
         ) {
-            item { SubItemTitle() }
-            item { SubListIngredients() }
             subListHalfMouthContact{ showChat = true }
         }
         if (showChat) {
@@ -86,62 +72,6 @@ fun ContactInfoScreen() {
         }
     }
 }
-
-@Composable
-fun SubItemTitle() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Start
-    ) {
-        Text(text = "Nossos Ingredientes:")
-    }
-}
-
-@OptIn(ExperimentalResourceApi::class)
-@Composable
-fun SubListIngredients() {
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-    ) {
-        val mock = listOf(
-            Ingredients("Lúpulo", "", Res.drawable.lupulo),
-            Ingredients("Malte", "", Res.drawable.malte),
-            Ingredients("Leveduras", "", Res.drawable.leveduras),
-            Ingredients("Agua", "", Res.drawable.agua),
-        )
-        items(mock.size) {
-            ConstraintLayout(
-                modifier = Modifier
-                    .fillMaxWidth(),
-            ) {
-                val (text, image) = createRefs()
-                Image(
-                    painter = painterResource(mock[it].image),
-                    contentDescription = "",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(120.dp)
-                        .clip(RoundedCornerShape(16))
-                        .constrainAs(image) {
-                            top.linkTo(parent.top)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
-                        }
-                )
-                Text(
-                    modifier = Modifier
-                        .constrainAs(text) {
-                            top.linkTo(image.bottom)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
-                        },
-                    text = mock[it].name,
-                )
-            }
-        }
-    }
-}
-
 
 @OptIn(ExperimentalResourceApi::class)
 fun LazyListScope.subListHalfMouthContact(onClick: () -> Unit) {
@@ -227,9 +157,3 @@ fun LazyListScope.subListHalfMouthContact(onClick: () -> Unit) {
         }
     }
 }
-
-data class Ingredients @OptIn(ExperimentalResourceApi::class) constructor(
-    val name: String,
-    val description: String,
-    val image: DrawableResource
-)

@@ -50,7 +50,7 @@ import viewmodel.ProductionViewState
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
 @Composable
-fun ProductionScreen() {
+fun ProductionScreen(onNavigateToProfile: () -> Unit) {
 
     val viewModel = getViewModel(
         key = "production-screen",
@@ -71,7 +71,7 @@ fun ProductionScreen() {
             AppToolbarLarge(
                 title = "Produção",
                 onNavigationLeftIconClick = { },
-                onNavigationProfileIconClick = { },
+                onNavigationProfileIconClick = { onNavigateToProfile() },
                 onNavigationSettingsIconClick = { },
                 scrollBehavior = scrollBehavior
             )

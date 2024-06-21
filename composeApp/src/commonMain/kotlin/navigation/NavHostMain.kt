@@ -146,13 +146,21 @@ private fun NavGraphBuilder.homeNavGraph(
                 composable(
                     route = AppNavigation.ProductionRoute.name,
                 ) {
-                    ProductionScreen()
+                    ProductionScreen(
+                        onNavigateToProfile = {
+                            navController.navigate(AppNavigation.ProfileRoute.name)
+                        }
+                    )
                 }
 
                 composable(
                     route = AppNavigation.NotificationRoute.name,
                 ) {
-                    ContactInfoScreen()
+                    ContactInfoScreen(
+                        onNavigateToProfile = {
+                            navController.navigate(AppNavigation.ProfileRoute.name)
+                        }
+                    )
                 }
 
                 composable(
@@ -168,9 +176,9 @@ private fun NavGraphBuilder.homeNavGraph(
                 composable(
                     route = AppNavigation.ContactRoute.name,
                 ) {
-                    ProfileScreen(
-                        onNavigateBack = {
-                            navController.navigateUp()
+                    ContactInfoScreen(
+                        onNavigateToProfile = {
+                            navController.navigate(AppNavigation.ProfileRoute.name)
                         }
                     )
                 }
