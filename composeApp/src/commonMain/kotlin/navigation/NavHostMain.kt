@@ -24,6 +24,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import presentation.ScreenTheme
 import screens.account.LoginScreen
 import screens.account.SignInScreen
+import screens.contactInfo.ContactInfoScreen
 import screens.home.HomeScreen
 import screens.production.ProductionScreen
 import screens.profile.ProfileScreen
@@ -151,7 +152,7 @@ private fun NavGraphBuilder.homeNavGraph(
                 composable(
                     route = AppNavigation.NotificationRoute.name,
                 ) {
-                    ProductionScreen()
+                    ContactInfoScreen()
                 }
 
                 composable(
