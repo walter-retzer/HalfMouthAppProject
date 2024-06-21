@@ -3,6 +3,7 @@ package screens.home
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -37,17 +39,17 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import components.AppToolbarLarge
+import data.BeerType
+import data.Ingredients
+import data.beerTypeList
+import data.listOfIngredients
 import halfmouthappproject.composeapp.generated.resources.Res
-import halfmouthappproject.composeapp.generated.resources.beer_craft_glass
-import halfmouthappproject.composeapp.generated.resources.beer_growler
-import halfmouthappproject.composeapp.generated.resources.beer_mug_ipa
-import halfmouthappproject.composeapp.generated.resources.brewingbeer
 import halfmouthappproject.composeapp.generated.resources.splashscreenlogo
-import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -72,7 +74,7 @@ fun HomeScreen(
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
         topBar = {
             AppToolbarLarge(
-                title = "Nossas Cervejas",
+                title = "Menu",
                 onNavigationLeftIconClick = { },
                 onNavigationProfileIconClick = { onNavigateToProfile() },
                 onNavigationSettingsIconClick = { onNavigateToSettings() },
@@ -86,9 +88,10 @@ fun HomeScreen(
                 .fillMaxSize(),
             contentPadding = innerPadding,
         ) {
-            items(itemList) { itemList ->
-                BeerCard(itemList)
-            }
+            item { SubItemTitle("Nossos Ingredientes:", 8.dp) }
+            item { SubListIngredients(listOfIngredients) }
+            item { SubItemTitle("Nossas Cervejas:") }
+            items(beerTypeList) { list -> BeerCard(list) }
         }
     }
 }
@@ -96,7 +99,7 @@ fun HomeScreen(
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun BeerCard(itemList: ItemBeerMainMenu) {
+fun BeerCard(itemList: BeerType) {
     ConstraintLayout {
         val (card, logo, imageBeer, text1, text2, icon1, text3) = createRefs()
         Row(modifier = Modifier.constrainAs(card) {
@@ -109,9 +112,7 @@ fun BeerCard(itemList: ItemBeerMainMenu) {
                     .padding(16.dp)
                     .height(205.dp)
                     .shadow(16.dp, shape = RectangleShape)
-            ) {
-
-            }
+            ) {}
         }
         Image(
             painter = painterResource(Res.drawable.splashscreenlogo),
@@ -200,50 +201,58 @@ fun BeerCard(itemList: ItemBeerMainMenu) {
     }
 }
 
-
-data class ItemBeerMainMenu @OptIn(ExperimentalResourceApi::class) constructor(
-    val title: String,
-    val subtitle: String,
-    val info: String,
-    val imageId: DrawableResource,
-)
+@Composable
+fun SubItemTitle(title: String, paddingBottom: Dp = 0.dp) {
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(start = 16.dp, top = 16.dp, bottom = paddingBottom),
+        horizontalArrangement = Arrangement.Start
+    ) {
+        Text(
+            style = MaterialTheme.typography.bodyMedium,
+            fontSize = 18.sp,
+            text = title
+        )
+    }
+}
 
 @OptIn(ExperimentalResourceApi::class)
-val itemList = listOf(
-    ItemBeerMainMenu(
-        "HalfMouth\nIpa",
-        "Nossa Ipa oferece uma intensidade de sabores dos maltes e lupulos.",
-        "IBU = 9 | ABV = 4,5% | Temp. Ideal = ±3°C",
-        Res.drawable.brewingbeer
-    ),
-    ItemBeerMainMenu(
-        "HalfMouth\nSession Ipa",
-        "Nossa Session Ipa oferece uma intensidade de sabores dos maltes e lupulos.",
-        "IBU = 8 | ABV = 4,5% | Temp. Ideal = ±6°C",
-        Res.drawable.beer_mug_ipa
-    ),
-    ItemBeerMainMenu(
-        "HalfMouth\nPilsen",
-        "Nossa Pilsen oferece uma intensidade de sabores dos maltes e lupulos.",
-        "IBU = 7 | ABV = 3,5% | Temp. Ideal = ±5°C",
-        Res.drawable.beer_craft_glass
-    ),
-    ItemBeerMainMenu(
-        "HalfMouth\nIpa",
-        "Nossa Ipa oferece uma intensidade de sabores dos maltes e lupulos.",
-        "IBU = 9 | ABV = 4,5% | Temp. Ideal = ±3°C",
-        Res.drawable.beer_growler
-    ),
-    ItemBeerMainMenu(
-        "HalfMouth\nSession Ipa",
-        "Nossa Session Ipa oferece uma intensidade de sabores dos maltes e lupulos.",
-        "IBU = 8 | ABV = 4,5% | Temp. Ideal = ±6°C",
-        Res.drawable.beer_growler
-    ),
-    ItemBeerMainMenu(
-        "HalfMouth\nPilsen",
-        "Nossa Pilsen oferece uma intensidade de sabores dos maltes e lupulos.",
-        "IBU = 7 | ABV = 3,5% | Temp. Ideal = ±5°C",
-        Res.drawable.beer_growler
-    ),
-)
+@Composable
+fun SubListIngredients(ingredients: List<Ingredients>) {
+    LazyRow(
+        modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        items(ingredients.size) {
+            ConstraintLayout(
+                modifier = Modifier
+                    .fillMaxWidth(),
+            ) {
+                val (text, image) = createRefs()
+                Image(
+                    painter = painterResource(ingredients[it].image),
+                    contentDescription = "",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(120.dp)
+                        .clip(RoundedCornerShape(16))
+                        .constrainAs(image) {
+                            top.linkTo(parent.top)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                        }
+                )
+                Text(
+                    modifier = Modifier
+                        .constrainAs(text) {
+                            top.linkTo(image.bottom)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                        },
+                    text = ingredients[it].name,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontSize = 16.sp,
+                )
+            }
+        }
+    }
+}
