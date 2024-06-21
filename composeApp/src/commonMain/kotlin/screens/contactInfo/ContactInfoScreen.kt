@@ -51,7 +51,7 @@ fun ContactInfoScreen(onNavigateToProfile:() -> Unit) {
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
         topBar = {
             AppToolbarLarge(
-                title = "Nossas Cervejas",
+                title = "Contato",
                 onNavigationLeftIconClick = { },
                 onNavigationProfileIconClick = {onNavigateToProfile() },
                 onNavigationSettingsIconClick = { },
