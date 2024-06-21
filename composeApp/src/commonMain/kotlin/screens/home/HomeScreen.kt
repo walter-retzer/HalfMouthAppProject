@@ -88,9 +88,9 @@ fun HomeScreen(
                 .fillMaxSize(),
             contentPadding = innerPadding,
         ) {
-            item { SubItemTitle("Nossos Ingredientes:", 8.dp) }
+            item { SubItemTitle("Nossos Ingredientes", 8.dp) }
             item { SubListIngredients(listOfIngredients) }
-            item { SubItemTitle("Nossas Cervejas:") }
+            item { SubItemTitle("Nossas Cervejas") }
             items(beerTypeList) { list -> BeerCard(list) }
         }
     }
