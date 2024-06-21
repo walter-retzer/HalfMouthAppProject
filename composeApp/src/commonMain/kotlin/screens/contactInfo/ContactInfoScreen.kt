@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -21,20 +20,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.input.key.Key.Companion.R
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import components.AppToolbarLarge
 import halfmouthappproject.composeapp.generated.resources.Res
-import halfmouthappproject.composeapp.generated.resources.beer_glass
-import halfmouthappproject.composeapp.generated.resources.splashscreenlogo
+import halfmouthappproject.composeapp.generated.resources.agua
+import halfmouthappproject.composeapp.generated.resources.leveduras
+import halfmouthappproject.composeapp.generated.resources.lupulo
+import halfmouthappproject.composeapp.generated.resources.malte
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import screens.home.BeerCard
-import screens.home.itemList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,8 +49,8 @@ fun ContactInfoScreen() {
             AppToolbarLarge(
                 title = "Nossas Cervejas",
                 onNavigationLeftIconClick = { },
-                onNavigationProfileIconClick = {  },
-                onNavigationSettingsIconClick = {  },
+                onNavigationProfileIconClick = { },
+                onNavigationSettingsIconClick = { },
                 scrollBehavior = scrollBehavior
             )
         },
@@ -63,9 +61,9 @@ fun ContactInfoScreen() {
                 .fillMaxSize(),
             contentPadding = innerPadding,
         ) {
-            items(itemList) { itemList ->
-                BeerCard(itemList)
-            }
+
+            item { SubItemTitle() }
+            item { SubListIngredients() }
         }
     }
 }
@@ -90,12 +88,11 @@ fun SubListIngredients() {
         horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         val mock = listOf(
-            Ingredients("Lúpulo", "", Res.drawable.beer_glass),
-//            Ingredients("Malte", "", Res.drawable.malte),
-//            Ingredients("Agua", "", Res.drawable.agua),
-//            Ingredients("Leveduras", "", Res.drawable.leveduras),
+            Ingredients("Lúpulo", "", Res.drawable.lupulo),
+            Ingredients("Malte", "", Res.drawable.malte),
+            Ingredients("Leveduras", "", Res.drawable.leveduras),
+            Ingredients("Agua", "", Res.drawable.agua),
         )
-//        mock[it].image
         items(mock.size) {
             ConstraintLayout(
                 modifier = Modifier
@@ -103,7 +100,7 @@ fun SubListIngredients() {
             ) {
                 val (text, image) = createRefs()
                 Image(
-                    painter = painterResource(Res.drawable.splashscreenlogo),
+                    painter = painterResource(mock[it].image),
                     contentDescription = "",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
