@@ -25,22 +25,21 @@ class NotificationViewModel : ViewModel() {
     private fun getInfoFirebaseRealTimeDatabase() {
         viewModelScope.launch {
             val firebase = Firebase.database
-            var dataSnapshot: MutableList<DataSnapshot?> = mutableListOf()
             try {
                 val response = firebase.reference("notifications").valueEvents.first().children
-                val key = response.mapNotNull { it.value }
+                        .mapNotNull { it.value }
 
+                val response1 =
+                    firebase.reference("notifications").valueEvents.first().child("list")
+                        .child("data").value
 
                 println(response)
-                println(key)
-
-
+                println(response1)
 
             } catch (e: Exception) {
                 println(" Errror $e")
             }
         }
-
     }
 }
 
