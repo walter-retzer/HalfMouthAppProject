@@ -15,6 +15,7 @@ compose = "1.6.7"
 compose-plugin = "1.6.2"
 constraintlayoutComposeMultiplatform = "0.4.0"
 firebaseAuth = "1.12.0"
+firebaseDatabase = "1.12.0"
 junit = "4.13.2"
 kotlin = "1.9.23"
 gservices = "4.4.1"
@@ -29,7 +30,13 @@ ktor = "2.3.7"
 
 [libraries]
 #Ktor Library
+firebase-database = { module = "dev.gitlive:firebase-database", version.ref = "firebaseDatabase" }
+firebase-auth = { module = "dev.gitlive:firebase-auth", version.ref = "firebaseAuth" }
+
+#Date Time Librry
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
+
+#Ktor Library
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
@@ -43,13 +50,19 @@ logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "lo
 #Preference Library
 multiplatformSettings-noargs = { module = "com.russhwolf:multiplatform-settings-no-arg", version.ref = "multiplatformSettings" }
 
+#Constraint Layout Compose Library
 constraintlayout-compose-multiplatform = { module = "tech.annexflow.compose:constraintlayout-compose-multiplatform", version.ref = "constraintlayoutComposeMultiplatform" }
+
+#Moko Library - ViewModels, Flow, LiveData..
 moko-mvvm-flow-compose = { module = "dev.icerock.moko:mvvm-flow-compose", version.ref = "mvvmFlowCompose" }
 moko-mvvm-livedata-compose = { module = "dev.icerock.moko:mvvm-livedata-compose", version.ref = "mvvmLivedataCompose" }
 mvvm-compose = { module = "dev.icerock.moko:mvvm-compose", version.ref = "mvvmCompose" }
+
+#Navigation Compose Library
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "composeNavigation" }
+
+#Core Library
 androidx-animation = { module = "androidx.compose.animation:animation", version.ref = "animation" }
-firebase-auth = { module = "dev.gitlive:firebase-auth", version.ref = "firebaseAuth" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
