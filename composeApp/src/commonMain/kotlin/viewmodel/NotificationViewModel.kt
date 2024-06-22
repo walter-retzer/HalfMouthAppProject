@@ -27,11 +27,15 @@ class NotificationViewModel : ViewModel() {
             val firebase = Firebase.database
             var dataSnapshot: MutableList<DataSnapshot?> = mutableListOf()
             try {
-                val response = firebase.reference("notifications").valueEvents.first().children.mapNotNull {
-                    it.key
-                }
+                val response = firebase.reference("notifications").valueEvents.first().children
+                val key = response.mapNotNull { it.value }
+
 
                 println(response)
+                println(key)
+
+
+
             } catch (e: Exception) {
                 println(" Errror $e")
             }
@@ -44,5 +48,5 @@ class NotificationViewModel : ViewModel() {
 data class RealTimeItemFirebase(
     var data: String? = "",
     var message: String? = "",
-    var index: Int = 0
+    var index: String? = ""
 )
