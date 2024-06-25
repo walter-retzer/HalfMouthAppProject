@@ -30,7 +30,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -48,6 +51,8 @@ import data.BeerType
 import data.Ingredients
 import data.beerTypeList
 import data.listOfIngredients
+import dev.icerock.moko.mvvm.compose.getViewModel
+import dev.icerock.moko.mvvm.compose.viewModelFactory
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.splashscreenlogo
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -56,6 +61,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import theme.onBackgroundDark
 import theme.onSecondaryContainerDark
 import theme.secondaryContainerDark
+import util.snackBarOnlyMessage
+import viewmodel.HomeViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -65,9 +72,14 @@ fun HomeScreen(
     onNavigateToSettings: () -> Unit,
     onNavigateToProfile: () -> Unit,
 ) {
-    val scrollBehavior =
-        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val snackBarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val viewModel = getViewModel(
+        key = "home-screen",
+        factory = viewModelFactory { HomeViewModel() }
+    )
+    val messageNotification by viewModel.notificationMessage.collectAsState()
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -75,7 +87,13 @@ fun HomeScreen(
         topBar = {
             AppToolbarLarge(
                 title = "Menu",
-                onNavigationLeftIconClick = { },
+                onNavigationLeftIconClick = {
+                    snackBarOnlyMessage(
+                        snackBarHostState = snackBarHostState,
+                        coroutineScope = scope,
+                        message = messageNotification
+                    )
+                },
                 onNavigationProfileIconClick = { onNavigateToProfile() },
                 onNavigationSettingsIconClick = { onNavigateToSettings() },
                 scrollBehavior = scrollBehavior
