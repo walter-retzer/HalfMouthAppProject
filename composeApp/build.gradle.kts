@@ -54,6 +54,7 @@ kotlin {
             implementation(libs.logback.classic)
             implementation(libs.kotlinx.datetime)
             implementation(libs.firebase.database)
+            implementation(libs.qr.kit)
         }
 
         iosMain.dependencies {
