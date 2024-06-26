@@ -137,7 +137,7 @@ private fun NavGraphBuilder.homeNavGraph(
             ) {
                 composable(route = AppNavigation.HomeRoute.name) {
                     HomeScreen(
-                        onNavigateToDrawerMenu = {},
+                        onNavigateToDrawerMenu = { },
                         onNavigateToProfile = {
                             navController.navigate(AppNavigation.ProfileRoute.name)
                         }
