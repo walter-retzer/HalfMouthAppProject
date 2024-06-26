@@ -2,11 +2,11 @@ package navigation
 
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.contact_route
+import halfmouthappproject.composeapp.generated.resources.discounts_route
 import halfmouthappproject.composeapp.generated.resources.home_graph_name
 import halfmouthappproject.composeapp.generated.resources.home_route
 import halfmouthappproject.composeapp.generated.resources.login_graph_name
 import halfmouthappproject.composeapp.generated.resources.login_route
-import halfmouthappproject.composeapp.generated.resources.notification_route
 import halfmouthappproject.composeapp.generated.resources.production_route
 import halfmouthappproject.composeapp.generated.resources.profile_route
 import halfmouthappproject.composeapp.generated.resources.sign_in_route
@@ -22,7 +22,7 @@ enum class AppNavigation(val title: StringResource) {
     HomeRoute(title = Res.string.home_route),
     ProfileRoute(title = Res.string.profile_route),
     ProductionRoute(title = Res.string.production_route),
-    NotificationRoute(title = Res.string.notification_route),
+    DiscountsRoute(title = Res.string.discounts_route),
     ContactRoute(title = Res.string.contact_route),
 }
 

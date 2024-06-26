@@ -3,8 +3,8 @@ package navigation.home
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.icon_beer
 import halfmouthappproject.composeapp.generated.resources.icon_home
-import halfmouthappproject.composeapp.generated.resources.icon_notifications
 import halfmouthappproject.composeapp.generated.resources.icon_phone
+import halfmouthappproject.composeapp.generated.resources.icon_qr_code
 import navigation.AppNavigation
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -13,7 +13,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 object NavTitle {
     const val HOME = "Menu"
     const val PRODUCTION = "Produção"
-    const val NOTIFICATIONS = "Notificação"
+    const val DISCOUNTS = "Descontos"
     const val CONTACT = "Contato"
 }
 
@@ -40,11 +40,11 @@ sealed class NavItem {
             icon = Res.drawable.icon_beer
         )
 
-    object Notification :
+    object Discounts :
         Item(
-            pathRoute = AppNavigation.NotificationRoute.name,
-            title = NavTitle.NOTIFICATIONS,
-            icon = Res.drawable.icon_notifications
+            pathRoute = AppNavigation.DiscountsRoute.name,
+            title = NavTitle.DISCOUNTS,
+            icon = Res.drawable.icon_qr_code
         )
 
     object Contact :
