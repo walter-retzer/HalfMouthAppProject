@@ -13,20 +13,24 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -36,12 +40,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import components.AppToolbarLarge
+import components.DrawerMenuNavigation
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.address
 import halfmouthappproject.composeapp.generated.resources.icon_email
 import halfmouthappproject.composeapp.generated.resources.icon_location
 import halfmouthappproject.composeapp.generated.resources.icon_phone
 import halfmouthappproject.composeapp.generated.resources.icon_whats_app
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import theme.mainYellowColor
@@ -55,45 +61,62 @@ import util.OpenWhatsAppChat
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContactInfoScreen(onNavigateToProfile:() -> Unit) {
-
     val scrollBehavior =
         TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val snackBarHostState = remember { SnackbarHostState() }
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
     var isOpenWhatsAppChat by remember { mutableStateOf(false) }
     var isOpenGoogleMaps by remember { mutableStateOf(false) }
 
-    Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-        topBar = {
-            AppToolbarLarge(
-                title = "Contato",
-                onNavigationToMenu = { },
-                onNavigationToProfile = {onNavigateToProfile() },
-                onNavigateToNotifications = { },
-                scrollBehavior = scrollBehavior
+
+    ModalNavigationDrawer(
+        drawerContent = {
+            DrawerMenuNavigation(
+                scope = scope,
+                drawerState = drawerState,
+                onNavigateToDrawerMenu = { },
             )
         },
-    ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize(),
-            contentPadding = innerPadding,
-        ) {
-            subListHalfMouthContact(
-                onOpenWhatsAppChat = {isOpenWhatsAppChat = true },
-                onOpenGoogleMaps = {isOpenGoogleMaps = true}
-            )
-        }
+        drawerState = drawerState
+    ) {
+        Scaffold(
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
+            topBar = {
+                AppToolbarLarge(
+                    title = "Contato",
+                    onNavigationToMenu = {
+                        scope.launch {
+                            drawerState.open()
+                        }
+                    },
+                    onNavigationToProfile = { onNavigateToProfile() },
+                    onNavigateToNotifications = { },
+                    scrollBehavior = scrollBehavior
+                )
+            },
+        ) { innerPadding ->
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize(),
+                contentPadding = innerPadding,
+            ) {
+                subListHalfMouthContact(
+                    onOpenWhatsAppChat = { isOpenWhatsAppChat = true },
+                    onOpenGoogleMaps = { isOpenGoogleMaps = true }
+                )
+            }
 
-        if (isOpenWhatsAppChat) {
-            OpenWhatsAppChat()
-            isOpenWhatsAppChat = false
-        }
+            if (isOpenWhatsAppChat) {
+                OpenWhatsAppChat()
+                isOpenWhatsAppChat = false
+            }
 
-        if (isOpenGoogleMaps) {
-            OpenGoogleMaps()
-            isOpenGoogleMaps = false
+            if (isOpenGoogleMaps) {
+                OpenGoogleMaps()
+                isOpenGoogleMaps = false
+            }
         }
     }
 }
