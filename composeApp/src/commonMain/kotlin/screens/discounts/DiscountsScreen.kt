@@ -1,4 +1,4 @@
-package screens.notification
+package screens.discounts
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -54,7 +54,7 @@ import theme.mainYellowColor
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
 @Composable
-fun NotificationScreen() {
+fun DiscountsScreen() {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     var qrCodeURL by remember { mutableStateOf("") }
     var startBarCodeScan by remember { mutableStateOf(false) }
@@ -186,7 +186,7 @@ fun NotificationScreen() {
                             colors = ButtonDefaults.buttonColors(containerColor = mainYellowColor),
                         ) {
                             Text(
-                                text = "Scan Qr",
+                                text = "Scanear QR Code",
                                 modifier = Modifier
                                     .background(Color.Transparent)
                                     .padding(horizontal = 12.dp, vertical = 12.dp),

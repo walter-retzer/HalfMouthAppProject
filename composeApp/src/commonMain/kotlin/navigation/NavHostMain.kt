@@ -26,7 +26,7 @@ import screens.account.LoginScreen
 import screens.account.SignInScreen
 import screens.contactInfo.ContactInfoScreen
 import screens.home.HomeScreen
-import screens.notification.NotificationScreen
+import screens.discounts.DiscountsScreen
 import screens.production.ProductionScreen
 import screens.profile.ProfileScreen
 import screens.splash.SplashScreen
@@ -123,7 +123,7 @@ private fun NavGraphBuilder.homeNavGraph(
             listOf(
                 NavItem.Home,
                 NavItem.Production,
-                NavItem.Notification,
+                NavItem.Discounts,
                 NavItem.Contact
             )
         }
@@ -155,9 +155,9 @@ private fun NavGraphBuilder.homeNavGraph(
                 }
 
                 composable(
-                    route = AppNavigation.NotificationRoute.name,
+                    route = AppNavigation.DiscountsRoute.name,
                 ) {
-                    NotificationScreen()
+                    DiscountsScreen()
                 }
 
                 composable(
