@@ -44,6 +44,7 @@ fun SplashScreen(
 
     LaunchedEffect(key1 = true) {
         val uid: String? = settingsPref[UserPreferences.UID]
+        settingsPref.putBoolean(UserPreferences.NOTIFICATION, true)
 
         scale.animateTo(
             targetValue = 1f,
