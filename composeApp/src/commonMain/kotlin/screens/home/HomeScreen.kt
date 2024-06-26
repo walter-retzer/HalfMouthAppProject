@@ -33,8 +33,10 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -47,9 +49,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.russhwolf.settings.Settings
+import com.russhwolf.settings.get
 import components.AppToolbarLarge
 import data.BeerType
 import data.Ingredients
+import data.UserPreferences
 import data.beerTypeList
 import data.listOfIngredients
 import dev.icerock.moko.mvvm.compose.getViewModel
@@ -70,17 +75,20 @@ import viewmodel.HomeViewModel
 @Composable
 @Preview
 fun HomeScreen(
-    onNavigateToSettings: () -> Unit,
+    onNavigateToDrawerMenu: () -> Unit,
     onNavigateToProfile: () -> Unit,
 ) {
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
-    val snackBarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
     val viewModel = getViewModel(
         key = "home-screen",
         factory = viewModelFactory { HomeViewModel() }
     )
     val messageNotification by viewModel.notificationMessage.collectAsState()
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+    val snackBarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val settingsPref = Settings()
+    val isBadgeIconActivated: Boolean = settingsPref[UserPreferences.NOTIFICATION] ?: false
+    var isFirstDisplaying by remember { mutableStateOf(isBadgeIconActivated) }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -88,21 +96,25 @@ fun HomeScreen(
         topBar = {
             AppToolbarLarge(
                 title = "Menu",
-                onNavigationLeftIconClick = {
-                    snackBarOnlyMessage(
-                        snackBarHostState = snackBarHostState,
-                        coroutineScope = scope,
-                        message = messageNotification,
-                        duration = SnackbarDuration.Long
-                    )
+                onNavigationToMenu = { onNavigateToDrawerMenu() },
+                onNavigationToProfile = { onNavigateToProfile() },
+                onNavigateToNotifications = {
+                    if (isFirstDisplaying) {
+                        snackBarOnlyMessage(
+                            snackBarHostState = snackBarHostState,
+                            coroutineScope = scope,
+                            message = messageNotification,
+                            duration = SnackbarDuration.Long
+                        )
+                        settingsPref.putBoolean(UserPreferences.NOTIFICATION, false)
+                        isFirstDisplaying = settingsPref[UserPreferences.NOTIFICATION] ?: false
+                    }
                 },
-                onNavigationProfileIconClick = { onNavigateToProfile() },
-                onNavigationSettingsIconClick = { onNavigateToSettings() },
-                scrollBehavior = scrollBehavior
+                scrollBehavior = scrollBehavior,
+                isActivatedBadge = isFirstDisplaying
             )
         },
     ) { innerPadding ->
-
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize(),
