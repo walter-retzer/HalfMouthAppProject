@@ -1,5 +1,13 @@
 package data
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.ui.graphics.vector.ImageVector
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.agua
 import halfmouthappproject.composeapp.generated.resources.beer_craft_glass
@@ -24,6 +32,13 @@ data class BeerType @OptIn(ExperimentalResourceApi::class) constructor(
     val subtitle: String,
     val info: String,
     val imageId: DrawableResource,
+)
+
+data class NavigationMenuDrawerItem(
+    val title: String,
+    val selectedIcon: ImageVector,
+    val unselectedIcon: ImageVector,
+    val badgeCount: Int? = null
 )
 
 @OptIn(ExperimentalResourceApi::class)
@@ -72,4 +87,23 @@ val beerTypeList = listOf(
         "IBU = 7 | ABV = 3,5% | Temp. Ideal = ±5°C",
         Res.drawable.beer_growler
     ),
+)
+
+val items = listOf(
+    NavigationMenuDrawerItem(
+        title = "Menu",
+        selectedIcon = Icons.Filled.Home,
+        unselectedIcon = Icons.Outlined.Home,
+    ),
+    NavigationMenuDrawerItem(
+        title = "Informação",
+        selectedIcon = Icons.Filled.Info,
+        unselectedIcon = Icons.Outlined.Info,
+        badgeCount = 45
+    ),
+    NavigationMenuDrawerItem(
+        title = "Configurações",
+        selectedIcon = Icons.Filled.Settings,
+        unselectedIcon = Icons.Outlined.Settings,
+    )
 )
