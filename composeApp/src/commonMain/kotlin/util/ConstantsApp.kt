@@ -17,5 +17,6 @@ class ConstantsApp {
             val MESSAGE_SIGN_OUT_ACCOUNT = "Deseja realmente sair da conta?"
             val SUCCESS_RESET_PASSWORD = "Em breve receberá um email para cadastrar uma nova senha."
             val ERROR_RESET_PASSWORD = "Verifique o email digitado."
+            val MESSAGE_DEFAULT_NOTIFICATION = "Você receberá novas notificações em breve."
         }
 }
