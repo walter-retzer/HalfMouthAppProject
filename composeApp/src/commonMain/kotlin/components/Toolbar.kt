@@ -1,11 +1,14 @@
 package components
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -14,20 +17,26 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import halfmouthappproject.composeapp.generated.resources.Res
+import halfmouthappproject.composeapp.generated.resources.icon_notifications
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.vectorResource
 import theme.primaryDark
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
 @Composable
 fun AppToolbarLarge(
     color: Color = Color.Black,
     titleColor: Color = primaryDark,
     title: String,
-    onNavigationLeftIconClick: () -> Unit,
-    onNavigationSettingsIconClick: () -> Unit,
-    onNavigationProfileIconClick: () -> Unit,
+    onNavigationToMenu: () -> Unit,
+    onNavigateToNotifications: () -> Unit,
+    onNavigationToProfile: () -> Unit,
     scrollBehavior:  TopAppBarScrollBehavior? = null,
-
+    isActivatedBadge: Boolean = false
 ) {
     LargeTopAppBar(
         colors = TopAppBarDefaults.largeTopAppBarColors(
@@ -37,7 +46,7 @@ fun AppToolbarLarge(
         ),
         title = { Text(title) },
         navigationIcon = {
-            IconButton(onClick = { onNavigationLeftIconClick() }) {
+            IconButton(onClick = { onNavigationToMenu() }) {
                 Icon(
                     imageVector = Icons.Filled.Menu,
                     contentDescription = "Localized description"
@@ -45,15 +54,28 @@ fun AppToolbarLarge(
             }
         },
         actions = {
-            IconButton(onClick = { onNavigationProfileIconClick() }) {
+            BadgedBox(
+                modifier = Modifier
+                    .padding(start = 10.dp, end = 10.dp)
+                    .clickable { onNavigateToNotifications() },
+                badge = {
+                    if (isActivatedBadge) {
+                        Badge(
+                            modifier = Modifier.padding(start = 3.dp, bottom = 10.dp)
+                        ) {
+                            Text(text = "1")
+                        }
+                    }
+                }
+            ) {
                 Icon(
-                    imageVector = Icons.Filled.AccountCircle,
-                    contentDescription = "Localized description"
+                    imageVector = vectorResource(Res.drawable.icon_notifications),
+                    contentDescription = null
                 )
             }
-            IconButton(onClick = { onNavigationSettingsIconClick() }) {
+            IconButton(onClick = { onNavigationToProfile() }) {
                 Icon(
-                    imageVector = Icons.Default.Settings,
+                    imageVector = Icons.Filled.AccountCircle,
                     contentDescription = "Localized description"
                 )
             }
