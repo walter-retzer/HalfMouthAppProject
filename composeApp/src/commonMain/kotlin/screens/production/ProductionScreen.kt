@@ -70,9 +70,9 @@ fun ProductionScreen(onNavigateToProfile: () -> Unit) {
         topBar = {
             AppToolbarLarge(
                 title = "Produção",
-                onNavigationLeftIconClick = { },
-                onNavigationProfileIconClick = { onNavigateToProfile() },
-                onNavigationSettingsIconClick = { },
+                onNavigationToMenu = { },
+                onNavigationToProfile = { onNavigateToProfile() },
+                onNavigateToNotifications = { },
                 scrollBehavior = scrollBehavior
             )
         }

@@ -68,9 +68,9 @@ fun ContactInfoScreen(onNavigateToProfile:() -> Unit) {
         topBar = {
             AppToolbarLarge(
                 title = "Contato",
-                onNavigationLeftIconClick = { },
-                onNavigationProfileIconClick = {onNavigateToProfile() },
-                onNavigationSettingsIconClick = { },
+                onNavigationToMenu = { },
+                onNavigationToProfile = {onNavigateToProfile() },
+                onNavigateToNotifications = { },
                 scrollBehavior = scrollBehavior
             )
         },
