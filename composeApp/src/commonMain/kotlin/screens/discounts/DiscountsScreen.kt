@@ -26,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,6 +42,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import components.profileToolbar
+import dev.icerock.moko.mvvm.compose.getViewModel
+import dev.icerock.moko.mvvm.compose.viewModelFactory
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.icon_flash_light
 import halfmouthappproject.composeapp.generated.resources.icon_gallery
@@ -50,11 +53,17 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
 import qrscanner.QrScanner
 import theme.mainYellowColor
+import viewmodel.DiscountsViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
 @Composable
 fun DiscountsScreen() {
+    val viewModel = getViewModel(
+        key = "discounts-screen",
+        factory = viewModelFactory { DiscountsViewModel() }
+    )
+    val urlDiscounts by viewModel.urlDiscount.collectAsState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     var qrCodeURL by remember { mutableStateOf("") }
     var startBarCodeScan by remember { mutableStateOf(false) }
@@ -67,7 +76,7 @@ fun DiscountsScreen() {
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             profileToolbar(
-                title = "Promoção",
+                title = "Descontos",
                 onNavigationIconBack = {  },
                 onNavigationIconClose = { if (startBarCodeScan) startBarCodeScan = false },
                 scrollBehavior = scrollBehavior
@@ -200,6 +209,14 @@ fun DiscountsScreen() {
                             color = Color.White,
                             modifier = Modifier.padding(top = 12.dp)
                         )
+
+                        if (qrCodeURL == urlDiscounts) {
+                            Text(
+                                text = "Parabéns pelo Desconto!",
+                                color = Color.White,
+                                modifier = Modifier.padding(top = 12.dp)
+                            )
+                        }
                     }
                 }
             }
