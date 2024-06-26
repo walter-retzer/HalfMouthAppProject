@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Card
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -60,6 +61,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.get
 import components.AppToolbarLarge
+import components.DrawerMenuNavigation
 import data.BeerType
 import data.Ingredients
 import data.UserPreferences
@@ -70,6 +72,7 @@ import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.splashscreenlogo
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
@@ -101,45 +104,15 @@ fun HomeScreen(
     val settingsPref = Settings()
     val isBadgeIconActivated: Boolean = settingsPref[UserPreferences.NOTIFICATION] ?: false
     var isFirstDisplaying by remember { mutableStateOf(isBadgeIconActivated) }
-    var selectedItemIndex by rememberSaveable { mutableStateOf(0) }
+
 
     ModalNavigationDrawer(
         drawerContent = {
-            ModalDrawerSheet(
-                modifier = Modifier.padding(end = 45.dp)
-            ) {
-                Spacer(modifier = Modifier.height(16.dp))
-                items.forEachIndexed { index, item ->
-                    NavigationDrawerItem(
-                        label = {
-                            Text(text = item.title)
-                        },
-                        selected = index == selectedItemIndex,
-                        onClick = {
-                            // navController.navigate(item.route)
-                            onNavigateToDrawerMenu()
-                            selectedItemIndex = index
-                            scope.launch {
-                                drawerState.close()
-                            }
-                        },
-                        icon = {
-                            Icon(
-                                imageVector = if (index == selectedItemIndex) {
-                                    item.selectedIcon
-                                } else item.unselectedIcon,
-                                contentDescription = item.title
-                            )
-                        },
-                        badge = {
-                            item.badgeCount?.let {
-                                Text(text = item.badgeCount.toString())
-                            }
-                        },
-                        modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
-                    )
-                }
-            }
+            DrawerMenuNavigation(
+                scope = scope,
+                drawerState = drawerState,
+                onNavigateToDrawerMenu = onNavigateToDrawerMenu,
+            )
         },
         drawerState = drawerState
     ) {
@@ -185,6 +158,7 @@ fun HomeScreen(
         }
     }
 }
+
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
