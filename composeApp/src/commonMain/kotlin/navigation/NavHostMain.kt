@@ -157,7 +157,12 @@ private fun NavGraphBuilder.homeNavGraph(
                 composable(
                     route = AppNavigation.DiscountsRoute.name,
                 ) {
-                    DiscountsScreen()
+                    DiscountsScreen(
+                        onNavigateToDrawerMenu = { },
+                        onNavigateBack = {
+                            navController.navigateUp()
+                        }
+                    )
                 }
 
                 composable(
