@@ -4,6 +4,7 @@ import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.database.database
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -12,23 +13,39 @@ import util.ConstantsApp
 class DiscountsViewModel : ViewModel() {
 
     private val firebase = Firebase.database
-    private val _urlDiscount = MutableStateFlow(ConstantsApp.MESSAGE_DEFAULT_NOTIFICATION)
-    val urlDiscount = _urlDiscount.asStateFlow()
+    private var urlDiscount: String = ""
+    private val _uiState = MutableStateFlow<DiscountsViewState>(DiscountsViewState.Dashboard)
+    val uiState: StateFlow<DiscountsViewState> = _uiState.asStateFlow()
 
     init {
-        getInfoFirebaseRealTimeDatabase()
+        getUrlOnFirebaseDatabase()
     }
 
-    private fun getInfoFirebaseRealTimeDatabase() {
+    private fun getUrlOnFirebaseDatabase() {
         viewModelScope.launch {
             try {
                 val notification = firebase.reference("notifications").valueEvents.first()
                 val message = notification.child("list").child("url").value
                     ?: ConstantsApp.MESSAGE_DEFAULT_NOTIFICATION
-                _urlDiscount.value = message as String
+                urlDiscount = message as String
             } catch (e: Exception) {
                 println(" Errror $e")
             }
         }
     }
+
+    fun getSuccess(qrCodeURL: String) {
+        if (urlDiscount == qrCodeURL) _uiState.value = DiscountsViewState.Success(qrCodeURL)
+        else _uiState.value = DiscountsViewState.Error("QR Code Inválido")
+    }
+
+    fun getError(error: String) {
+        _uiState.value = DiscountsViewState.Error(error)
+    }
+}
+
+sealed interface DiscountsViewState {
+    data object Dashboard : DiscountsViewState
+    data class Success(val message: String) : DiscountsViewState
+    data class Error(val message: String) : DiscountsViewState
 }
