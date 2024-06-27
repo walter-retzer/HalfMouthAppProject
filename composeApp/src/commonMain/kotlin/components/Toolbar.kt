@@ -28,7 +28,7 @@ import theme.primaryDark
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
 @Composable
-fun AppToolbarLarge(
+fun MenuToolbar(
     color: Color = Color.Black,
     titleColor: Color = primaryDark,
     title: String,
@@ -86,7 +86,44 @@ fun AppToolbarLarge(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun profileToolbar(
+fun SimpleToolbar(
+    color: Color = Color.Black,
+    titleColor: Color = primaryDark,
+    title: String,
+    onNavigationToMenu: () -> Unit,
+    onNavigationClose: () -> Unit,
+    scrollBehavior:  TopAppBarScrollBehavior? = null,
+) {
+    LargeTopAppBar(
+        colors = TopAppBarDefaults.largeTopAppBarColors(
+            containerColor = color,
+            scrolledContainerColor = color,
+            titleContentColor = titleColor,
+        ),
+        title = { Text(title) },
+        navigationIcon = {
+            IconButton(onClick = { onNavigationToMenu() }) {
+                Icon(
+                    imageVector = Icons.Filled.Menu,
+                    contentDescription = "Localized description"
+                )
+            }
+        },
+        actions = {
+            IconButton(onClick = { onNavigationClose() }) {
+                Icon(
+                    imageVector = Icons.Filled.Close,
+                    contentDescription = "Localized description"
+                )
+            }
+        },
+        scrollBehavior = scrollBehavior
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ProfileToolbar(
     color: Color = Color.Black,
     titleColor: Color = primaryDark,
     title: String,
