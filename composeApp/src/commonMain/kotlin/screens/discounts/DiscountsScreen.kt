@@ -10,17 +10,23 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -34,25 +40,32 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import components.ProgressButton
 import components.profileToolbar
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.icon_flash_light
 import halfmouthappproject.composeapp.generated.resources.icon_gallery
+import halfmouthappproject.composeapp.generated.resources.icon_qr_code
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
 import qrscanner.QrScanner
 import theme.mainYellowColor
+import theme.onSurfaceVariantDark
 import viewmodel.DiscountsViewModel
 
 
@@ -74,6 +87,7 @@ fun DiscountsScreen() {
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
         topBar = {
             profileToolbar(
                 title = "Descontos",
@@ -87,6 +101,7 @@ fun DiscountsScreen() {
             Column(
                 modifier = Modifier
                     .windowInsetsPadding(WindowInsets.safeDrawing)
+                    .verticalScroll(rememberScrollState())
                     .fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -97,6 +112,22 @@ fun DiscountsScreen() {
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+
+                        Row(
+                            modifier = Modifier.padding(vertical = 5.dp, horizontal = 18.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                text = "Aponte a câmera para o QR Code para conseguir o seu desconto",
+                                modifier = Modifier
+                                    .background(Color.Transparent)
+                                    .padding(horizontal = 12.dp, vertical = 12.dp),
+                                style = MaterialTheme.typography.titleLarge,
+                                fontSize = 18.sp,
+                                textAlign = TextAlign.Center,
+                            )
+                        }
+
                         Box(
                             modifier = Modifier
                                 .size(250.dp)
@@ -187,22 +218,91 @@ fun DiscountsScreen() {
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Button(
-                            onClick = {
-                                startBarCodeScan = true
-                                qrCodeURL = ""
-                            },
-                            colors = ButtonDefaults.buttonColors(containerColor = mainYellowColor),
+                        Text(
+                            text = "Leia o QR Code e aproveite os cupons de descontos das nossas cervejas",
+                            modifier = Modifier
+                                .background(Color.Transparent)
+                                //.wrapContentHeight()
+                                //.fillMaxWidth()
+                                .padding(start = 16.dp, end = 16.dp, top = 20.dp, bottom = 20.dp),
+                            style = MaterialTheme.typography.titleLarge,
+                            fontSize = 18.sp,
+                            textAlign = TextAlign.Center
+                        )
+
+                        Image(
+                            painter = painterResource(Res.drawable.icon_qr_code),
+                            contentDescription = "qr-code",
+                            contentScale = ContentScale.Fit,
+                            modifier = Modifier
+                                .size(150.dp)
+                                .clickable { launchGallery = true }
+                        )
+
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                                .height(205.dp)
+                                .shadow(16.dp, shape = RectangleShape),
                         ) {
                             Text(
-                                text = "Scanear QR Code",
+                                text = "Escolha a opção desejável",
+                                textAlign = TextAlign.Center,
                                 modifier = Modifier
-                                    .background(Color.Transparent)
-                                    .padding(horizontal = 12.dp, vertical = 12.dp),
-                                fontSize = 16.sp,
-                                color = Color.Black,
+                                    .fillMaxWidth()
+                                    .padding(
+                                        start = 16.dp,
+                                        end = 16.dp,
+                                        top = 20.dp,
+                                    ),
+                                style = MaterialTheme.typography.titleLarge,
+                                fontSize = 15.sp
                             )
+
+                            HorizontalDivider(
+                                modifier = Modifier
+                                    .padding(start = 45.dp, end= 45.dp, top = 16.dp, bottom = 20.dp)
+                                    .alpha(0.7f),
+                                thickness = 1.dp,
+                                color = onSurfaceVariantDark
+                            )
+
+                            Row(
+                                modifier = Modifier
+                                    //.fillMaxWidth()
+                                    .padding(vertical = 20.dp, horizontal = 8.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                //horizontalArrangement = Arrangement.spacedBy(10.dp)
+                            ) {
+                                ProgressButton(
+                                    modifier = Modifier.padding(start = 16.dp),
+                                    text = " Ler QR Code ",
+                                    isLoading = false,
+                                    textSize = 14.sp,
+                                    onClick = {
+                                        startBarCodeScan = true
+                                        qrCodeURL = ""
+                                    }
+                                )
+
+                                ProgressButton(
+                                    modifier = Modifier.padding(end = 16.dp),
+                                    text = "Abrir QR Code",
+                                    isLoading = false,
+                                    textSize = 14.sp,
+                                    onClick = {
+                                        startBarCodeScan = true
+                                        qrCodeURL = ""
+                                    }
+                                )
+                            }
                         }
+
+
+
+
+
 
                         Text(
                             text = qrCodeURL,
