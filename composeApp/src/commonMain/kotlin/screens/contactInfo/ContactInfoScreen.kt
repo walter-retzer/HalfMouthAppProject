@@ -39,7 +39,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import components.AppToolbarLarge
+import components.MenuToolbar
 import components.DrawerMenuNavigation
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.address
@@ -84,7 +84,7 @@ fun ContactInfoScreen(onNavigateToProfile:() -> Unit) {
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
             topBar = {
-                AppToolbarLarge(
+                MenuToolbar(
                     title = "Contato",
                     onNavigationToMenu = {
                         scope.launch {

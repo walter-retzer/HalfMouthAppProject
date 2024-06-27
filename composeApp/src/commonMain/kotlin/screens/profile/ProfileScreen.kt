@@ -45,7 +45,7 @@ import androidx.compose.ui.unit.sp
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.get
 import components.LoadingWithLine
-import components.profileToolbar
+import components.ProfileToolbar
 import data.UserPreferences
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
@@ -93,7 +93,7 @@ fun ProfileScreen(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         snackbarHost =  { SnackbarHost(hostState = snackBarHostState) },
         topBar = {
-            profileToolbar(
+            ProfileToolbar(
                 title = "Perfil",
                 onNavigationIconBack = { onNavigateBack() },
                 onNavigationIconClose = { onNavigateBack() },

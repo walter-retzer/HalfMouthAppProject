@@ -35,7 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
-import components.AppToolbarLarge
+import components.MenuToolbar
 import components.DrawerMenuNavigation
 import components.MyAppCircularProgressIndicator
 import dev.icerock.moko.mvvm.compose.getViewModel
@@ -84,7 +84,7 @@ fun ProductionScreen(onNavigateToProfile: () -> Unit) {
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
             topBar = {
-                AppToolbarLarge(
+                MenuToolbar(
                     title = "Produção",
                     onNavigationToMenu = {
                         scope.launch {
