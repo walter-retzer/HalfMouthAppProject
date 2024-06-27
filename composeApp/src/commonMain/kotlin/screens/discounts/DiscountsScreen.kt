@@ -58,6 +58,7 @@ import components.SimpleToolbar
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import halfmouthappproject.composeapp.generated.resources.Res
+import halfmouthappproject.composeapp.generated.resources.beer_on_right
 import halfmouthappproject.composeapp.generated.resources.icon_bolt_fill_off
 import halfmouthappproject.composeapp.generated.resources.icon_bolt_fill_on
 import halfmouthappproject.composeapp.generated.resources.icon_gallery_send
@@ -73,6 +74,7 @@ import theme.onSurfaceVariantDark
 import theme.surfaceVariantDark
 import util.snackBarOnlyMessage
 import viewmodel.DiscountsViewModel
+import viewmodel.DiscountsViewState
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
@@ -85,7 +87,7 @@ fun DiscountsScreen(
         key = "discounts-screen",
         factory = viewModelFactory { DiscountsViewModel() }
     )
-    val urlDiscounts by viewModel.urlDiscount.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val snackBarHostState = remember { SnackbarHostState() }
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -125,157 +127,238 @@ fun DiscountsScreen(
                 )
             }
         ) { innerPadding ->
-            Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
-                Column(
-                    modifier = Modifier
-                        .windowInsetsPadding(WindowInsets.safeDrawing)
-                        .verticalScroll(rememberScrollState())
-                        .fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    if (qrCodeURL.isEmpty() && startBarCodeScan) {
+            when (val state = uiState) {
+                is DiscountsViewState.Dashboard -> {
+                    Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
                         Column(
-                            modifier = Modifier.fillMaxSize(),
+                            modifier = Modifier
+                                .windowInsetsPadding(WindowInsets.safeDrawing)
+                                .verticalScroll(rememberScrollState())
+                                .fillMaxSize(),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
+                            if (qrCodeURL.isEmpty() && startBarCodeScan) {
+                                Column(
+                                    modifier = Modifier.fillMaxSize(),
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
 
-                            Row(
-                                modifier = Modifier.padding(vertical = 8.dp, horizontal = 1.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Text(
-                                    text = "Aponte a câmera para o QR Code para conseguir o seu desconto",
-                                    modifier = Modifier.fillMaxWidth(),
-                                    style = MaterialTheme.typography.titleLarge,
-                                    fontSize = 18.sp,
-                                    textAlign = TextAlign.Start,
-                                )
-                            }
+                                    Row(
+                                        modifier = Modifier.padding(vertical = 8.dp, horizontal = 1.dp),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                    ) {
+                                        Text(
+                                            text = "Aponte a câmera para o QR Code para conseguir o seu desconto",
+                                            modifier = Modifier.fillMaxWidth(),
+                                            style = MaterialTheme.typography.titleLarge,
+                                            fontSize = 18.sp,
+                                            textAlign = TextAlign.Start,
+                                        )
+                                    }
 
-                            Box(
-                                modifier = Modifier
-                                    .size(250.dp)
-                                    .clip(shape = RoundedCornerShape(size = 14.dp))
-                                    .clipToBounds()
-                                    .border(2.dp, Color.Gray, RoundedCornerShape(size = 14.dp)),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                QrScanner(
-                                    modifier = Modifier
-                                        .clipToBounds()
-                                        .clip(shape = RoundedCornerShape(size = 14.dp)),
-                                    flashlightOn = flashlightOn,
-                                    launchGallery = launchGallery,
-                                    onCompletion = {
-                                        qrCodeURL = it
-                                        startBarCodeScan = false
-                                    },
-                                    onGalleryCallBackHandler = {
-                                        launchGallery = it
-                                    },
-                                    onFailure = { text ->
-                                        if (text.isEmpty()) {
-                                            snackBarOnlyMessage(
-                                                snackBarHostState = snackBarHostState,
-                                                coroutineScope = scope,
-                                                message = "Qr Code Inválido",
-                                                duration = SnackbarDuration.Long
+                                    Box(
+                                        modifier = Modifier
+                                            .size(250.dp)
+                                            .clip(shape = RoundedCornerShape(size = 14.dp))
+                                            .clipToBounds()
+                                            .border(2.dp, Color.Gray, RoundedCornerShape(size = 14.dp)),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        QrScanner(
+                                            modifier = Modifier
+                                                .clipToBounds()
+                                                .clip(shape = RoundedCornerShape(size = 14.dp)),
+                                            flashlightOn = flashlightOn,
+                                            launchGallery = launchGallery,
+                                            onCompletion = {
+                                                qrCodeURL = it
+                                                startBarCodeScan = false
+                                                viewModel.getSuccess(it)
+                                            },
+                                            onGalleryCallBackHandler = {
+                                                launchGallery = it
+                                            },
+                                            onFailure = { text ->
+                                                viewModel.getError(text)
+                                            }
+                                        )
+                                    }
+
+                                    Box(
+                                        modifier = Modifier
+                                            .padding(start = 20.dp, end = 20.dp, top = 10.dp)
+                                            .background(
+                                                color = mainYellowColor,
+                                                shape = RoundedCornerShape(25.dp)
                                             )
-                                        } else {
-                                            snackBarOnlyMessage(
-                                                snackBarHostState = snackBarHostState,
-                                                coroutineScope = scope,
-                                                message = text,
-                                                duration = SnackbarDuration.Long
+                                            .height(35.dp),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Row(
+                                            modifier = Modifier.padding(
+                                                vertical = 2.dp,
+                                                horizontal = 16.dp
+                                            ),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                                        ) {
+                                            Icon(
+                                                modifier = Modifier
+                                                    .size(24.dp)
+                                                    .clickable { flashlightOn = !flashlightOn },
+                                                imageVector = if (flashlightOn) vectorResource(Res.drawable.icon_bolt_fill_on)
+                                                else vectorResource(Res.drawable.icon_bolt_fill_off),
+                                                contentDescription = "flash",
+                                                tint = Color.Black
+                                            )
+
+                                            Text(
+                                                modifier = Modifier.clickable {
+                                                    flashlightOn = !flashlightOn
+                                                },
+                                                text = "Flash  ",
+                                                textAlign = TextAlign.Center,
+                                                style = MaterialTheme.typography.titleLarge,
+                                                fontSize = 15.sp,
+                                                color = darkScheme.onPrimary,
+                                            )
+
+                                            VerticalDivider(
+                                                modifier = Modifier.padding(2.dp),
+                                                thickness = 1.dp,
+                                                color = onSurfaceVariantDark
+                                            )
+
+                                            Icon(
+                                                modifier = Modifier
+                                                    .size(24.dp)
+                                                    .clickable { launchGallery = true },
+                                                painter = painterResource(Res.drawable.icon_gallery_send),
+                                                contentDescription = "gallery",
+                                                tint = Color.Black
+                                            )
+
+                                            Text(
+                                                modifier = Modifier.clickable { launchGallery = true },
+                                                text = "Galeria",
+                                                textAlign = TextAlign.Center,
+                                                style = MaterialTheme.typography.titleLarge,
+                                                fontSize = 15.sp,
+                                                color = darkScheme.onPrimary,
                                             )
                                         }
                                     }
-                                )
-                            }
-
-                            Box(
-                                modifier = Modifier
-                                    .padding(start = 20.dp, end = 20.dp, top = 10.dp)
-                                    .background(
-                                        color = mainYellowColor,
-                                        shape = RoundedCornerShape(25.dp)
-                                    )
-                                    .height(35.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Row(
-                                    modifier = Modifier.padding(
-                                        vertical = 2.dp,
-                                        horizontal = 16.dp
-                                    ),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                                }
+                            } else {
+                                Column(
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
-                                    Icon(
-                                        modifier = Modifier
-                                            .size(24.dp)
-                                            .clickable { flashlightOn = !flashlightOn },
-                                        imageVector = if (flashlightOn) vectorResource(Res.drawable.icon_bolt_fill_on)
-                                        else vectorResource(Res.drawable.icon_bolt_fill_off),
-                                        contentDescription = "flash",
-                                        tint = Color.Black
-                                    )
-
                                     Text(
-                                        modifier = Modifier.clickable {
-                                            flashlightOn = !flashlightOn
-                                        },
-                                        text = "Flash  ",
-                                        textAlign = TextAlign.Center,
-                                        style = MaterialTheme.typography.titleLarge,
-                                        fontSize = 15.sp,
-                                        color = darkScheme.onPrimary,
-                                    )
-
-                                    VerticalDivider(
-                                        modifier = Modifier.padding(2.dp),
-                                        thickness = 1.dp,
-                                        color = onSurfaceVariantDark
-                                    )
-
-                                    Icon(
+                                        text = "Acesse seu cupom descubra o seu desconto",
                                         modifier = Modifier
-                                            .size(24.dp)
-                                            .clickable { launchGallery = true },
-                                        painter = painterResource(Res.drawable.icon_gallery_send),
-                                        contentDescription = "gallery",
-                                        tint = Color.Black
+                                            .fillMaxWidth()
+                                            .background(Color.Transparent)
+                                            .padding(start = 16.dp, end = 16.dp, top = 20.dp),
+                                        style = MaterialTheme.typography.titleLarge,
+                                        fontSize = 18.sp,
+                                        textAlign = TextAlign.Start
                                     )
 
-                                    Text(
-                                        modifier = Modifier.clickable { launchGallery = true },
-                                        text = "Galeria",
-                                        textAlign = TextAlign.Center,
-                                        style = MaterialTheme.typography.titleLarge,
-                                        fontSize = 15.sp,
-                                        color = darkScheme.onPrimary,
-                                    )
+                                    Box(
+                                        modifier = Modifier
+                                            .padding(start = 30.dp, end = 30.dp, top = 10.dp)
+                                            .background(
+                                                color = surfaceVariantDark,
+                                                shape = RoundedCornerShape(25.dp)
+                                            )
+                                            .height(360.dp),
+                                    ) {
+                                        Column(
+                                            verticalArrangement = Arrangement.Center,
+                                            horizontalAlignment = Alignment.CenterHorizontally
+                                        ) {
+                                            Image(
+                                                painter = painterResource(Res.drawable.icon_qr_code),
+                                                contentDescription = "qr-code",
+                                                contentScale = ContentScale.Fit,
+                                                modifier = Modifier.size(150.dp).padding(top = 20.dp)
+                                            )
+
+                                            Text(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(
+                                                        start = 16.dp,
+                                                        end = 16.dp,
+                                                        top = 20.dp,
+                                                    ),
+                                                text = "Leia o QR Code e aproveite\nos cupons de descontos\ndas nossas cervejas",
+                                                textAlign = TextAlign.Center,
+                                                style = MaterialTheme.typography.titleLarge,
+                                                fontSize = 15.sp
+                                            )
+
+                                            HorizontalDivider(
+                                                modifier = Modifier
+                                                    .padding(
+                                                        start = 80.dp,
+                                                        end = 80.dp,
+                                                        top = 16.dp,
+                                                        bottom = 20.dp
+                                                    )
+                                                    .alpha(0.7f),
+                                                thickness = 1.dp,
+                                                color = onSurfaceVariantDark
+                                            )
+
+                                            ButtonWithIcon(
+                                                text = "Ler QR Code",
+                                                textSize = 14.sp,
+                                                drawableResource = Res.drawable.icon_qr_code,
+                                                onClick = {
+                                                    startBarCodeScan = true
+                                                    qrCodeURL = ""
+                                                }
+                                            )
+                                        }
+                                    }
                                 }
                             }
                         }
+                    }
+                }
+
+                is DiscountsViewState.Error -> {
+                    if (state.message.isEmpty()) {
+                        snackBarOnlyMessage(
+                            snackBarHostState = snackBarHostState,
+                            coroutineScope = scope,
+                            message = "Qr Code Inválido",
+                            duration = SnackbarDuration.Long
+                        )
                     } else {
+                        snackBarOnlyMessage(
+                            snackBarHostState = snackBarHostState,
+                            coroutineScope = scope,
+                            message = state.message,
+                            duration = SnackbarDuration.Long
+                        )
+                    }
+                }
+
+                is DiscountsViewState.Success -> {
+                    Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
                         Column(
+                            modifier = Modifier
+                                .windowInsetsPadding(WindowInsets.safeDrawing)
+                                .verticalScroll(rememberScrollState())
+                                .fillMaxSize(),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text(
-                                text = "Acesse seu cupom descubra o seu desconto",
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .background(Color.Transparent)
-                                    .padding(start = 16.dp, end = 16.dp, top = 20.dp),
-                                style = MaterialTheme.typography.titleLarge,
-                                fontSize = 18.sp,
-                                textAlign = TextAlign.Start
-                            )
-
                             Box(
                                 modifier = Modifier
                                     .padding(start = 30.dp, end = 30.dp, top = 10.dp)
@@ -283,17 +366,17 @@ fun DiscountsScreen(
                                         color = surfaceVariantDark,
                                         shape = RoundedCornerShape(25.dp)
                                     )
-                                    .height(360.dp),
+                                    .height(350.dp),
                             ) {
                                 Column(
                                     verticalArrangement = Arrangement.Center,
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
-                                    Image(
-                                        painter = painterResource(Res.drawable.icon_qr_code),
+                                    Icon(
+                                        painter = painterResource(Res.drawable.beer_on_right),
                                         contentDescription = "qr-code",
-                                        contentScale = ContentScale.Fit,
-                                        modifier = Modifier.size(150.dp).padding(top = 20.dp)
+                                        modifier = Modifier.size(150.dp).padding(top = 10.dp),
+                                        tint = Color(0xFFCAC8A4)
                                     )
 
                                     Text(
@@ -302,51 +385,40 @@ fun DiscountsScreen(
                                             .padding(
                                                 start = 16.dp,
                                                 end = 16.dp,
-                                                top = 20.dp,
+                                                top = 16.dp,
                                             ),
-                                        text = "Leia o QR Code e aproveite\nos cupons de descontos\ndas nossas cervejas",
+                                        text = "Desconto de 10%",
                                         textAlign = TextAlign.Center,
                                         style = MaterialTheme.typography.titleLarge,
-                                        fontSize = 15.sp
+                                        fontSize = 24.sp
                                     )
 
                                     HorizontalDivider(
                                         modifier = Modifier
                                             .padding(
-                                                start = 80.dp,
-                                                end = 80.dp,
-                                                top = 16.dp,
-                                                bottom = 20.dp
+                                                start = 70.dp,
+                                                end = 70.dp,
+                                                top = 24.dp,
+                                                bottom = 24.dp
                                             )
                                             .alpha(0.7f),
                                         thickness = 1.dp,
                                         color = onSurfaceVariantDark
                                     )
 
-                                    ButtonWithIcon(
-                                        text = "Ler QR Code",
-                                        textSize = 14.sp,
-                                        drawableResource = Res.drawable.icon_qr_code,
-                                        onClick = {
-                                            startBarCodeScan = true
-                                            qrCodeURL = ""
-                                        }
+                                    Text(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(
+                                                start = 16.dp,
+                                                end = 16.dp,
+                                            ),
+                                        text = "Parabéns,\no seu cupom de desconto\né valido até o dia 31/12/2024",
+                                        textAlign = TextAlign.Center,
+                                        style = MaterialTheme.typography.titleLarge,
+                                        fontSize = 18.sp
                                     )
                                 }
-                            }
-
-                            Text(
-                                text = qrCodeURL,
-                                color = Color.White,
-                                modifier = Modifier.padding(top = 12.dp)
-                            )
-
-                            if (qrCodeURL == urlDiscounts) {
-                                Text(
-                                    text = "Parabéns pelo Desconto!",
-                                    color = Color.White,
-                                    modifier = Modifier.padding(top = 12.dp)
-                                )
                             }
                         }
                     }
