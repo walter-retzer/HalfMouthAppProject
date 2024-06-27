@@ -230,37 +230,38 @@ fun DiscountsScreen() {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = "Leia o QR Code e aproveite os cupons de descontos das nossas cervejas",
+                            text = "Descubra o seu desconto",
                             modifier = Modifier
+                                .fillMaxWidth()
                                 .background(Color.Transparent)
-                                .padding(start = 16.dp, end = 16.dp, top = 20.dp, bottom = 20.dp),
+                                .padding(start = 16.dp, end = 16.dp, top = 20.dp),
                             style = MaterialTheme.typography.titleLarge,
                             fontSize = 18.sp,
-                            textAlign = TextAlign.Center
-                        )
-
-                        Image(
-                            painter = painterResource(Res.drawable.icon_qr_code),
-                            contentDescription = "qr-code",
-                            contentScale = ContentScale.Fit,
-                            modifier = Modifier.size(150.dp)
+                            textAlign = TextAlign.Start
                         )
 
                         Box(
                             modifier = Modifier
-                                .padding(start = 20.dp, end = 20.dp, top = 30.dp)
+                                .padding(start = 20.dp, end = 20.dp, top = 10.dp)
                                 .background(
                                     color = surfaceVariantDark,
                                     shape = RoundedCornerShape(25.dp)
                                 )
-                                .height(205.dp),
+                                .height(330.dp),
                         ) {
                             Column(
                                 verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
+                                Image(
+                                    painter = painterResource(Res.drawable.icon_qr_code),
+                                    contentDescription = "qr-code",
+                                    contentScale = ContentScale.Fit,
+                                    modifier = Modifier.size(150.dp).padding(top = 20.dp)
+                                )
+
                                 Text(
-                                    text = "Escolha a opção desejável",
+                                    text = "Leia o QR Code e aproveite os cupons de descontos das nossas cervejas",
                                     textAlign = TextAlign.Center,
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -276,8 +277,8 @@ fun DiscountsScreen() {
                                 HorizontalDivider(
                                     modifier = Modifier
                                         .padding(
-                                            start = 45.dp,
-                                            end = 45.dp,
+                                            start = 60.dp,
+                                            end = 60.dp,
                                             top = 16.dp,
                                             bottom = 20.dp
                                         )
@@ -286,15 +287,25 @@ fun DiscountsScreen() {
                                     color = onSurfaceVariantDark
                                 )
 
-                                Row(
-                                    modifier = Modifier.padding(
-                                        vertical = 5.dp,
-                                        horizontal = 18.dp
-                                    ),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(11.dp)
-                                ) {
-//                                    ProgressButton(
+                                ButtonWithIcon(
+                                    text = "Ler QR Code",
+                                    textSize = 14.sp,
+                                    drawableResource = Res.drawable.icon_qr_code,
+                                    onClick = {
+                                        startBarCodeScan = true
+                                        qrCodeURL = ""
+                                    }
+                                )
+
+//                                Row(
+//                                    modifier = Modifier.padding(
+//                                        vertical = 5.dp,
+//                                        horizontal = 18.dp
+//                                    ),
+//                                    verticalAlignment = Alignment.CenterVertically,
+//                                    horizontalArrangement = Arrangement.spacedBy(11.dp)
+//                                ) {
+////                                    ProgressButton(
 //                                        text = " Ler QR Code ",
 //                                        isLoading = false,
 //                                        textSize = 14.sp,
@@ -332,86 +343,86 @@ fun DiscountsScreen() {
 //                                            launchGallery = true
 //                                        }
 //                                    )
-
-                                    val shape = RoundedCornerShape(20.dp)
-
-                                    Button(
-                                        modifier = Modifier
-                                            .height(54.dp)
-                                            .clip(shape)
-                                            .background(
-                                                brush = Brush.linearGradient(
-                                                    0f to mainYellowColor,
-                                                    1f to mainYellowColor
-                                                )
-                                            ),
-                                        shape = shape,
-                                        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-                                        onClick = {
-                                            startBarCodeScan = true
-                                            qrCodeURL = ""
-                                        },
-                                    ) {
-                                        Image(
-                                            painter = painterResource(Res.drawable.icon_qr_code),
-                                            contentDescription = "qr-code",
-                                            contentScale = ContentScale.Fit,
-                                            modifier = Modifier.size(24.dp)
-                                        )
-
-                                        Text(
-                                            modifier = Modifier.wrapContentHeight(),
-                                            text = "Camera",
-                                            color = darkScheme.onPrimary,
-                                            style = TextStyle(
-                                                fontFamily = FontFamily.SansSerif,
-                                                fontWeight = FontWeight.Bold,
-                                                fontSize = 14.sp,
-                                                lineHeight = 16.sp,
-                                                letterSpacing = 0.5.sp
-                                            )
-                                        )
-                                    }
-
-                                    Button(
-                                        modifier = Modifier
-                                            .height(54.dp)
-                                            .clip(shape)
-                                            .background(
-                                                brush = Brush.linearGradient(
-                                                    0f to mainYellowColor,
-                                                    1f to mainYellowColor
-                                                )
-                                            ),
-                                        shape = shape,
-                                        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-                                        onClick = {
-                                            qrCodeURL = ""
-                                            launchGallery = true
-                                                  },
-                                    ) {
-                                        Image(
-                                            painter = painterResource(Res.drawable.icon_gallery),
-                                            contentDescription = "qr-code",
-                                            contentScale = ContentScale.Fit,
-                                            modifier = Modifier.size(24.dp)
-                                        )
-
-                                        Text(
-                                            modifier = Modifier.wrapContentHeight(),
-                                            text = "Galeria",
-                                            color = darkScheme.onPrimary,
-                                            style = TextStyle(
-                                                fontFamily = FontFamily.SansSerif,
-                                                fontWeight = FontWeight.Bold,
-                                                fontSize = 14.sp,
-                                                lineHeight = 16.sp,
-                                                letterSpacing = 0.5.sp
-                                            )
-                                        )
-                                    }
-                                }
-                            }
+//
+//                                    val shape = RoundedCornerShape(20.dp)
+//
+//                                    Button(
+//                                        modifier = Modifier
+//                                            .height(54.dp)
+//                                            .clip(shape)
+//                                            .background(
+//                                                brush = Brush.linearGradient(
+//                                                    0f to mainYellowColor,
+//                                                    1f to mainYellowColor
+//                                                )
+//                                            ),
+//                                        shape = shape,
+//                                        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+//                                        onClick = {
+//                                            startBarCodeScan = true
+//                                            qrCodeURL = ""
+//                                        },
+//                                    ) {
+//                                        Image(
+//                                            painter = painterResource(Res.drawable.icon_qr_code),
+//                                            contentDescription = "qr-code",
+//                                            contentScale = ContentScale.Fit,
+//                                            modifier = Modifier.size(24.dp)
+//                                        )
+//
+//                                        Text(
+//                                            modifier = Modifier.wrapContentHeight(),
+//                                            text = "Camera",
+//                                            color = darkScheme.onPrimary,
+//                                            style = TextStyle(
+//                                                fontFamily = FontFamily.SansSerif,
+//                                                fontWeight = FontWeight.Bold,
+//                                                fontSize = 14.sp,
+//                                                lineHeight = 16.sp,
+//                                                letterSpacing = 0.5.sp
+//                                            )
+//                                        )
+//                                    }
+//
+//                                    Button(
+//                                        modifier = Modifier
+//                                            .height(54.dp)
+//                                            .clip(shape)
+//                                            .background(
+//                                                brush = Brush.linearGradient(
+//                                                    0f to mainYellowColor,
+//                                                    1f to mainYellowColor
+//                                                )
+//                                            ),
+//                                        shape = shape,
+//                                        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+//                                        onClick = {
+//                                            qrCodeURL = ""
+//                                            launchGallery = true
+//                                                  },
+//                                    ) {
+//                                        Image(
+//                                            painter = painterResource(Res.drawable.icon_gallery),
+//                                            contentDescription = "qr-code",
+//                                            contentScale = ContentScale.Fit,
+//                                            modifier = Modifier.size(24.dp)
+//                                        )
+//
+//                                        Text(
+//                                            modifier = Modifier.wrapContentHeight(),
+//                                            text = "Galeria",
+//                                            color = darkScheme.onPrimary,
+//                                            style = TextStyle(
+//                                                fontFamily = FontFamily.SansSerif,
+//                                                fontWeight = FontWeight.Bold,
+//                                                fontSize = 14.sp,
+//                                                lineHeight = 16.sp,
+//                                                letterSpacing = 0.5.sp
+//                                            )
+//                                        )
+//                                    }
+//                                }
+                           }
 
                         }
 
