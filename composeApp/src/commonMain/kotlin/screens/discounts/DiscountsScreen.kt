@@ -1,6 +1,5 @@
 package screens.discounts
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -48,9 +47,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.LineBreak
@@ -139,7 +136,12 @@ fun DiscountsScreen(
             when (val state = uiState) {
                 is DiscountsViewState.Dashboard -> {
                     isSnackBarDisplaying = false
-                    Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                    ) {
                         Column(
                             modifier = Modifier
                                 .windowInsetsPadding(WindowInsets.safeDrawing)
@@ -150,7 +152,7 @@ fun DiscountsScreen(
                         ) {
                             if (qrCodeURL.isEmpty() && startBarCodeScan) {
                                 ConstraintLayout {
-                                    val (card, dashLine, textTitle, qrCode, button) = createRefs()
+                                    val (card, textTitle, qrCode) = createRefs()
                                     Box(
                                         modifier = Modifier
                                             .padding(
@@ -163,42 +165,105 @@ fun DiscountsScreen(
                                                 color = surfaceVariantDark,
                                                 shape = RoundedCornerShape(25.dp)
                                             )
-                                            .height(540.dp)
+                                            .fillMaxSize()
                                             .constrainAs(card) {
                                                 top.linkTo(parent.top, margin = 10.dp)
                                             }
                                     ) {
-                                        Image(
-                                            painter = painterResource(Res.drawable.ticket_qr_code),
-                                            contentDescription = "qr-code",
-                                            contentScale = ContentScale.Fit,
-                                            modifier = Modifier.fillMaxWidth().padding(
-                                                top = 30.dp,
-                                                start = 10.dp,
-                                                end = 10.dp
+                                        Column(
+                                            verticalArrangement = Arrangement.Center,
+                                            horizontalAlignment = Alignment.CenterHorizontally
+                                        ) {
+
+                                            Image(
+                                                painter = painterResource(Res.drawable.ticket_qr_code),
+                                                contentDescription = "qr-code",
+                                                contentScale = ContentScale.Fit,
+                                                modifier = Modifier
+                                                    .fillMaxSize()
+                                                    .padding(
+                                                        top = 30.dp,
+                                                        start = 10.dp,
+                                                        end = 10.dp
+                                                    )
                                             )
-                                        )
-                                    }
 
-                                    val pathEffect = PathEffect
-                                        .dashPathEffect(floatArrayOf(20f, 20f), 0f)
+                                            Box(
+                                                modifier = Modifier
+                                                    .padding(top = 16.dp, bottom = 16.dp)
+                                                    .background(
+                                                        color = surfaceVariantDark,
+                                                        shape = RoundedCornerShape(25.dp)
+                                                    )
+                                                    .height(42.dp),
+                                                contentAlignment = Alignment.Center
+                                            ) {
 
-                                    Canvas(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(3.dp)
-                                            .constrainAs(dashLine) {
-                                                top.linkTo(parent.top, margin = 186.dp)
-                                                start.linkTo(parent.start)
-                                                end.linkTo(parent.end)
+                                                Row(
+                                                    modifier = Modifier
+                                                        .border(
+                                                            2.dp,
+                                                            onSurfaceVariantDark,
+                                                            RoundedCornerShape(size = 25.dp)
+                                                        ),
+                                                    verticalAlignment = Alignment.CenterVertically,
+                                                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                                                ) {
+
+                                                    Spacer(modifier = Modifier.width(10.dp))
+
+                                                    Icon(
+                                                        modifier = Modifier
+                                                            .size(24.dp)
+                                                            .clickable {
+                                                                flashlightOn = !flashlightOn
+                                                            },
+                                                        imageVector = if (flashlightOn) vectorResource(
+                                                            Res.drawable.icon_bolt_fill_on
+                                                        )
+                                                        else vectorResource(Res.drawable.icon_bolt_fill_off),
+                                                        contentDescription = "flash",
+                                                        tint = mainYellowColor
+                                                    )
+
+                                                    Text(
+                                                        modifier = Modifier.clickable {
+                                                            flashlightOn = !flashlightOn
+                                                        },
+                                                        text = "Flash  ",
+                                                        textAlign = TextAlign.Center,
+                                                        style = MaterialTheme.typography.titleLarge,
+                                                        fontSize = 15.sp,
+                                                    )
+
+                                                    VerticalDivider(
+                                                        modifier = Modifier.padding(2.dp),
+                                                        thickness = 2.dp,
+                                                        color = onSurfaceVariantDark
+                                                    )
+
+                                                    Icon(
+                                                        modifier = Modifier
+                                                            .size(24.dp)
+                                                            .clickable { launchGallery = true },
+                                                        painter = painterResource(Res.drawable.icon_gallery_send),
+                                                        contentDescription = "gallery",
+                                                        tint = mainYellowColor
+                                                    )
+
+                                                    Text(
+                                                        modifier = Modifier
+                                                            .clickable { launchGallery = true },
+                                                        text = "Galeria",
+                                                        textAlign = TextAlign.Center,
+                                                        style = MaterialTheme.typography.titleLarge,
+                                                        fontSize = 15.sp,
+                                                    )
+
+                                                    Spacer(modifier = Modifier.width(10.dp))
+                                                }
                                             }
-                                    ) {
-                                        drawLine(
-                                            color = surfaceVariantDark,
-                                            start = Offset(10f, 0f),
-                                            end = Offset(size.width, 0f),
-                                            pathEffect = pathEffect
-                                        )
+                                        }
                                     }
 
                                     Text(
@@ -233,7 +298,7 @@ fun DiscountsScreen(
                                                 RoundedCornerShape(size = 14.dp)
                                             )
                                             .constrainAs(qrCode) {
-                                                top.linkTo(dashLine.top, margin = 24.dp)
+                                                bottom.linkTo(card.bottom, margin = 100.dp)
                                                 start.linkTo(card.start, margin = 0.dp)
                                                 end.linkTo(card.end, margin = 0.dp)
                                             },
@@ -258,83 +323,6 @@ fun DiscountsScreen(
                                             }
                                         )
                                     }
-
-                                    Box(
-                                        modifier = Modifier
-                                            .padding(top = 10.dp)
-                                            .background(
-                                                color = surfaceVariantDark,
-                                                shape = RoundedCornerShape(25.dp)
-                                            )
-                                            .height(42.dp)
-                                            .constrainAs(button) {
-                                                bottom.linkTo(card.bottom, margin = 48.dp)
-                                                start.linkTo(card.start, margin = 0.dp)
-                                                end.linkTo(card.end, margin = 0.dp)
-                                            },
-                                        contentAlignment = Alignment.Center
-                                    ) {
-
-                                        Row(
-                                            modifier = Modifier
-                                                .border(
-                                                    2.dp,
-                                                    onSurfaceVariantDark,
-                                                    RoundedCornerShape(size = 25.dp)
-                                                ),
-                                            verticalAlignment = Alignment.CenterVertically,
-                                            horizontalArrangement = Arrangement.spacedBy(10.dp)
-                                        ) {
-
-                                            Spacer(modifier = Modifier.width(10.dp))
-
-                                            Icon(
-                                                modifier = Modifier
-                                                    .size(24.dp)
-                                                    .clickable { flashlightOn = !flashlightOn },
-                                                imageVector = if (flashlightOn) vectorResource(Res.drawable.icon_bolt_fill_on)
-                                                else vectorResource(Res.drawable.icon_bolt_fill_off),
-                                                contentDescription = "flash",
-                                                tint = mainYellowColor
-                                            )
-
-                                            Text(
-                                                modifier = Modifier.clickable {
-                                                    flashlightOn = !flashlightOn
-                                                },
-                                                text = "Flash  ",
-                                                textAlign = TextAlign.Center,
-                                                style = MaterialTheme.typography.titleLarge,
-                                                fontSize = 15.sp,
-                                            )
-
-                                            VerticalDivider(
-                                                modifier = Modifier.padding(2.dp),
-                                                thickness = 2.dp,
-                                                color = onSurfaceVariantDark
-                                            )
-
-                                            Icon(
-                                                modifier = Modifier
-                                                    .size(24.dp)
-                                                    .clickable { launchGallery = true },
-                                                painter = painterResource(Res.drawable.icon_gallery_send),
-                                                contentDescription = "gallery",
-                                                tint = mainYellowColor
-                                            )
-
-                                            Text(
-                                                modifier = Modifier
-                                                    .clickable { launchGallery = true },
-                                                text = "Galeria",
-                                                textAlign = TextAlign.Center,
-                                                style = MaterialTheme.typography.titleLarge,
-                                                fontSize = 15.sp,
-                                            )
-
-                                            Spacer(modifier = Modifier.width(10.dp))
-                                        }
-                                    }
                                 }
                             } else {
                                 Column(
@@ -342,7 +330,7 @@ fun DiscountsScreen(
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
                                     ConstraintLayout {
-                                        val (card, dashLine, textTitle, qrCode, dividerLine, button) = createRefs()
+                                        val (card, textTitle, qrCode, dividerLine) = createRefs()
                                         Box(
                                             modifier = Modifier
                                                 .padding(
@@ -355,40 +343,41 @@ fun DiscountsScreen(
                                                     color = surfaceVariantDark,
                                                     shape = RoundedCornerShape(25.dp)
                                                 )
-                                                .height(540.dp)
+                                                .fillMaxSize()
                                                 .constrainAs(card) {
                                                     top.linkTo(parent.top, margin = 10.dp)
                                                 }
                                         ) {
-                                            Image(
-                                                painter = painterResource(Res.drawable.ticket_qr_code),
-                                                contentDescription = "qr-code",
-                                                contentScale = ContentScale.Fit,
-                                                modifier = Modifier.fillMaxWidth().padding(
-                                                    top = 30.dp,
-                                                    start = 10.dp,
-                                                    end = 10.dp
-                                                )
-                                            )
-                                        }
 
-                                        val pathEffect = PathEffect.dashPathEffect(floatArrayOf(20f, 20f), 0f)
-                                        Canvas(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .height(3.dp)
-                                                .constrainAs(dashLine) {
-                                                    top.linkTo(parent.top, margin = 186.dp)
-                                                    start.linkTo(parent.start)
-                                                    end.linkTo(parent.end)
-                                                }
-                                        ) {
-                                            drawLine(
-                                                color = surfaceVariantDark,
-                                                start = Offset(10f, 0f),
-                                                end = Offset(size.width, 0f),
-                                                pathEffect = pathEffect
-                                            )
+                                            Column(
+                                                verticalArrangement = Arrangement.Center,
+                                                horizontalAlignment = Alignment.CenterHorizontally
+                                            ) {
+                                                Image(
+                                                    painter = painterResource(Res.drawable.ticket_qr_code),
+                                                    contentDescription = "qr-code",
+                                                    contentScale = ContentScale.Fit,
+                                                    modifier = Modifier
+                                                        .fillMaxSize()
+                                                        .padding(
+                                                            top = 30.dp,
+                                                            start = 10.dp,
+                                                            end = 10.dp
+                                                        )
+                                                )
+
+                                                ButtonWithIcon(
+                                                    modifier = Modifier
+                                                        .padding(top = 16.dp, bottom = 16.dp),
+                                                    text = "Ler QR Code",
+                                                    textSize = 14.sp,
+                                                    drawableResource = Res.drawable.icon_qr_code,
+                                                    onClick = {
+                                                        startBarCodeScan = true
+                                                        qrCodeURL = ""
+                                                    }
+                                                )
+                                            }
                                         }
 
                                         Text(
@@ -416,11 +405,12 @@ fun DiscountsScreen(
                                             painter = painterResource(Res.drawable.qr_code_big),
                                             contentDescription = "qr-code",
                                             contentScale = ContentScale.Fit,
-                                            modifier = Modifier.size(240.dp)
+                                            modifier = Modifier
+                                                .size(240.dp)
                                                 .constrainAs(qrCode) {
-                                                    top.linkTo(dashLine.top, margin = 16.dp)
-                                                    start.linkTo(card.start, margin = 0.dp)
-                                                    end.linkTo(card.end, margin = 0.dp)
+                                                    bottom.linkTo(card.bottom, margin = 130.dp)
+                                                    start.linkTo(card.start)
+                                                    end.linkTo(card.end)
                                                 }
                                         )
 
@@ -436,30 +426,19 @@ fun DiscountsScreen(
                                             thickness = 4.dp,
                                             color = surfaceVariantDark
                                         )
-
-                                        ButtonWithIcon(
-                                            modifier = Modifier.constrainAs(button) {
-                                                bottom.linkTo(card.bottom, margin = 36.dp)
-                                                start.linkTo(card.start, margin = 0.dp)
-                                                end.linkTo(card.end, margin = 0.dp)
-                                            },
-                                            text = "Ler QR Code",
-                                            textSize = 14.sp,
-                                            drawableResource = Res.drawable.icon_qr_code,
-                                            onClick = {
-                                                startBarCodeScan = true
-                                                qrCodeURL = ""
-                                            }
-                                        )
                                     }
-                                }
+                               }
                             }
                         }
                     }
                 }
 
                 is DiscountsViewState.Error -> {
-                    Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                    ) {
                         Column(
                             modifier = Modifier
                                 .windowInsetsPadding(WindowInsets.safeDrawing)
@@ -486,7 +465,9 @@ fun DiscountsScreen(
                                         painter = painterResource(Res.drawable.icon_qr_code),
                                         contentDescription = "qr-code",
                                         contentScale = ContentScale.Fit,
-                                        modifier = Modifier.size(150.dp).padding(top = 20.dp)
+                                        modifier = Modifier
+                                            .size(150.dp)
+                                            .padding(top = 20.dp)
                                     )
 
                                     HorizontalDivider(
@@ -532,7 +513,11 @@ fun DiscountsScreen(
 
                 is DiscountsViewState.Success -> {
                     isSnackBarDisplaying = false
-                    Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                    ) {
                         Column(
                             modifier = Modifier
                                 .windowInsetsPadding(WindowInsets.safeDrawing)
@@ -557,7 +542,9 @@ fun DiscountsScreen(
                                     Icon(
                                         painter = painterResource(Res.drawable.beer_on_right),
                                         contentDescription = "qr-code",
-                                        modifier = Modifier.size(150.dp).padding(top = 10.dp),
+                                        modifier = Modifier
+                                            .size(150.dp)
+                                            .padding(top = 10.dp),
                                         tint = Color(0xFFCAC8A4)
                                     )
 
