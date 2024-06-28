@@ -12,4 +12,10 @@
   <path
       android:pathData="M870,417m-70,0a70,70 0,1 1,140 0a70,70 0,1 1,-140 0"
       android:fillColor="#48473A"/>
+  <path
+      android:pathData="M159.5,415.5L781.5,415.5"
+      android:strokeWidth="3"
+      android:fillColor="#00000000"
+      android:strokeColor="#6D6D6D"
+      android:strokeLineCap="square"/>
 </vector>
