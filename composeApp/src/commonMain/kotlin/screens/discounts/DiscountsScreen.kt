@@ -1,5 +1,6 @@
 package screens.discounts
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,7 +28,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -46,12 +47,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import components.ButtonWithIcon
 import components.DrawerMenuNavigation
 import components.SimpleToolbar
@@ -63,16 +68,18 @@ import halfmouthappproject.composeapp.generated.resources.icon_bolt_fill_off
 import halfmouthappproject.composeapp.generated.resources.icon_bolt_fill_on
 import halfmouthappproject.composeapp.generated.resources.icon_gallery_send
 import halfmouthappproject.composeapp.generated.resources.icon_qr_code
+import halfmouthappproject.composeapp.generated.resources.qr_code_big
+import halfmouthappproject.composeapp.generated.resources.ticket_qr_code
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
 import qrscanner.QrScanner
-import theme.darkScheme
 import theme.mainYellowColor
 import theme.onSurfaceVariantDark
+import theme.surfaceBrightDark
 import theme.surfaceVariantDark
-import util.snackBarOnlyMessage
+import util.snackBarWithActionButton
 import viewmodel.DiscountsViewModel
 import viewmodel.DiscountsViewState
 
@@ -95,7 +102,8 @@ fun DiscountsScreen(
     var qrCodeURL by remember { mutableStateOf("") }
     var startBarCodeScan by remember { mutableStateOf(false) }
     var flashlightOn by remember { mutableStateOf(false) }
-    var launchGallery by remember { mutableStateOf(value = false) }
+    var launchGallery by remember { mutableStateOf( false) }
+    var isSnackBarDisplaying by remember { mutableStateOf( false) }
 
 
     ModalNavigationDrawer(
@@ -129,6 +137,7 @@ fun DiscountsScreen(
         ) { innerPadding ->
             when (val state = uiState) {
                 is DiscountsViewState.Dashboard -> {
+                    isSnackBarDisplaying = false
                     Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
                         Column(
                             modifier = Modifier
@@ -151,7 +160,9 @@ fun DiscountsScreen(
                                     ) {
                                         Text(
                                             text = "Aponte a câmera para o QR Code para conseguir o seu desconto",
-                                            modifier = Modifier.fillMaxWidth(),
+                                            modifier = Modifier
+                                                .padding(16.dp)
+                                                .fillMaxWidth(),
                                             style = MaterialTheme.typography.titleLarge,
                                             fontSize = 18.sp,
                                             textAlign = TextAlign.Start,
@@ -190,7 +201,7 @@ fun DiscountsScreen(
                                         modifier = Modifier
                                             .padding(start = 20.dp, end = 20.dp, top = 10.dp)
                                             .background(
-                                                color = mainYellowColor,
+                                                color = surfaceVariantDark,
                                                 shape = RoundedCornerShape(25.dp)
                                             )
                                             .height(35.dp),
@@ -211,7 +222,7 @@ fun DiscountsScreen(
                                                 imageVector = if (flashlightOn) vectorResource(Res.drawable.icon_bolt_fill_on)
                                                 else vectorResource(Res.drawable.icon_bolt_fill_off),
                                                 contentDescription = "flash",
-                                                tint = Color.Black
+                                                tint = mainYellowColor
                                             )
 
                                             Text(
@@ -222,7 +233,6 @@ fun DiscountsScreen(
                                                 textAlign = TextAlign.Center,
                                                 style = MaterialTheme.typography.titleLarge,
                                                 fontSize = 15.sp,
-                                                color = darkScheme.onPrimary,
                                             )
 
                                             VerticalDivider(
@@ -237,7 +247,7 @@ fun DiscountsScreen(
                                                     .clickable { launchGallery = true },
                                                 painter = painterResource(Res.drawable.icon_gallery_send),
                                                 contentDescription = "gallery",
-                                                tint = Color.Black
+                                                tint = mainYellowColor
                                             )
 
                                             Text(
@@ -246,7 +256,6 @@ fun DiscountsScreen(
                                                 textAlign = TextAlign.Center,
                                                 style = MaterialTheme.typography.titleLarge,
                                                 fontSize = 15.sp,
-                                                color = darkScheme.onPrimary,
                                             )
                                         }
                                     }
@@ -256,74 +265,116 @@ fun DiscountsScreen(
                                     verticalArrangement = Arrangement.Center,
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
-                                    Text(
-                                        text = "Acesse seu cupom descubra o seu desconto",
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .background(Color.Transparent)
-                                            .padding(start = 16.dp, end = 16.dp, top = 20.dp),
-                                        style = MaterialTheme.typography.titleLarge,
-                                        fontSize = 18.sp,
-                                        textAlign = TextAlign.Start
-                                    )
-
-                                    Box(
-                                        modifier = Modifier
-                                            .padding(start = 30.dp, end = 30.dp, top = 10.dp)
-                                            .background(
-                                                color = surfaceVariantDark,
-                                                shape = RoundedCornerShape(25.dp)
-                                            )
-                                            .height(360.dp),
-                                    ) {
-                                        Column(
-                                            verticalArrangement = Arrangement.Center,
-                                            horizontalAlignment = Alignment.CenterHorizontally
+                                    ConstraintLayout {
+                                        val (card, dashLine, textTitle, qrCode, dividerLine, button) = createRefs()
+                                        Box(
+                                            modifier = Modifier
+                                                .padding(
+                                                    start = 16.dp,
+                                                    end = 16.dp,
+                                                    top = 10.dp,
+                                                    bottom = 16.dp
+                                                )
+                                                .background(
+                                                    color = surfaceVariantDark,
+                                                    shape = RoundedCornerShape(25.dp)
+                                                )
+                                                .height(540.dp)
+                                                .constrainAs(card) {
+                                                    top.linkTo(parent.top, margin = 10.dp)
+                                                }
                                         ) {
                                             Image(
-                                                painter = painterResource(Res.drawable.icon_qr_code),
+                                                painter = painterResource(Res.drawable.ticket_qr_code),
                                                 contentDescription = "qr-code",
                                                 contentScale = ContentScale.Fit,
-                                                modifier = Modifier.size(150.dp).padding(top = 20.dp)
-                                            )
-
-                                            Text(
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .padding(
-                                                        start = 16.dp,
-                                                        end = 16.dp,
-                                                        top = 20.dp,
-                                                    ),
-                                                text = "Leia o QR Code e aproveite\nos cupons de descontos\ndas nossas cervejas",
-                                                textAlign = TextAlign.Center,
-                                                style = MaterialTheme.typography.titleLarge,
-                                                fontSize = 15.sp
-                                            )
-
-                                            HorizontalDivider(
-                                                modifier = Modifier
-                                                    .padding(
-                                                        start = 80.dp,
-                                                        end = 80.dp,
-                                                        top = 16.dp,
-                                                        bottom = 20.dp
-                                                    )
-                                                    .alpha(0.7f),
-                                                thickness = 1.dp,
-                                                color = onSurfaceVariantDark
-                                            )
-
-                                            ButtonWithIcon(
-                                                text = "Ler QR Code",
-                                                textSize = 14.sp,
-                                                drawableResource = Res.drawable.icon_qr_code,
-                                                onClick = {
-                                                    startBarCodeScan = true
-                                                    qrCodeURL = ""
-                                                }
+                                                modifier = Modifier.fillMaxWidth().padding(
+                                                    top = 30.dp,
+                                                    start = 10.dp,
+                                                    end = 10.dp
+                                                )
                                             )
                                         }
+
+                                        val pathEffect = PathEffect.dashPathEffect(floatArrayOf(20f, 20f), 0f)
+                                        Canvas(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(3.dp)
+                                                .constrainAs(dashLine) {
+                                                    top.linkTo(parent.top, margin = 186.dp)
+                                                    start.linkTo(parent.start)
+                                                    end.linkTo(parent.end)
+                                                }
+                                        ) {
+                                            drawLine(
+                                                color = surfaceVariantDark,
+                                                start = Offset(10f, 0f),
+                                                end = Offset(size.width, 0f),
+                                                pathEffect = pathEffect
+                                            )
+                                        }
+
+                                        Text(
+                                            text = "Leia o QR Code e aproveite os cupons de descontos das nossas cervejas artesanais",
+                                            textAlign = TextAlign.Center,
+                                            style = MaterialTheme.typography.titleLarge.copy(
+                                                lineBreak = LineBreak.Paragraph
+                                            ),
+                                            fontSize = 17.sp,
+                                            color = surfaceBrightDark,
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(
+                                                    start = 60.dp,
+                                                    end = 60.dp,
+                                                )
+                                                .constrainAs(textTitle) {
+                                                    top.linkTo(card.top, margin = 60.dp)
+                                                    start.linkTo(card.start, margin = 0.dp)
+                                                    end.linkTo(card.end, margin = 0.dp)
+                                                },
+                                        )
+
+                                        Image(
+                                            painter = painterResource(Res.drawable.qr_code_big),
+                                            contentDescription = "qr-code",
+                                            contentScale = ContentScale.Fit,
+                                            modifier = Modifier.size(240.dp)
+                                                .constrainAs(qrCode) {
+                                                    top.linkTo(dashLine.top, margin = 16.dp)
+                                                    start.linkTo(card.start, margin = 0.dp)
+                                                    end.linkTo(card.end, margin = 0.dp)
+                                                }
+                                        )
+
+                                        HorizontalDivider(
+                                            modifier = Modifier
+                                                .width(100.dp)
+                                                .alpha(0.7f)
+                                                .constrainAs(dividerLine){
+                                                    bottom.linkTo(card.bottom, margin = 132.dp)
+                                                    start.linkTo(card.start, margin = 0.dp)
+                                                    end.linkTo(card.end, margin = 0.dp)
+                                                },
+                                            thickness = 4.dp,
+                                            color = surfaceVariantDark
+                                        )
+
+                                        ButtonWithIcon(
+                                            modifier = Modifier.constrainAs(button) {
+                                                bottom.linkTo(card.bottom, margin = 42.dp)
+                                                start.linkTo(card.start, margin = 0.dp)
+                                                end.linkTo(card.end, margin = 0.dp)
+                                            },
+                                            text = "Ler QR Code",
+                                            textSize = 14.sp,
+                                            drawableResource = Res.drawable.icon_qr_code,
+                                            onClick = {
+                                                startBarCodeScan = true
+                                                qrCodeURL = ""
+                                            }
+                                        )
                                     }
                                 }
                             }
@@ -332,24 +383,79 @@ fun DiscountsScreen(
                 }
 
                 is DiscountsViewState.Error -> {
-                    if (state.message.isEmpty()) {
-                        snackBarOnlyMessage(
-                            snackBarHostState = snackBarHostState,
+                    Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+                        Column(
+                            modifier = Modifier
+                                .windowInsetsPadding(WindowInsets.safeDrawing)
+                                .verticalScroll(rememberScrollState())
+                                .fillMaxSize(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .padding(16.dp)
+                                    .background(
+                                        color = surfaceVariantDark,
+                                        shape = RoundedCornerShape(25.dp)
+                                    )
+                                    .width(240.dp)
+                                    .height(360.dp)
+                            ) {
+                                Column(
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Image(
+                                        painter = painterResource(Res.drawable.icon_qr_code),
+                                        contentDescription = "qr-code",
+                                        contentScale = ContentScale.Fit,
+                                        modifier = Modifier.size(150.dp).padding(top = 20.dp)
+                                    )
+
+                                    HorizontalDivider(
+                                        modifier = Modifier
+                                            .padding(
+                                                start = 80.dp,
+                                                end = 80.dp,
+                                                top = 20.dp,
+                                            )
+                                            .alpha(0.7f),
+                                        thickness = 1.dp,
+                                        color = onSurfaceVariantDark
+                                    )
+
+                                    Text(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(
+                                                start = 16.dp,
+                                                end = 16.dp,
+                                                top = 20.dp,
+                                            ),
+                                        text = state.message,
+                                        textAlign = TextAlign.Center,
+                                        style = MaterialTheme.typography.titleLarge,
+                                        fontSize = 24.sp
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    if(!isSnackBarDisplaying){
+                        snackBarWithActionButton(
                             coroutineScope = scope,
-                            message = "Qr Code Inválido",
-                            duration = SnackbarDuration.Long
-                        )
-                    } else {
-                        snackBarOnlyMessage(
                             snackBarHostState = snackBarHostState,
-                            coroutineScope = scope,
-                            message = state.message,
-                            duration = SnackbarDuration.Long
+                            message = "Deseja tentar novamente?",
+                            actionLabel = "Sim",
+                            onAction = { viewModel.getRefreshScan() }
                         )
+                        isSnackBarDisplaying = true
                     }
                 }
 
                 is DiscountsViewState.Success -> {
+                    isSnackBarDisplaying = false
                     Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
                         Column(
                             modifier = Modifier
