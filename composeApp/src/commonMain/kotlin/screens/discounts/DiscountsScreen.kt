@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -148,33 +149,94 @@ fun DiscountsScreen(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             if (qrCodeURL.isEmpty() && startBarCodeScan) {
-                                Column(
-                                    modifier = Modifier.fillMaxSize(),
-                                    verticalArrangement = Arrangement.Center,
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-
-                                    Row(
-                                        modifier = Modifier.padding(vertical = 8.dp, horizontal = 1.dp),
-                                        verticalAlignment = Alignment.CenterVertically,
+                                ConstraintLayout {
+                                    val (card, dashLine, textTitle, qrCode, button) = createRefs()
+                                    Box(
+                                        modifier = Modifier
+                                            .padding(
+                                                start = 16.dp,
+                                                end = 16.dp,
+                                                top = 10.dp,
+                                                bottom = 16.dp
+                                            )
+                                            .background(
+                                                color = surfaceVariantDark,
+                                                shape = RoundedCornerShape(25.dp)
+                                            )
+                                            .height(540.dp)
+                                            .constrainAs(card) {
+                                                top.linkTo(parent.top, margin = 10.dp)
+                                            }
                                     ) {
-                                        Text(
-                                            text = "Aponte a câmera para o QR Code para conseguir o seu desconto",
-                                            modifier = Modifier
-                                                .padding(16.dp)
-                                                .fillMaxWidth(),
-                                            style = MaterialTheme.typography.titleLarge,
-                                            fontSize = 18.sp,
-                                            textAlign = TextAlign.Start,
+                                        Image(
+                                            painter = painterResource(Res.drawable.ticket_qr_code),
+                                            contentDescription = "qr-code",
+                                            contentScale = ContentScale.Fit,
+                                            modifier = Modifier.fillMaxWidth().padding(
+                                                top = 30.dp,
+                                                start = 10.dp,
+                                                end = 10.dp
+                                            )
                                         )
                                     }
 
+                                    val pathEffect = PathEffect
+                                        .dashPathEffect(floatArrayOf(20f, 20f), 0f)
+
+                                    Canvas(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(3.dp)
+                                            .constrainAs(dashLine) {
+                                                top.linkTo(parent.top, margin = 186.dp)
+                                                start.linkTo(parent.start)
+                                                end.linkTo(parent.end)
+                                            }
+                                    ) {
+                                        drawLine(
+                                            color = surfaceVariantDark,
+                                            start = Offset(10f, 0f),
+                                            end = Offset(size.width, 0f),
+                                            pathEffect = pathEffect
+                                        )
+                                    }
+
+                                    Text(
+                                        text = "Aponte a câmera para o QR Code para conseguir o seu desconto",
+                                        textAlign = TextAlign.Center,
+                                        style = MaterialTheme.typography.titleLarge.copy(
+                                            lineBreak = LineBreak.Paragraph
+                                        ),
+                                        fontSize = 17.sp,
+                                        color = surfaceBrightDark,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(
+                                                start = 60.dp,
+                                                end = 60.dp,
+                                            )
+                                            .constrainAs(textTitle) {
+                                                top.linkTo(card.top, margin = 60.dp)
+                                                start.linkTo(card.start, margin = 0.dp)
+                                                end.linkTo(card.end, margin = 0.dp)
+                                            },
+                                    )
+
                                     Box(
                                         modifier = Modifier
-                                            .size(250.dp)
+                                            .size(240.dp)
                                             .clip(shape = RoundedCornerShape(size = 14.dp))
                                             .clipToBounds()
-                                            .border(2.dp, Color.Gray, RoundedCornerShape(size = 14.dp)),
+                                            .border(
+                                                2.dp,
+                                                onSurfaceVariantDark,
+                                                RoundedCornerShape(size = 14.dp)
+                                            )
+                                            .constrainAs(qrCode) {
+                                                top.linkTo(dashLine.top, margin = 24.dp)
+                                                start.linkTo(card.start, margin = 0.dp)
+                                                end.linkTo(card.end, margin = 0.dp)
+                                            },
                                         contentAlignment = Alignment.Center
                                     ) {
                                         QrScanner(
@@ -199,22 +261,33 @@ fun DiscountsScreen(
 
                                     Box(
                                         modifier = Modifier
-                                            .padding(start = 20.dp, end = 20.dp, top = 10.dp)
+                                            .padding(top = 10.dp)
                                             .background(
                                                 color = surfaceVariantDark,
                                                 shape = RoundedCornerShape(25.dp)
                                             )
-                                            .height(35.dp),
+                                            .height(42.dp)
+                                            .constrainAs(button) {
+                                                bottom.linkTo(card.bottom, margin = 48.dp)
+                                                start.linkTo(card.start, margin = 0.dp)
+                                                end.linkTo(card.end, margin = 0.dp)
+                                            },
                                         contentAlignment = Alignment.Center
                                     ) {
+
                                         Row(
-                                            modifier = Modifier.padding(
-                                                vertical = 2.dp,
-                                                horizontal = 16.dp
-                                            ),
+                                            modifier = Modifier
+                                                .border(
+                                                    2.dp,
+                                                    onSurfaceVariantDark,
+                                                    RoundedCornerShape(size = 25.dp)
+                                                ),
                                             verticalAlignment = Alignment.CenterVertically,
                                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                                         ) {
+
+                                            Spacer(modifier = Modifier.width(10.dp))
+
                                             Icon(
                                                 modifier = Modifier
                                                     .size(24.dp)
@@ -237,7 +310,7 @@ fun DiscountsScreen(
 
                                             VerticalDivider(
                                                 modifier = Modifier.padding(2.dp),
-                                                thickness = 1.dp,
+                                                thickness = 2.dp,
                                                 color = onSurfaceVariantDark
                                             )
 
@@ -251,12 +324,15 @@ fun DiscountsScreen(
                                             )
 
                                             Text(
-                                                modifier = Modifier.clickable { launchGallery = true },
+                                                modifier = Modifier
+                                                    .clickable { launchGallery = true },
                                                 text = "Galeria",
                                                 textAlign = TextAlign.Center,
                                                 style = MaterialTheme.typography.titleLarge,
                                                 fontSize = 15.sp,
                                             )
+
+                                            Spacer(modifier = Modifier.width(10.dp))
                                         }
                                     }
                                 }
@@ -363,7 +439,7 @@ fun DiscountsScreen(
 
                                         ButtonWithIcon(
                                             modifier = Modifier.constrainAs(button) {
-                                                bottom.linkTo(card.bottom, margin = 42.dp)
+                                                bottom.linkTo(card.bottom, margin = 36.dp)
                                                 start.linkTo(card.start, margin = 0.dp)
                                                 end.linkTo(card.end, margin = 0.dp)
                                             },
