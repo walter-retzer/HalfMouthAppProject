@@ -30,6 +30,7 @@ import theme.mainYellowColor
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun ButtonWithIcon(
+    modifier: Modifier,
     text: String = "",
     textSize: TextUnit = 17.sp,
     drawableResource: DrawableResource,
@@ -38,7 +39,7 @@ fun ButtonWithIcon(
     val shape = RoundedCornerShape(20.dp)
 
     Button(
-        modifier = Modifier
+        modifier = modifier
             .height(54.dp)
             .clip(shape)
             .background(
