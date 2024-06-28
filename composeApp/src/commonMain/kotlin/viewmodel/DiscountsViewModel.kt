@@ -36,11 +36,15 @@ class DiscountsViewModel : ViewModel() {
 
     fun getSuccess(qrCodeURL: String) {
         if (urlDiscount == qrCodeURL) _uiState.value = DiscountsViewState.Success(qrCodeURL)
-        else _uiState.value = DiscountsViewState.Error("QR Code Inválido")
+        else _uiState.value = DiscountsViewState.Error("Não foi possível\ngerar o cupom de\ndesconto com o\nQR Code\napresentado")
     }
 
     fun getError(error: String) {
         _uiState.value = DiscountsViewState.Error(error)
+    }
+
+    fun getRefreshScan() {
+        _uiState.value = DiscountsViewState.Dashboard
     }
 }
 
