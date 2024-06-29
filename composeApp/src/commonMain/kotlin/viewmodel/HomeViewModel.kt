@@ -22,8 +22,8 @@ class HomeViewModel : ViewModel() {
     private fun getInfoFirebaseRealTimeDatabase() {
         viewModelScope.launch {
             try {
-                val notification = firebase.reference("notifications").valueEvents.first()
-                val message = notification.child("list").child("message").value
+                val notification = firebase.reference("halfmouth").valueEvents.first()
+                val message = notification.child("information").child("message").value
                     ?: ConstantsApp.MESSAGE_DEFAULT_NOTIFICATION
                 _notificationMessage.value = message as String
             } catch (e: Exception) {
