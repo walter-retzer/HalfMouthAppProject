@@ -18,5 +18,7 @@ class ConstantsApp {
             val SUCCESS_RESET_PASSWORD = "Em breve receberá um email para cadastrar uma nova senha."
             val ERROR_RESET_PASSWORD = "Verifique o email digitado."
             val MESSAGE_DEFAULT_NOTIFICATION = "Você receberá novas notificações em breve."
+            val MESSAGE_DEFAULT_DISCOUNT = "Desconto de 5%"
+            val MESSAGE_ERROR_DISCOUNT = "Não foi possível gerar o cupom de desconto com o QR Code apresentado"
         }
 }
