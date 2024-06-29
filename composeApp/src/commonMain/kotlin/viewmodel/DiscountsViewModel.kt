@@ -9,11 +9,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import util.ConstantsApp
+import util.ConstantsApp.Companion.MESSAGE_ERROR_DISCOUNT
 
 class DiscountsViewModel : ViewModel() {
 
     private val firebase = Firebase.database
     private var urlDiscount: String = ""
+    private var discountMessage: String = ""
     private val _uiState = MutableStateFlow<DiscountsViewState>(DiscountsViewState.Dashboard)
     val uiState: StateFlow<DiscountsViewState> = _uiState.asStateFlow()
 
@@ -24,10 +26,16 @@ class DiscountsViewModel : ViewModel() {
     private fun getUrlOnFirebaseDatabase() {
         viewModelScope.launch {
             try {
-                val notification = firebase.reference("notifications").valueEvents.first()
-                val message = notification.child("list").child("url").value
+                val notification = firebase.reference("halfmouth").valueEvents.first()
+
+                val message = notification.child("information").child("url").value
                     ?: ConstantsApp.MESSAGE_DEFAULT_NOTIFICATION
+
+                val discount = notification.child("information").child("discount").value
+                    ?: ConstantsApp.MESSAGE_DEFAULT_DISCOUNT
+
                 urlDiscount = message as String
+                discountMessage = discount as String
             } catch (e: Exception) {
                 println(" Errror $e")
             }
@@ -35,12 +43,13 @@ class DiscountsViewModel : ViewModel() {
     }
 
     fun getSuccess(qrCodeURL: String) {
-        if (urlDiscount == qrCodeURL) _uiState.value = DiscountsViewState.Success(qrCodeURL)
-        else _uiState.value = DiscountsViewState.Error("Não foi possível\ngerar o cupom de\ndesconto com o\nQR Code\napresentado")
+        if (urlDiscount == qrCodeURL) _uiState.value = DiscountsViewState.Success(discountMessage)
+        else _uiState.value = DiscountsViewState.Error(MESSAGE_ERROR_DISCOUNT)
     }
 
     fun getError(error: String) {
-        _uiState.value = DiscountsViewState.Error(error)
+        _uiState.value = DiscountsViewState.Error(MESSAGE_ERROR_DISCOUNT)
+        println(error)
     }
 
     fun getRefreshScan() {
