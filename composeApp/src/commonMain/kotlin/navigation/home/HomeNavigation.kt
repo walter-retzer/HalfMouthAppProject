@@ -2,6 +2,7 @@ package navigation.home
 
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.icon_beer
+import halfmouthappproject.composeapp.generated.resources.icon_discount
 import halfmouthappproject.composeapp.generated.resources.icon_home
 import halfmouthappproject.composeapp.generated.resources.icon_phone
 import halfmouthappproject.composeapp.generated.resources.icon_qr_code
@@ -44,7 +45,7 @@ sealed class NavItem {
         Item(
             pathRoute = AppNavigation.DiscountsRoute.name,
             title = NavTitle.DISCOUNTS,
-            icon = Res.drawable.icon_qr_code
+            icon = Res.drawable.icon_discount
         )
 
     object Contact :
