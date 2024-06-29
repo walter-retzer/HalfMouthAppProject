@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -55,6 +56,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import components.ButtonWithIcon
 import components.DrawerMenuNavigation
 import components.SimpleToolbar
@@ -513,6 +515,7 @@ fun DiscountsScreen(
 
                 is DiscountsViewState.Success -> {
                     isSnackBarDisplaying = false
+
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
@@ -526,68 +529,106 @@ fun DiscountsScreen(
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Box(
-                                modifier = Modifier
-                                    .padding(start = 30.dp, end = 30.dp, top = 10.dp)
-                                    .background(
-                                        color = surfaceVariantDark,
-                                        shape = RoundedCornerShape(25.dp)
-                                    )
-                                    .height(350.dp),
-                            ) {
-                                Column(
-                                    verticalArrangement = Arrangement.Center,
-                                    horizontalAlignment = Alignment.CenterHorizontally
+                            ConstraintLayout {
+                                val (card, textTitle, icon, textDiscount) = createRefs()
+
+                                Box(
+                                    modifier = Modifier
+                                        .padding(
+                                            start = 16.dp,
+                                            end = 16.dp,
+                                            top = 10.dp,
+                                            bottom = 16.dp
+                                        )
+                                        .background(
+                                            color = surfaceVariantDark,
+                                            shape = RoundedCornerShape(25.dp)
+                                        )
+                                        .fillMaxSize()
+                                        .constrainAs(card) {
+                                            top.linkTo(parent.top, margin = 10.dp)
+                                        }
                                 ) {
-                                    Icon(
-                                        painter = painterResource(Res.drawable.beer_on_right),
-                                        contentDescription = "qr-code",
-                                        modifier = Modifier
-                                            .size(150.dp)
-                                            .padding(top = 10.dp),
-                                        tint = Color(0xFFCAC8A4)
-                                    )
+                                    Column(
+                                        verticalArrangement = Arrangement.Center,
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
 
-                                    Text(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(
-                                                start = 16.dp,
-                                                end = 16.dp,
-                                                top = 16.dp,
-                                            ),
-                                        text = "Desconto de 10%",
-                                        textAlign = TextAlign.Center,
-                                        style = MaterialTheme.typography.titleLarge,
-                                        fontSize = 24.sp
-                                    )
-
-                                    HorizontalDivider(
-                                        modifier = Modifier
-                                            .padding(
-                                                start = 70.dp,
-                                                end = 70.dp,
-                                                top = 24.dp,
-                                                bottom = 24.dp
-                                            )
-                                            .alpha(0.7f),
-                                        thickness = 1.dp,
-                                        color = onSurfaceVariantDark
-                                    )
-
-                                    Text(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(
-                                                start = 16.dp,
-                                                end = 16.dp,
-                                            ),
-                                        text = "Parabéns,\no seu cupom de desconto\né valido até o dia 31/12/2024",
-                                        textAlign = TextAlign.Center,
-                                        style = MaterialTheme.typography.titleLarge,
-                                        fontSize = 18.sp
-                                    )
+                                        Image(
+                                            painter = painterResource(Res.drawable.ticket_qr_code),
+                                            contentDescription = "qr-code",
+                                            contentScale = ContentScale.Fit,
+                                            modifier = Modifier
+                                                .fillMaxSize()
+                                                .padding(
+                                                    top = 30.dp,
+                                                    start = 10.dp,
+                                                    end = 10.dp,
+                                                    bottom = 30.dp
+                                                )
+                                        )
+                                    }
                                 }
+
+                                val topTitleGuideLine = createGuidelineFromTop(0.15f)
+                                val startTitleGuideLine = createGuidelineFromStart(0.15f)
+                                val endTitleGuideLine = createGuidelineFromEnd(0.15f)
+
+
+
+                                val topIconGuideLine = createGuidelineFromTop(0.35f)
+                                val startIconGuideLine = createGuidelineFromStart(0.15f)
+                                val endIconGuideLine = createGuidelineFromEnd(0.15f)
+
+                                Text(
+                                    text = "Parabéns, o seu cupom de desconto é valido até o dia 31/07/2024",
+                                    textAlign = TextAlign.Center,
+                                    style = MaterialTheme.typography.titleLarge.copy(
+                                        lineBreak = LineBreak.Paragraph
+                                    ),
+                                    fontSize = 20.sp,
+                                    color = surfaceBrightDark,
+                                    modifier = Modifier
+                                        .constrainAs(textTitle) {
+                                            top.linkTo(topTitleGuideLine)
+                                            start.linkTo(startTitleGuideLine)
+                                            end.linkTo(endTitleGuideLine)
+                                            width = Dimension.fillToConstraints
+                                        }
+                                )
+
+                                Icon(
+                                    painter = painterResource(Res.drawable.beer_on_right),
+                                    contentDescription = "qr-code",
+                                    modifier = Modifier
+                                        //.size(250.dp)
+                                        .constrainAs(icon) {
+                                            top.linkTo(topIconGuideLine)
+                                            start.linkTo(startIconGuideLine)
+                                            end.linkTo(endIconGuideLine)
+                                            width = Dimension.fillToConstraints
+                                        },
+                                    tint = Color(0xFFCAC8A4)
+                                )
+
+
+                                val bottomDiscountGuideLine = createGuidelineFromBottom(0.12f)
+                                val startDiscountGuideLine = createGuidelineFromStart(0.15f)
+                                val endDiscountGuideLine = createGuidelineFromEnd(0.15f)
+
+                                Text(
+                                    text = "Desconto de 10%",
+                                    textAlign = TextAlign.Center,
+                                    style = MaterialTheme.typography.titleLarge,
+                                    fontSize = 24.sp,
+                                    modifier = Modifier
+                                        .constrainAs(textDiscount) {
+                                            bottom.linkTo(bottomDiscountGuideLine)
+                                            start.linkTo(startDiscountGuideLine)
+                                            end.linkTo(endDiscountGuideLine)
+                                            width = Dimension.fillToConstraints
+                                        }
+                                )
                             }
                         }
                     }
