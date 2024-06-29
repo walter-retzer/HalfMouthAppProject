@@ -12,6 +12,8 @@ de equipamentos da cervejaria artesanal HalfMouth.
 - [Trello](https://trello.com/b/Jz2V5Q2t/aplicativo-half-mouth) - É uma ferramenta visual que possibilita o gerenciamento de projetos, fluxo de trabalho e monitoramento de tarefas.
 
 ## Trello
+Quadro do Trello com as tarefas [APLICATIVO HALF MOUTH](https://trello.com/b/Jz2V5Q2t/aplicativo-half-mouth)
+
 Cards das tarefas implementadas para a construção do aplicativo.
 ![Screen](screen/Trello/QuadroTrello.png)
 
