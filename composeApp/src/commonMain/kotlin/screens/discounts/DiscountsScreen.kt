@@ -126,8 +126,7 @@ fun DiscountsScreen(
                     onNavigationClose = {
                         if (startBarCodeScan) startBarCodeScan = false
                         else onNavigateBack()
-                    },
-                    scrollBehavior = scrollBehavior
+                    }
                 )
             }
         ) { innerPadding ->
