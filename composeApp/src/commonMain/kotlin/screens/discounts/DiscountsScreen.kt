@@ -268,8 +268,12 @@ fun DiscountsScreen(
                                         }
                                     }
 
+                                    val topTitleGuideLine = createGuidelineFromTop(0.15f)
+                                    val startTitleGuideLine = createGuidelineFromStart(0.15f)
+                                    val endTitleGuideLine = createGuidelineFromEnd(0.15f)
+
                                     Text(
-                                        text = "Aponte a câmera para o QR Code para conseguir o seu desconto",
+                                        text = "Aponte a câmera para ler o QR Code ou insira seu cupom para conseguir o seu desconto",
                                         textAlign = TextAlign.Center,
                                         style = MaterialTheme.typography.titleLarge.copy(
                                             lineBreak = LineBreak.Paragraph
@@ -277,21 +281,20 @@ fun DiscountsScreen(
                                         fontSize = 17.sp,
                                         color = surfaceBrightDark,
                                         modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(
-                                                start = 60.dp,
-                                                end = 60.dp,
-                                            )
                                             .constrainAs(textTitle) {
-                                                top.linkTo(card.top, margin = 60.dp)
-                                                start.linkTo(card.start, margin = 0.dp)
-                                                end.linkTo(card.end, margin = 0.dp)
-                                            },
+                                                top.linkTo(topTitleGuideLine)
+                                                start.linkTo(startTitleGuideLine)
+                                                end.linkTo(endTitleGuideLine)
+                                                width = Dimension.fillToConstraints
+                                            }
                                     )
+                                    val topScanQrCodeGuideLine = createGuidelineFromTop(0.40f)
+                                    val startScanQrCodeGuideLine = createGuidelineFromStart(0.17f)
+                                    val endScanQrCodeGuideLine = createGuidelineFromEnd(0.17f)
+                                    val bottomScanQrCodeGuideLine = createGuidelineFromBottom(0.19f)
 
                                     Box(
                                         modifier = Modifier
-                                            .size(240.dp)
                                             .clip(shape = RoundedCornerShape(size = 14.dp))
                                             .clipToBounds()
                                             .border(
@@ -300,9 +303,12 @@ fun DiscountsScreen(
                                                 RoundedCornerShape(size = 14.dp)
                                             )
                                             .constrainAs(qrCode) {
-                                                bottom.linkTo(card.bottom, margin = 100.dp)
-                                                start.linkTo(card.start, margin = 0.dp)
-                                                end.linkTo(card.end, margin = 0.dp)
+                                                top.linkTo(topScanQrCodeGuideLine)
+                                                start.linkTo(startScanQrCodeGuideLine)
+                                                end.linkTo(endScanQrCodeGuideLine)
+                                                bottom.linkTo(bottomScanQrCodeGuideLine)
+                                                width = Dimension.fillToConstraints
+                                                height = Dimension.fillToConstraints
                                             },
                                         contentAlignment = Alignment.Center
                                     ) {
@@ -574,12 +580,6 @@ fun DiscountsScreen(
                                 val startTitleGuideLine = createGuidelineFromStart(0.15f)
                                 val endTitleGuideLine = createGuidelineFromEnd(0.15f)
 
-
-
-                                val topIconGuideLine = createGuidelineFromTop(0.35f)
-                                val startIconGuideLine = createGuidelineFromStart(0.15f)
-                                val endIconGuideLine = createGuidelineFromEnd(0.15f)
-
                                 Text(
                                     text = "Parabéns, o seu cupom de desconto é valido até o dia 31/07/2024",
                                     textAlign = TextAlign.Center,
@@ -597,11 +597,14 @@ fun DiscountsScreen(
                                         }
                                 )
 
+                                val topIconGuideLine = createGuidelineFromTop(0.35f)
+                                val startIconGuideLine = createGuidelineFromStart(0.15f)
+                                val endIconGuideLine = createGuidelineFromEnd(0.15f)
+
                                 Icon(
                                     painter = painterResource(Res.drawable.beer_on_right),
                                     contentDescription = "qr-code",
                                     modifier = Modifier
-                                        //.size(250.dp)
                                         .constrainAs(icon) {
                                             top.linkTo(topIconGuideLine)
                                             start.linkTo(startIconGuideLine)
