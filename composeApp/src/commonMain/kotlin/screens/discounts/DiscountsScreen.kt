@@ -656,7 +656,7 @@ fun DiscountsScreen(
                                 val endDiscountGuideLine = createGuidelineFromEnd(0.15f)
 
                                 Text(
-                                    text = "Desconto de 10%",
+                                    text = state.message,
                                     textAlign = TextAlign.Center,
                                     style = MaterialTheme.typography.titleLarge,
                                     fontSize = 24.sp,
