@@ -40,7 +40,7 @@ fun ButtonWithIcon(
 
     Button(
         modifier = modifier
-            .height(54.dp)
+            .height(45.dp)
             .clip(shape)
             .background(
                 brush = Brush.linearGradient(
