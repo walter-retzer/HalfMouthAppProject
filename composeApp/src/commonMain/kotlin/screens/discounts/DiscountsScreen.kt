@@ -11,20 +11,17 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
@@ -45,10 +42,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.LineBreak
@@ -63,11 +58,12 @@ import components.SimpleToolbar
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import halfmouthappproject.composeapp.generated.resources.Res
-import halfmouthappproject.composeapp.generated.resources.beer_on_right
 import halfmouthappproject.composeapp.generated.resources.icon_bolt_fill_off
 import halfmouthappproject.composeapp.generated.resources.icon_bolt_fill_on
 import halfmouthappproject.composeapp.generated.resources.icon_gallery_send
 import halfmouthappproject.composeapp.generated.resources.icon_qr_code
+import halfmouthappproject.composeapp.generated.resources.icon_thumbs_down
+import halfmouthappproject.composeapp.generated.resources.logohalfmouth
 import halfmouthappproject.composeapp.generated.resources.qr_code_big
 import halfmouthappproject.composeapp.generated.resources.ticket_qr_code
 import kotlinx.coroutines.launch
@@ -197,7 +193,7 @@ fun DiscountsScreen(
                                                         color = surfaceVariantDark,
                                                         shape = RoundedCornerShape(25.dp)
                                                     )
-                                                    .height(42.dp),
+                                                    .height(45.dp),
                                                 contentAlignment = Alignment.Center
                                             ) {
 
@@ -268,17 +264,17 @@ fun DiscountsScreen(
                                         }
                                     }
 
-                                    val topTitleGuideLine = createGuidelineFromTop(0.15f)
+                                    val topTitleGuideLine = createGuidelineFromTop(0.14f)
                                     val startTitleGuideLine = createGuidelineFromStart(0.15f)
                                     val endTitleGuideLine = createGuidelineFromEnd(0.15f)
 
                                     Text(
-                                        text = "Aponte a câmera para ler o QR Code ou insira seu cupom para conseguir o seu desconto",
+                                        text = "Aponte a câmera no QR Code ou abra seu cupom e garanta o seu desconto",
                                         textAlign = TextAlign.Center,
                                         style = MaterialTheme.typography.titleLarge.copy(
                                             lineBreak = LineBreak.Paragraph
                                         ),
-                                        fontSize = 17.sp,
+                                        fontSize = 18.sp,
                                         color = surfaceBrightDark,
                                         modifier = Modifier
                                             .constrainAs(textTitle) {
@@ -288,6 +284,7 @@ fun DiscountsScreen(
                                                 width = Dimension.fillToConstraints
                                             }
                                     )
+
                                     val topScanQrCodeGuideLine = createGuidelineFromTop(0.40f)
                                     val startScanQrCodeGuideLine = createGuidelineFromStart(0.17f)
                                     val endScanQrCodeGuideLine = createGuidelineFromEnd(0.17f)
@@ -333,10 +330,7 @@ fun DiscountsScreen(
                                     }
                                 }
                             } else {
-                                Column(
-                                    verticalArrangement = Arrangement.Center,
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
+
                                     ConstraintLayout {
                                         val (card, textTitle, qrCode, dividerLine) = createRefs()
                                         Box(
@@ -388,57 +382,51 @@ fun DiscountsScreen(
                                             }
                                         }
 
+                                        val topTitleGuideLine = createGuidelineFromTop(0.14f)
+                                        val startTitleGuideLine = createGuidelineFromStart(0.15f)
+                                        val endTitleGuideLine = createGuidelineFromEnd(0.15f)
+
                                         Text(
-                                            text = "Leia o QR Code e aproveite os cupons de descontos das nossas cervejas artesanais",
+                                            text = "Leia o QR Code e aproveite os cupons de descontos das nossas cervejas",
                                             textAlign = TextAlign.Center,
                                             style = MaterialTheme.typography.titleLarge.copy(
                                                 lineBreak = LineBreak.Paragraph
                                             ),
-                                            fontSize = 17.sp,
+                                            fontSize = 18.sp,
                                             color = surfaceBrightDark,
                                             modifier = Modifier
-                                                .fillMaxWidth()
-                                                .padding(
-                                                    start = 60.dp,
-                                                    end = 60.dp,
-                                                )
                                                 .constrainAs(textTitle) {
-                                                    top.linkTo(card.top, margin = 60.dp)
-                                                    start.linkTo(card.start, margin = 0.dp)
-                                                    end.linkTo(card.end, margin = 0.dp)
-                                                },
+                                                    top.linkTo(topTitleGuideLine)
+                                                    start.linkTo(startTitleGuideLine)
+                                                    end.linkTo(endTitleGuideLine)
+                                                    width = Dimension.fillToConstraints
+                                                }
                                         )
+
+                                        val topQrCodeGuideLine = createGuidelineFromTop(0.40f)
+                                        val startQrCodeGuideLine = createGuidelineFromStart(0.20f)
+                                        val endQrCodeGuideLine = createGuidelineFromEnd(0.20f)
+                                        val bottomQrCodeGuideLine = createGuidelineFromBottom(0.25f)
 
                                         Image(
                                             painter = painterResource(Res.drawable.qr_code_big),
                                             contentDescription = "qr-code",
-                                            contentScale = ContentScale.Fit,
+                                            contentScale = ContentScale.Crop,
                                             modifier = Modifier
-                                                .size(240.dp)
                                                 .constrainAs(qrCode) {
-                                                    bottom.linkTo(card.bottom, margin = 130.dp)
-                                                    start.linkTo(card.start)
-                                                    end.linkTo(card.end)
-                                                }
-                                        )
-
-                                        HorizontalDivider(
-                                            modifier = Modifier
-                                                .width(100.dp)
-                                                .alpha(0.7f)
-                                                .constrainAs(dividerLine){
-                                                    bottom.linkTo(card.bottom, margin = 132.dp)
-                                                    start.linkTo(card.start, margin = 0.dp)
-                                                    end.linkTo(card.end, margin = 0.dp)
+                                                    top.linkTo(topQrCodeGuideLine)
+                                                    start.linkTo(startQrCodeGuideLine)
+                                                    end.linkTo(endQrCodeGuideLine)
+                                                    bottom.linkTo(bottomQrCodeGuideLine)
+                                                    width = Dimension.fillToConstraints
+                                                    height = Dimension.fillToConstraints
                                                 },
-                                            thickness = 4.dp,
-                                            color = surfaceVariantDark
                                         )
                                     }
                                }
                             }
                         }
-                    }
+
                 }
 
                 is DiscountsViewState.Error -> {
@@ -455,55 +443,105 @@ fun DiscountsScreen(
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Box(
-                                modifier = Modifier
-                                    .padding(16.dp)
-                                    .background(
-                                        color = surfaceVariantDark,
-                                        shape = RoundedCornerShape(25.dp)
-                                    )
-                                    .width(240.dp)
-                                    .height(360.dp)
-                            ) {
-                                Column(
-                                    verticalArrangement = Arrangement.Center,
-                                    horizontalAlignment = Alignment.CenterHorizontally
+                            ConstraintLayout {
+                                val (card, textTitle, icon, textDiscount) = createRefs()
+
+                                Box(
+                                    modifier = Modifier
+                                        .padding(
+                                            start = 16.dp,
+                                            end = 16.dp,
+                                            top = 10.dp,
+                                            bottom = 16.dp
+                                        )
+                                        .background(
+                                            color = surfaceVariantDark,
+                                            shape = RoundedCornerShape(25.dp)
+                                        )
+                                        .fillMaxSize()
+                                        .constrainAs(card) {
+                                            top.linkTo(parent.top, margin = 10.dp)
+                                        }
                                 ) {
-                                    Image(
-                                        painter = painterResource(Res.drawable.icon_qr_code),
-                                        contentDescription = "qr-code",
-                                        contentScale = ContentScale.Fit,
-                                        modifier = Modifier
-                                            .size(150.dp)
-                                            .padding(top = 20.dp)
-                                    )
+                                    Column(
+                                        verticalArrangement = Arrangement.Center,
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
 
-                                    HorizontalDivider(
-                                        modifier = Modifier
-                                            .padding(
-                                                start = 80.dp,
-                                                end = 80.dp,
-                                                top = 20.dp,
-                                            )
-                                            .alpha(0.7f),
-                                        thickness = 1.dp,
-                                        color = onSurfaceVariantDark
-                                    )
-
-                                    Text(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(
-                                                start = 16.dp,
-                                                end = 16.dp,
-                                                top = 20.dp,
-                                            ),
-                                        text = state.message,
-                                        textAlign = TextAlign.Center,
-                                        style = MaterialTheme.typography.titleLarge,
-                                        fontSize = 24.sp
-                                    )
+                                        Image(
+                                            painter = painterResource(Res.drawable.ticket_qr_code),
+                                            contentDescription = "qr-code",
+                                            contentScale = ContentScale.Fit,
+                                            modifier = Modifier
+                                                .fillMaxSize()
+                                                .padding(
+                                                    top = 30.dp,
+                                                    start = 10.dp,
+                                                    end = 10.dp,
+                                                    bottom = 30.dp
+                                                )
+                                        )
+                                    }
                                 }
+
+                                val topTitleGuideLine = createGuidelineFromTop(0.14f)
+                                val startTitleGuideLine = createGuidelineFromStart(0.15f)
+                                val endTitleGuideLine = createGuidelineFromEnd(0.15f)
+
+                                Text(
+                                    text = state.message,
+                                    textAlign = TextAlign.Center,
+                                    style = MaterialTheme.typography.titleLarge.copy(
+                                        lineBreak = LineBreak.Paragraph
+                                    ),
+                                    fontSize = 18.sp,
+                                    color = surfaceBrightDark,
+                                    modifier = Modifier
+                                        .constrainAs(textTitle) {
+                                            top.linkTo(topTitleGuideLine)
+                                            start.linkTo(startTitleGuideLine)
+                                            end.linkTo(endTitleGuideLine)
+                                            width = Dimension.fillToConstraints
+                                        }
+                                )
+
+                                val topIconGuideLine = createGuidelineFromTop(0.43f)
+                                val bottomIconGuideLine = createGuidelineFromBottom(0.21f)
+                                val startIconGuideLine = createGuidelineFromStart(0.15f)
+                                val endIconGuideLine = createGuidelineFromEnd(0.15f)
+
+                                Image(
+                                    painter = painterResource(Res.drawable.icon_thumbs_down),
+                                    contentDescription = "qr-code",
+                                    modifier = Modifier
+                                        .constrainAs(icon) {
+                                            top.linkTo(topIconGuideLine)
+                                            start.linkTo(startIconGuideLine)
+                                            end.linkTo(endIconGuideLine)
+                                            bottom.linkTo(bottomIconGuideLine)
+                                            width = Dimension.fillToConstraints
+                                            height = Dimension.fillToConstraints
+                                        }
+                                )
+
+                                val bottomDiscountGuideLine = createGuidelineFromBottom(0.12f)
+                                val startDiscountGuideLine = createGuidelineFromStart(0.15f)
+                                val endDiscountGuideLine = createGuidelineFromEnd(0.15f)
+
+                                Text(
+                                    text = "Verifique o QR Code",
+                                    textAlign = TextAlign.Center,
+                                    style = MaterialTheme.typography.titleLarge,
+                                    fontSize = 24.sp,
+                                    color = surfaceBrightDark,
+                                    modifier = Modifier
+                                        .constrainAs(textDiscount) {
+                                            bottom.linkTo(bottomDiscountGuideLine)
+                                            start.linkTo(startDiscountGuideLine)
+                                            end.linkTo(endDiscountGuideLine)
+                                            width = Dimension.fillToConstraints
+                                        }
+                                )
                             }
                         }
                     }
@@ -576,7 +614,7 @@ fun DiscountsScreen(
                                     }
                                 }
 
-                                val topTitleGuideLine = createGuidelineFromTop(0.15f)
+                                val topTitleGuideLine = createGuidelineFromTop(0.14f)
                                 val startTitleGuideLine = createGuidelineFromStart(0.15f)
                                 val endTitleGuideLine = createGuidelineFromEnd(0.15f)
 
@@ -586,7 +624,7 @@ fun DiscountsScreen(
                                     style = MaterialTheme.typography.titleLarge.copy(
                                         lineBreak = LineBreak.Paragraph
                                     ),
-                                    fontSize = 20.sp,
+                                    fontSize = 18.sp,
                                     color = surfaceBrightDark,
                                     modifier = Modifier
                                         .constrainAs(textTitle) {
@@ -597,12 +635,12 @@ fun DiscountsScreen(
                                         }
                                 )
 
-                                val topIconGuideLine = createGuidelineFromTop(0.35f)
+                                val topIconGuideLine = createGuidelineFromTop(0.42f)
                                 val startIconGuideLine = createGuidelineFromStart(0.15f)
                                 val endIconGuideLine = createGuidelineFromEnd(0.15f)
 
-                                Icon(
-                                    painter = painterResource(Res.drawable.beer_on_right),
+                                Image(
+                                    painter = painterResource(Res.drawable.logohalfmouth),
                                     contentDescription = "qr-code",
                                     modifier = Modifier
                                         .constrainAs(icon) {
@@ -610,8 +648,7 @@ fun DiscountsScreen(
                                             start.linkTo(startIconGuideLine)
                                             end.linkTo(endIconGuideLine)
                                             width = Dimension.fillToConstraints
-                                        },
-                                    tint = Color(0xFFCAC8A4)
+                                        }
                                 )
 
 
@@ -624,6 +661,7 @@ fun DiscountsScreen(
                                     textAlign = TextAlign.Center,
                                     style = MaterialTheme.typography.titleLarge,
                                     fontSize = 24.sp,
+                                    color = surfaceBrightDark,
                                     modifier = Modifier
                                         .constrainAs(textDiscount) {
                                             bottom.linkTo(bottomDiscountGuideLine)
