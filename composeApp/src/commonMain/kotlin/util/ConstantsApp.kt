@@ -20,5 +20,7 @@ class ConstantsApp {
             val MESSAGE_DEFAULT_NOTIFICATION = "Você receberá novas notificações em breve."
             val MESSAGE_DEFAULT_DISCOUNT = "Desconto de 5%"
             val MESSAGE_ERROR_DISCOUNT = "Não foi possível gerar o cupom de desconto com o QR Code apresentado"
+            val ERROR_CHART_LINE = "Não foi possível exibir os dados do gráfico, por favor, tente mais tarde."
+            val ERROR_API_CHART_LINE = "Não foi possível acessar os dados no ThingSpeak, por favor, tente mais tarde."
         }
 }
