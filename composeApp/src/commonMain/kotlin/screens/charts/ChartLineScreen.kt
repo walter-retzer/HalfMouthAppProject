@@ -44,7 +44,10 @@ import viewmodel.ChartLineViewState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChartLineScreen() {
+fun ChartLineScreen(
+    onNavigateToProduction: () -> Unit,
+    id: String
+) {
 
     val viewModel = getViewModel(
         key = "chart-line-screen",
@@ -74,13 +77,13 @@ fun ChartLineScreen() {
             snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
             topBar = {
                 SimpleToolbar(
-                    title = "Gráficos",
+                    title = "Gráficos $id",
                     onNavigationToMenu = {
                         scope.launch {
                             drawerState.open()
                         }
                     },
-                    onNavigationClose = { },
+                    onNavigationClose = { onNavigateToProduction() },
                 )
             }
         ) { innerPadding ->
