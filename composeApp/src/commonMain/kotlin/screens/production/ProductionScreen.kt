@@ -59,7 +59,7 @@ import viewmodel.ProductionViewState
 @Composable
 fun ProductionScreen(
     onNavigateToProfile: () -> Unit,
-    onNavigateToChartLine: (index: String) -> Unit
+    onNavigateToChartLine: (fieldId: String, fieldName: String) -> Unit
 ) {
     val viewModel = getViewModel(
         key = "production-screen",
@@ -114,7 +114,12 @@ fun ProductionScreen(
                                         start = 12.dp,
                                         end = 12.dp
                                     )
-                                    .clickable { onNavigateToChartLine(it.fieldName.toString()) },
+                                    .clickable {
+                                        onNavigateToChartLine(
+                                            it.fieldId.toString(),
+                                            it.fieldType.toString() + it.fieldName.toString()
+                                        )
+                                    },
                                 shape = RoundedCornerShape(16.dp),
                             ) {
                                 Column(
