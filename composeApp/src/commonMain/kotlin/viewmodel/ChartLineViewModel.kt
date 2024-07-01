@@ -18,12 +18,12 @@ class ChartLineViewModel : ViewModel() {
     private val _uiState = MutableStateFlow<ChartLineViewState>(ChartLineViewState.Dashboard)
     val uiState: StateFlow<ChartLineViewState> = _uiState.asStateFlow()
 
-    fun fetchThingSpeakChannelField() {
+    fun fetchThingSpeakChannelField(fieldId: String) {
         _uiState.value = ChartLineViewState.Loading
         viewModelScope.launch {
-            val responseApi = service.getThingSpeakChannelFeed(field = "5", results = results)
+            val responseApi = service.getThingSpeakChannelFeed(fieldId = fieldId, results = results)
             val thingSpeakResponse = handleResponseApi(responseApi)
-            adjustValuesChannelField(mutableListOf(thingSpeakResponse))
+            adjustValuesChannelField(mutableListOf(thingSpeakResponse), fieldId)
         }
     }
 
@@ -35,7 +35,7 @@ class ChartLineViewModel : ViewModel() {
         }
     }
 
-    private fun adjustValuesChannelField(listReceive: List<ThingSpeakResponse>) {
+    private fun adjustValuesChannelField(listReceive: List<ThingSpeakResponse>, fieldId: String) {
         try{
             val channelFeed = mutableListOf<FeedsThingSpeak?>()
             listReceive.forEach {
@@ -44,15 +44,31 @@ class ChartLineViewModel : ViewModel() {
                 }
             }
 
-            val listOfValues = channelFeed.mapNotNull {
-                it?.field5.toString().toDouble()
+            val listOfFields = channelFeed.mapNotNull {
+                when (fieldId) {
+                    "1" -> it?.field1?.toDouble()
+                    "2" -> it?.field2?.toDouble()
+                    "3" -> it?.field3?.toDouble()
+                    "4" -> it?.field4?.toDouble()
+                    "5" -> it?.field5?.toDouble()
+                    "6" -> it?.field6?.toDouble()
+                    "7" -> it?.field7?.toDouble()
+                    "8" -> it?.field8?.toDouble()
+                    else -> emptyList<Double>()
+                }
+            }
+
+            val listOfValues = listOfFields.map {
+                it.toString().toDouble()
             }
 
             val listOfDate = channelFeed.mapNotNull {
                 it?.created_at.toString().formattedAsTimeToChart()
             }
 
-            _uiState.value = ChartLineViewState.Success(listOfValues, listOfDate)
+            if (listOfValues.isEmpty() || listOfValues.size != listOfDate.size) _uiState.value =
+                ChartLineViewState.Error("Falha")
+            else _uiState.value = ChartLineViewState.Success(listOfValues, listOfDate)
         } catch(e: Exception){
             _uiState.value = ChartLineViewState.Error("Falha")
             println(e)
