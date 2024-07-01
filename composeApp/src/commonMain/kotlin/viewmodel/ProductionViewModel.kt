@@ -52,41 +52,57 @@ class ProductionViewModel : ViewModel() {
             val i2 = if (response.feeds.first()?.field5 == null) 1 else 0
             val newFeedList = mutableListOf(
                 Feeds(
+                    fieldId = "1",
+                    fieldType = "TEMPERATURA ",
                     fieldName = response.channel?.field1,
                     fieldValue = response.feeds[i1]?.field1,
                     fieldData = response.feeds[i1]?.created_at
                 ),
                 Feeds(
+                    fieldId = "2",
+                    fieldType = "TEMPERATURA ",
                     fieldName = response.channel?.field2,
                     fieldValue = response.feeds[i1]?.field2,
                     fieldData = response.feeds[i1]?.created_at
                 ),
                 Feeds(
+                    fieldId = "3",
+                    fieldType = "TEMPERATURA ",
                     fieldName = response.channel?.field3,
                     fieldValue = response.feeds[i1]?.field3,
                     fieldData = response.feeds[i1]?.created_at
                 ),
                 Feeds(
+                    fieldId = "4",
+                    fieldType = "TEMPERATURA ",
                     fieldName = response.channel?.field4,
                     fieldValue = response.feeds[i1]?.field4,
                     fieldData = response.feeds[i1]?.created_at
                 ),
                 Feeds(
+                    fieldId = "5",
+                    fieldType = "TEMPERATURA ",
                     fieldName = response.channel?.field5,
                     fieldValue = response.feeds[i2]?.field5,
                     fieldData = response.feeds[i2]?.created_at
                 ),
                 Feeds(
+                    fieldId = "6",
+                    fieldType = "RESFRIAMENTO  ",
                     fieldName = response.channel?.field6,
                     fieldValue = response.feeds[i1]?.field6,
                     fieldData = response.feeds[i1]?.created_at
                 ),
                 Feeds(
+                    fieldId = "7",
+                    fieldType = "MBO-001 ",
                     fieldName = response.channel?.field7,
                     fieldValue = response.feeds[i1]?.field7,
                     fieldData = response.feeds[i1]?.created_at
                 ),
                 Feeds(
+                    fieldId = "8",
+                    fieldType = "RESFRIAMENTO  ",
                     fieldName = response.channel?.field8,
                     fieldValue = response.feeds[i2]?.field8,
                     fieldData = response.feeds[i2]?.created_at
