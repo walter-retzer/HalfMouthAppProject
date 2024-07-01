@@ -11,6 +11,7 @@ androidx-espresso-core = "3.5.1"
 androidx-material = "1.11.0"
 androidx-test-junit = "1.1.5"
 animation = "1.6.7"
+chart = "Beta-0.0.5"
 compose = "1.6.7"
 compose-plugin = "1.6.2"
 constraintlayoutComposeMultiplatform = "0.4.0"
@@ -30,6 +31,9 @@ ktor = "2.3.7"
 qrKit = "1.0.4"
 
 [libraries]
+#Chart Line Library
+chart = { module = "io.github.thechance101:chart", version.ref = "chart" }
+
 #Qr Code Reader and Generate Library
 qr-kit = { module = "network.chaintech:qr-kit", version.ref = "qrKit" }
 
