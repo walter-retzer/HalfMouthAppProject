@@ -1,5 +1,6 @@
 package screens.production
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -56,7 +57,10 @@ import viewmodel.ProductionViewState
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
 @Composable
-fun ProductionScreen(onNavigateToProfile: () -> Unit) {
+fun ProductionScreen(
+    onNavigateToProfile: () -> Unit,
+    onNavigateToChartLine: (index: String) -> Unit
+) {
     val viewModel = getViewModel(
         key = "production-screen",
         factory = viewModelFactory {
@@ -109,7 +113,8 @@ fun ProductionScreen(onNavigateToProfile: () -> Unit) {
                                         bottom = 7.dp,
                                         start = 12.dp,
                                         end = 12.dp
-                                    ),
+                                    )
+                                    .clickable { onNavigateToChartLine(it.fieldName.toString()) },
                                 shape = RoundedCornerShape(16.dp),
                             ) {
                                 Column(
