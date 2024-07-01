@@ -1,6 +1,7 @@
 package navigation
 
 import halfmouthappproject.composeapp.generated.resources.Res
+import halfmouthappproject.composeapp.generated.resources.chart_line_route
 import halfmouthappproject.composeapp.generated.resources.contact_route
 import halfmouthappproject.composeapp.generated.resources.discounts_route
 import halfmouthappproject.composeapp.generated.resources.home_graph_name
@@ -24,6 +25,7 @@ enum class AppNavigation(val title: StringResource) {
     ProductionRoute(title = Res.string.production_route),
     DiscountsRoute(title = Res.string.discounts_route),
     ContactRoute(title = Res.string.contact_route),
+    ChartLineRoute(title = Res.string.chart_line_route),
 }
 
 @OptIn(ExperimentalResourceApi::class)
