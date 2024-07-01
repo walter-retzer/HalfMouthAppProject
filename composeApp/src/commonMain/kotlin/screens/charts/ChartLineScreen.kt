@@ -46,7 +46,8 @@ import viewmodel.ChartLineViewState
 @Composable
 fun ChartLineScreen(
     onNavigateToProduction: () -> Unit,
-    id: String
+    fieldId: String,
+    fieldName: String
 ) {
 
     val viewModel = getViewModel(
@@ -77,7 +78,7 @@ fun ChartLineScreen(
             snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
             topBar = {
                 SimpleToolbar(
-                    title = "Gráficos $id",
+                    title = "Gráfico",
                     onNavigationToMenu = {
                         scope.launch {
                             drawerState.open()
@@ -110,7 +111,7 @@ fun ChartLineScreen(
                 is ChartLineViewState.Success -> {
                     val lineParameters: List<LineParameters> = listOf(
                         LineParameters(
-                            label = "Temperatura TI-005",
+                            label = fieldName,
                             data = state.listOfValues,
                             lineColor = mainYellowColor,
                             lineType = LineType.DEFAULT_LINE,
