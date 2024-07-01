@@ -26,15 +26,14 @@ class ApiServiceImpl(
             }
         }
 
-    override suspend fun getThingSpeakChannelFeed(fields: String, results: String): ResultNetwork<ThingSpeakResponse> =
+    override suspend fun getThingSpeakChannelFeed(fieldId: String, results: String): ResultNetwork<ThingSpeakResponse> =
         makeRequest {
             client.get{
-                url(HttpRoutes.REQUEST_CHANNEL_FEED)
+                url(HttpRoutes.REQUEST_CHANNEL_FEED + "$fieldId.json?")
                 parameter("api_key", "ZL0IH5O2QK5U4NNS")
                 parameter("results", results)
             }
         }
-
 }
 
 
