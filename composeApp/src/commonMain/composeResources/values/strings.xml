@@ -11,6 +11,7 @@
     <string name="notification_route">NotificationRoute</string>
     <string name="discounts_route">DiscountsRoute</string>
     <string name="contact_route">ContactRoute</string>
+    <string name="chart_line_route">ChartLineRoute</string>
     // Nomes dos Graphs do Navigation
     <string name="login_graph_name">LoginGraph</string>
     <string name="home_graph_name">HomeGraph</string>
