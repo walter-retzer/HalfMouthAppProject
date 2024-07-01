@@ -44,6 +44,8 @@ data class FeedsThingSpeak(
 
 @Serializable
 data class Feeds(
+    var fieldId: String? = null,
+    var fieldType: String? = null,
     var fieldName: String? = null,
     var fieldValue: String? = null,
     var fieldData: String? = null,
