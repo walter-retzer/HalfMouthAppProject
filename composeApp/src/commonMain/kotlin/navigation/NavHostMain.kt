@@ -16,6 +16,7 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import components.AppBottomNavigationBar
 import navigation.ArgumentsKey.FIELD_ID_KEY
+import navigation.ArgumentsKey.FIELD_ID_NAME
 import navigation.NavAnimations.popEnterRightAnimation
 import navigation.NavAnimations.popExitRightAnimation
 import navigation.NavAnimations.slideFadeInAnimation
@@ -155,8 +156,10 @@ private fun NavGraphBuilder.homeNavGraph(
                         onNavigateToProfile = {
                             navController.navigate(AppNavigation.ProfileRoute.name)
                         },
-                        onNavigateToChartLine = {
-                            navController.navigate("${AppNavigation.ChartLineRoute.name}/${it}")
+                        onNavigateToChartLine = { fieldId, fieldName ->
+                            navController.navigate("${AppNavigation.ChartLineRoute.name}/${fieldId}/${fieldName}") {
+                                launchSingleTop = true
+                            }
                         }
                     )
                 }
@@ -193,17 +196,19 @@ private fun NavGraphBuilder.homeNavGraph(
                 }
 
                 composable(
-                    route = "${AppNavigation.ChartLineRoute.name}/{$FIELD_ID_KEY}",
-                    arguments = listOf(navArgument(FIELD_ID_KEY) { type = NavType.StringType }),
+                    route = "${AppNavigation.ChartLineRoute.name}/{$FIELD_ID_KEY}/{$FIELD_ID_NAME}",
+                    arguments = listOf(navArgument(FIELD_ID_KEY) { type = NavType.StringType }, navArgument(FIELD_ID_NAME) { type = NavType.StringType }),
                 ) {
-
                     val arguments = requireNotNull(it.arguments)
-                    val movieId = arguments.getString(FIELD_ID_KEY)
+                    val fieldId = arguments.getString(FIELD_ID_KEY)
+                    val fieldName = arguments.getString(FIELD_ID_NAME)
+
                     ChartLineScreen(
                         onNavigateToProduction = {
                             navController.navigate(AppNavigation.ProductionRoute.name)
                         },
-                        id = movieId.toString()
+                        fieldId = fieldId.toString(),
+                        fieldName = fieldName.toString(),
                     )
                 }
             }
@@ -218,5 +223,5 @@ private fun NavGraphBuilder.homeNavGraph(
 
 object ArgumentsKey {
     const val FIELD_ID_KEY = "FIELD_ID"
+    const val FIELD_ID_NAME = "FIELD_NAME"
 }
-
