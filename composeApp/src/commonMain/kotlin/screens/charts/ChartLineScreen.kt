@@ -16,8 +16,10 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,6 +41,7 @@ import dev.icerock.moko.mvvm.compose.viewModelFactory
 import kotlinx.coroutines.launch
 import theme.mainYellowColor
 import theme.surfaceVariantDark
+import util.snackBarOnlyMessage
 import viewmodel.ChartLineViewModel
 import viewmodel.ChartLineViewState
 
@@ -61,6 +64,7 @@ fun ChartLineScreen(
     val snackBarHostState = remember { SnackbarHostState() }
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+    var isSnackBarOpen by remember { mutableStateOf(false) }
 
 
     ModalNavigationDrawer(
@@ -90,12 +94,19 @@ fun ChartLineScreen(
         ) { innerPadding ->
 
             when (val state = uiState) {
-
                 is ChartLineViewState.Dashboard -> {
                     viewModel.fetchThingSpeakChannelField(fieldId)
                 }
 
                 is ChartLineViewState.Error -> {
+                    if(!isSnackBarOpen){
+                        snackBarOnlyMessage(
+                            snackBarHostState = snackBarHostState,
+                            coroutineScope = scope,
+                            message = state.message
+                        )
+                        isSnackBarOpen = true
+                    }
 
                 }
 
