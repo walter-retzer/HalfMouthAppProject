@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import network.ApiService
 import network.ResultNetwork
+import util.ConstantsApp.Companion.ERROR_API_CHART_LINE
+import util.ConstantsApp.Companion.ERROR_CHART_LINE
 import util.formattedAsTimeToChart
 
 class ChartLineViewModel : ViewModel() {
@@ -36,6 +38,12 @@ class ChartLineViewModel : ViewModel() {
     }
 
     private fun adjustValuesChannelField(listReceive: List<ThingSpeakResponse>, fieldId: String) {
+
+        if (listReceive.first().feeds.isEmpty() || listReceive.first().channel == null) {
+            _uiState.value = ChartLineViewState.Error(ERROR_API_CHART_LINE)
+            return
+        }
+
         try{
             val channelFeed = mutableListOf<FeedsThingSpeak?>()
             listReceive.forEach {
@@ -67,10 +75,10 @@ class ChartLineViewModel : ViewModel() {
             }
 
             if (listOfValues.isEmpty() || listOfValues.size != listOfDate.size) _uiState.value =
-                ChartLineViewState.Error("Falha")
+                ChartLineViewState.Error(ERROR_CHART_LINE)
             else _uiState.value = ChartLineViewState.Success(listOfValues, listOfDate)
         } catch(e: Exception){
-            _uiState.value = ChartLineViewState.Error("Falha")
+            _uiState.value = ChartLineViewState.Error(ERROR_API_CHART_LINE)
             println(e)
         }
     }
