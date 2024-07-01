@@ -13,6 +13,7 @@ import kotlinx.serialization.json.Json
 interface ApiService {
 
     suspend fun getThingSpeakValues(results: String): ResultNetwork<ThingSpeakResponse>
+    suspend fun getThingSpeakChannelFeed(field: String, results: String): ResultNetwork<ThingSpeakResponse>
 
     companion object {
         fun create(): ApiService {
