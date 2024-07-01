@@ -32,16 +32,13 @@ import com.aay.compose.lineChart.LineChart
 import com.aay.compose.lineChart.model.LineParameters
 import com.aay.compose.lineChart.model.LineType
 import components.DrawerMenuNavigation
-import components.MenuToolbar
 import components.MyAppCircularProgressIndicator
+import components.SimpleToolbar
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import kotlinx.coroutines.launch
 import theme.mainYellowColor
-import theme.primaryContainerDark
-import theme.secondaryContainerDark
 import theme.surfaceVariantDark
-import theme.tertiaryDark
 import viewmodel.ChartLineViewModel
 import viewmodel.ChartLineViewState
 
@@ -76,16 +73,14 @@ fun ChartLineScreen() {
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
             topBar = {
-                MenuToolbar(
+                SimpleToolbar(
                     title = "Gráficos",
                     onNavigationToMenu = {
                         scope.launch {
                             drawerState.open()
                         }
                     },
-                    onNavigationToProfile = { },
-                    onNavigateToNotifications = { },
-                    scrollBehavior = scrollBehavior
+                    onNavigationClose = { },
                 )
             }
         ) { innerPadding ->
@@ -110,16 +105,10 @@ fun ChartLineScreen() {
                 }
 
                 is ChartLineViewState.Success -> {
-                    val list = state.channelFeed.mapNotNull {
-                        it?.field5.toString().toDouble()
-                    }
-                    val date = state.channelFeed.mapNotNull {
-                        it?.created_at.toString()
-                    }
-                    val testLineParameters: List<LineParameters> = listOf(
+                    val lineParameters: List<LineParameters> = listOf(
                         LineParameters(
                             label = "Temperatura TI-005",
-                            data = list,
+                            data = state.listOfValues,
                             lineColor = mainYellowColor,
                             lineType = LineType.DEFAULT_LINE,
                             lineShadow = true,
@@ -134,10 +123,10 @@ fun ChartLineScreen() {
                                 .fillMaxSize()
                                 .background(surfaceVariantDark)
                                 .padding(20.dp),
-                            linesParameters = testLineParameters,
+                            linesParameters = lineParameters,
                             isGrid = true,
                             gridColor = Color.Gray,
-                            xAxisData = listOf("2001", "2002", "2003", "2004", "2019"),
+                            xAxisData = state.listOfDate,
                             animateChart = true,
                             showGridWithSpacer = true,
                             descriptionStyle = TextStyle(

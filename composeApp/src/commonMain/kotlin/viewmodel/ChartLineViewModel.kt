@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import network.ApiService
 import network.ResultNetwork
+import util.formattedAsTimeToChart
 
 class ChartLineViewModel : ViewModel() {
 
@@ -35,20 +36,34 @@ class ChartLineViewModel : ViewModel() {
     }
 
     private fun adjustValuesChannelField(listReceive: List<ThingSpeakResponse>) {
-        val channelFeed = mutableListOf<FeedsThingSpeak?>()
-        listReceive.forEach {
-            it.feeds.mapNotNull {
-                channelFeed.add(it)
+        try{
+            val channelFeed = mutableListOf<FeedsThingSpeak?>()
+            listReceive.forEach {
+                it.feeds.mapNotNull { feeds->
+                    channelFeed.add(feeds)
+                }
             }
+
+            val listOfValues = channelFeed.mapNotNull {
+                it?.field5.toString().toDouble()
+            }
+
+            val listOfDate = channelFeed.mapNotNull {
+                it?.created_at.toString().formattedAsTimeToChart()
+            }
+
+            _uiState.value = ChartLineViewState.Success(listOfValues, listOfDate)
+        } catch(e: Exception){
+            _uiState.value = ChartLineViewState.Error("Falha")
+            println(e)
         }
-        _uiState.value = ChartLineViewState.Success(channelFeed)
     }
 }
 
 sealed interface ChartLineViewState {
     data object Dashboard : ChartLineViewState
 
-    data class Success(val channelFeed: MutableList<FeedsThingSpeak?> = mutableListOf()) : ChartLineViewState
+    data class Success(val listOfValues:  List<Double>, val listOfDate: List<String>) : ChartLineViewState
 
     data class Error(val message: String) : ChartLineViewState
 

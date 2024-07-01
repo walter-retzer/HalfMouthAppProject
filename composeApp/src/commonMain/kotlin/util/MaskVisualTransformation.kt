@@ -108,6 +108,25 @@ fun String.formattedAsTime(): String {
     }
 }
 
+@OptIn(FormatStringsInDatetimeFormats::class)
+fun String.formattedAsTimeToChart(): String {
+    val formatPattern = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+    val timeZone = TimeZone.of("America/Los_Angeles")
+
+    return try {
+        val dateTimeFormat = LocalDateTime.Format { byUnicodePattern(formatPattern) }
+        val dateTimeReceiver = dateTimeFormat.parse(this)
+        val adjustTimeZone = dateTimeReceiver.toInstant(timeZone)
+        val time = adjustTimeZone.minus(3, DateTimeUnit.HOUR, timeZone).toLocalDateTime(timeZone)
+        var minute = time.minute.toString()
+        if(minute.length == 1) minute = "0$minute"
+        time.hour.toString() + ":" + minute
+    } catch (e: Exception) {
+        println("Erro ao Converter a String: $e")
+        "##:##"
+    }
+}
+
 fun String.adjustString(): String {
     var text = ""
     if (this == "0.00000") text = " = Desligado"
