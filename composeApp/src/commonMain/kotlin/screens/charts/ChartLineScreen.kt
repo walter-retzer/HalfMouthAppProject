@@ -92,7 +92,7 @@ fun ChartLineScreen(
             when (val state = uiState) {
 
                 is ChartLineViewState.Dashboard -> {
-                    viewModel.fetchThingSpeakChannelField()
+                    viewModel.fetchThingSpeakChannelField(fieldId)
                 }
 
                 is ChartLineViewState.Error -> {
