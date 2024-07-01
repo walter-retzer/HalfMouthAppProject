@@ -8,11 +8,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import components.AppBottomNavigationBar
+import navigation.ArgumentsKey.FIELD_ID_KEY
 import navigation.NavAnimations.popEnterRightAnimation
 import navigation.NavAnimations.popExitRightAnimation
 import navigation.NavAnimations.slideFadeInAnimation
@@ -24,6 +27,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import presentation.ScreenTheme
 import screens.account.LoginScreen
 import screens.account.SignInScreen
+import screens.charts.ChartLineScreen
 import screens.contactInfo.ContactInfoScreen
 import screens.home.HomeScreen
 import screens.discounts.DiscountsScreen
@@ -150,6 +154,9 @@ private fun NavGraphBuilder.homeNavGraph(
                     ProductionScreen(
                         onNavigateToProfile = {
                             navController.navigate(AppNavigation.ProfileRoute.name)
+                        },
+                        onNavigateToChartLine = {
+                            navController.navigate("${AppNavigation.ChartLineRoute.name}/${it}")
                         }
                     )
                 }
@@ -184,6 +191,21 @@ private fun NavGraphBuilder.homeNavGraph(
                         }
                     )
                 }
+
+                composable(
+                    route = "${AppNavigation.ChartLineRoute.name}/{$FIELD_ID_KEY}",
+                    arguments = listOf(navArgument(FIELD_ID_KEY) { type = NavType.StringType }),
+                ) {
+
+                    val arguments = requireNotNull(it.arguments)
+                    val movieId = arguments.getString(FIELD_ID_KEY)
+                    ChartLineScreen(
+                        onNavigateToProduction = {
+                            navController.navigate(AppNavigation.ProductionRoute.name)
+                        },
+                        id = movieId.toString()
+                    )
+                }
             }
 
             AppBottomNavigationBar(
@@ -193,3 +215,8 @@ private fun NavGraphBuilder.homeNavGraph(
         }
     }
 }
+
+object ArgumentsKey {
+    const val FIELD_ID_KEY = "FIELD_ID"
+}
+
