@@ -9,7 +9,7 @@ fun MainViewController() = ComposeUIViewController {
         UIScreen.mainScreen.traitCollection.userInterfaceStyle ==
                 UIUserInterfaceStyle.UIUserInterfaceStyleDark
     NavHostMain(
-        darkTheme = isDarkTheme,
+        darkTheme = true,
         dynamicColor = false,
     )
 }
