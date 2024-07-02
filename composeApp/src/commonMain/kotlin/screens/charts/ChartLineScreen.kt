@@ -99,7 +99,7 @@ fun ChartLineScreen(
                 }
 
                 is ChartLineViewState.Error -> {
-                    if(!isSnackBarOpen){
+                    if (!isSnackBarOpen) {
                         snackBarOnlyMessage(
                             snackBarHostState = snackBarHostState,
                             coroutineScope = scope,
@@ -107,7 +107,6 @@ fun ChartLineScreen(
                         )
                         isSnackBarOpen = true
                     }
-
                 }
 
                 is ChartLineViewState.Loading -> {
@@ -125,7 +124,7 @@ fun ChartLineScreen(
                             label = fieldName,
                             data = state.listOfValues,
                             lineColor = mainYellowColor,
-                            lineType = LineType.DEFAULT_LINE,
+                            lineType = LineType.CURVED_LINE,
                             lineShadow = true,
                         )
                     )
@@ -135,9 +134,9 @@ fun ChartLineScreen(
                     ) {
                         LineChart(
                             modifier = Modifier
-                                .fillMaxSize()
                                 .background(surfaceVariantDark)
-                                .padding(20.dp),
+                                .padding(20.dp)
+                                .fillMaxSize(),
                             linesParameters = lineParameters,
                             isGrid = true,
                             gridColor = Color.Gray,
@@ -158,12 +157,12 @@ fun ChartLineScreen(
                                 color = Color.Gray,
                                 fontWeight = FontWeight.W400
                             ),
-                            yAxisRange = 6,
+                            yAxisRange = 4,
                             oneLineChart = false,
                             showXAxis = true,
                             showYAxis = true,
                             gridOrientation = GridOrientation.GRID,
-                            legendPosition = LegendPosition.BOTTOM
+                            legendPosition = LegendPosition.BOTTOM,
                         )
                     }
                 }
