@@ -56,6 +56,7 @@ kotlin {
             implementation(libs.firebase.database)
             implementation(libs.qr.kit)
             implementation(libs.chart)
+            implementation(libs.konnection)
         }
 
         iosMain.dependencies {
