@@ -27,7 +27,7 @@ Exemplo de informacões incluídas no Card da tarefa.
 </table>
 
 ## Telas do Aplicativo
-Telas Desenvolvidas para as Plataformas Android e iOS.
+Screen Shots dasTelas Desenvolvidas para as Plataformas Android e iOS.
 
 ### Splash Screen
 <table>
@@ -40,6 +40,67 @@ Telas Desenvolvidas para as Plataformas Android e iOS.
     <td><img src="screen/iOS/splash-screen/splash-screen-ios.png" width=250 height=500></td>
   </tr>
 </table>
+
+### Telas do Menu Principal
+<table>
+  <tr>
+     <td>Android</td>
+     <td>iOS</td>
+  </tr>
+  <tr>
+    <td><img src="screen/android/menu/menu2-android.png" width=250 height=500></td>
+    <td><img src="screen/iOS/menu/menu-ios.png" width=250 height=500></td>
+  </tr>
+  <tr>
+    <td><img src="screen/android/menu/menu-android.png" width=250 height=500></td>
+    <td><img src="screen/iOS/menu/menu2-ios.png" width=250 height=500></td>
+  </tr>
+</table>
+
+### Tela de Informação da Produção
+<table>
+  <tr>
+     <td>Android</td>
+     <td>iOS</td>
+  </tr>
+  <tr>
+    <td><img src="screen/android/production/production-android.png" width=250 height=500></td>
+    <td><img src="screen/iOS/production/production-ios.png" width=250 height=500></td>
+  </tr>
+  <tr>
+    <td><img src="screen/android/production/production2-android.png" width=250 height=500></td>
+    <td><img src="screen/iOS/production/production2-ios.png" width=250 height=500></td>
+  </tr>
+</table>
+
+### Tela de Gráfico
+<table>
+  <tr>
+     <td>Android</td>
+     <td>iOS</td>
+  </tr>
+  <tr>
+    <td><img src="screen/android/chart/chart-android.png" width=250 height=500></td>
+    <td><img src="screen/iOS/chart/chart-ios.png" width=250 height=500></td>
+  </tr>
+</table>
+
+### Telas do Fluxo de Descontos
+<table>
+  <tr>
+     <td>Android</td>
+     <td>iOS</td>
+  </tr>
+  <tr>
+    <td><img src="screen/android/discount/discount-android.png" width=250 height=500></td>
+    <td><img src="screen/iOS/discount/discount-ios.png" width=250 height=500></td>
+  </tr>
+  <tr>
+    <td><img src="screen/android/discount/discount2-android.png" width=250 height=500></td>
+    <td><img src="screen/iOS/discount/discount2-ios.png" width=250 height=500></td>
+  </tr>
+</table>
+
 
 ### Tela de Login do Usuário (Android)
 <table>
@@ -81,21 +142,7 @@ Telas Desenvolvidas para as Plataformas Android e iOS.
   </tr>
 </table>
 
-### Tela do Menu Principal (Android)
-<table>
-  <tr>
-    <td><img src="screen/android/menu/menu-android.png" width=250 height=500></td>
-    <td><img src="screen/android/menu/menu2-android.png" width=250 height=500></td>
-  </tr>
-</table>
 
-### Tela do Menu Principal (iOS)
-<table>
-  <tr>
-    <td><img src="screen/iOS/menu/menu-ios.png" width=250 height=500></td>
-    <td><img src="screen/iOS/menu/menu2-ios.png" width=250 height=500></td>
-  </tr>
-</table>
 
 ### Tela de Perfil (Android)
 <table>
