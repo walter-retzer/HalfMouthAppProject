@@ -1,5 +1,6 @@
 package screens.production
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -31,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -48,6 +50,8 @@ import halfmouthappproject.composeapp.generated.resources.icon_temperature
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.vectorResource
+import theme.mainYellowColor
+import theme.onBackgroundDark
 import theme.onSurfaceVariantDark
 import util.adjustString
 import util.formattedAsDate
@@ -123,17 +127,21 @@ fun ProductionScreen(
                                 ConstraintLayout {
                                     val (icon, textTitle, textValue, dateText, sendDateText, iconChartLine) = createRefs()
 
-                                    val topIconGuideLine = createGuidelineFromTop(0.10f)
+                                    val topIconGuideLine = createGuidelineFromTop(0.08f)
                                     val startIconGuideLine = createGuidelineFromStart(0.85f)
-                                    val endIconGuideLine = createGuidelineFromEnd(0.05f)
-                                    val bottomIconGuideLine = createGuidelineFromBottom(0.10f)
+                                    val endIconGuideLine = createGuidelineFromEnd(0.12f)
+                                    val bottomIconGuideLine = createGuidelineFromBottom(0.08f)
+                                    val shape = RoundedCornerShape(10.dp)
 
                                     Icon(
                                         vectorResource(Res.drawable.icon_chart_line2),
                                         contentDescription = " ",
-                                        tint = onSurfaceVariantDark,
+                                        tint = mainYellowColor,
                                         modifier = Modifier
-                                            .size(32.dp)
+                                            .size(40.dp)
+                                            .border(1.dp, onBackgroundDark, shape)
+                                            .clip(shape)
+                                            .padding(3.dp)
                                             .constrainAs(iconChartLine) {
                                                 top.linkTo(topIconGuideLine)
                                                 end.linkTo(endIconGuideLine)
@@ -158,7 +166,7 @@ fun ProductionScreen(
                                         contentDescription = " ",
                                         tint = onSurfaceVariantDark,
                                         modifier = Modifier
-                                            .size(32.dp)
+                                            .size(40.dp)
                                             .constrainAs(icon) {
                                                 top.linkTo(parent.top)
                                                 start.linkTo(parent.start, margin = 16.dp)
@@ -167,7 +175,7 @@ fun ProductionScreen(
                                     )
 
                                     val name =
-                                        if (it.fieldName.toString() == "BOMBA RECIRCULAÇÃO") "MBO-001"
+                                        if (it.fieldName.toString() == "BOMBA RECIRCULAÇÃO") "MOTOR"
                                         else it.fieldName.toString()
 
                                     Text(
@@ -202,7 +210,7 @@ fun ProductionScreen(
                                                     top.linkTo(textTitle.bottom, margin = 10.dp)
                                                     start.linkTo(icon.end, margin = 10.dp)
                                                 },
-                                            text = "Data: ${date.formattedAsDate()}",
+                                            text = "Data do Envio: ${date.formattedAsDate()}",
                                             style = MaterialTheme.typography.bodySmall,
                                         )
                                     }
@@ -211,7 +219,7 @@ fun ProductionScreen(
                                         val time = it.fieldData.toString()
 
                                         Text(
-                                            text = "Enviado: ${time.formattedAsTime()}",
+                                            text = "Hora do Envio: ${time.formattedAsTime()}",
                                             style = MaterialTheme.typography.bodySmall,
                                             modifier = Modifier
                                                 .padding(start = 6.dp, bottom = 16.dp)
