@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -36,17 +37,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import components.MenuToolbar
 import components.DrawerMenuNavigation
 import components.MyAppCircularProgressIndicator
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import halfmouthappproject.composeapp.generated.resources.Res
+import halfmouthappproject.composeapp.generated.resources.icon_chart_line
+import halfmouthappproject.composeapp.generated.resources.icon_chart_line2
 import halfmouthappproject.composeapp.generated.resources.icon_freezer
+import halfmouthappproject.composeapp.generated.resources.icon_freezer_small
+import halfmouthappproject.composeapp.generated.resources.icon_motor
+import halfmouthappproject.composeapp.generated.resources.icon_temperature
 import halfmouthappproject.composeapp.generated.resources.icon_thermostat
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.vectorResource
+import theme.onSecondaryContainerDark
+import theme.onSurfaceVariantDark
 import util.adjustString
 import util.formattedAsDate
 import util.formattedAsTime
@@ -108,103 +117,117 @@ fun ProductionScreen(
                             Spacer(modifier = Modifier.height(4.dp))
                             Card(
                                 modifier = Modifier
+                                    .fillMaxWidth()
                                     .padding(
                                         top = 7.dp,
                                         bottom = 7.dp,
                                         start = 12.dp,
                                         end = 12.dp
-                                    )
-                                    .clickable {
-                                        onNavigateToChartLine(
-                                            it.fieldId.toString(),
-                                            it.fieldType.toString() + it.fieldName.toString()
-                                        )
-                                    },
+                                    ),
                                 shape = RoundedCornerShape(16.dp),
                             ) {
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                ) {
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        modifier = Modifier
-                                            .padding(
-                                                start = 16.dp,
-                                                top = 6.dp,
-                                                end = 0.dp,
-                                                bottom = 6.dp
-                                            )
-                                            .fillMaxSize(),
-                                    ) {
-                                        val drawable =
-                                            if (it.fieldName.toString() == "CAMARA FRIA") Res.drawable.icon_freezer
-                                            else if (it.fieldName.toString() == "CHILLER") Res.drawable.icon_freezer
-                                            else if (it.fieldName.toString() == "BOMBA RECIRCULAÇÃO") Res.drawable.icon_freezer
-                                            else Res.drawable.icon_thermostat
-                                        Icon(
-                                            vectorResource(drawable),
-                                            contentDescription = " ",
-                                            tint = Color.White
-                                        )
 
-                                        val name =
-                                            if (it.fieldName.toString() == "BOMBA RECIRCULAÇÃO") "MBO-001"
-                                            else it.fieldName.toString()
+                                ConstraintLayout {
+                                    val (icon, textTitle, textValue, dateText, sendDateText, iconChartLine) = createRefs()
+
+                                    val topIconGuideLine = createGuidelineFromTop(0.10f)
+                                    val startIconGuideLine = createGuidelineFromStart(0.85f)
+                                    val endIconGuideLine = createGuidelineFromEnd(0.05f)
+                                    val bottomIconGuideLine = createGuidelineFromBottom(0.10f)
+
+                                    Icon(
+                                        vectorResource(Res.drawable.icon_chart_line2),
+                                        contentDescription = " ",
+                                        tint = onSurfaceVariantDark,
+                                        modifier = Modifier
+                                            .size(32.dp)
+                                            .constrainAs(iconChartLine) {
+                                                top.linkTo(topIconGuideLine)
+                                                end.linkTo(endIconGuideLine)
+                                                start.linkTo(startIconGuideLine)
+                                                bottom.linkTo(bottomIconGuideLine)
+                                            }.clickable {
+                                                onNavigateToChartLine(
+                                                    it.fieldId.toString(),
+                                                    it.fieldType.toString() + it.fieldName.toString()
+                                                )
+                                            }
+                                    )
+
+                                    val drawable =
+                                        if (it.fieldName.toString() == "CAMARA FRIA") Res.drawable.icon_freezer_small
+                                        else if (it.fieldName.toString() == "CHILLER") Res.drawable.icon_freezer
+                                        else if (it.fieldName.toString() == "BOMBA RECIRCULAÇÃO") Res.drawable.icon_motor
+                                        else Res.drawable.icon_temperature
+
+                                    Icon(
+                                        vectorResource(drawable),
+                                        contentDescription = " ",
+                                        tint = onSurfaceVariantDark,
+                                        modifier = Modifier
+                                            .size(32.dp)
+                                            .constrainAs(icon) {
+                                                top.linkTo(parent.top)
+                                                start.linkTo(parent.start, margin = 16.dp)
+                                                bottom.linkTo(parent.bottom)
+                                            }
+                                    )
+
+                                    val name =
+                                        if (it.fieldName.toString() == "BOMBA RECIRCULAÇÃO") "MBO-001"
+                                        else it.fieldName.toString()
+
+                                    Text(
+                                        modifier = Modifier.padding(start = 6.dp)
+                                            .constrainAs(textTitle) {
+                                                top.linkTo(parent.top, margin = 10.dp)
+                                                start.linkTo(icon.end, margin = 10.dp)
+                                            },
+                                        text = name,
+                                        style = MaterialTheme.typography.bodyMedium,
+                                    )
+
+                                    it.fieldValue?.adjustString()?.let { value ->
                                         Text(
-                                            modifier = Modifier.padding(start = 6.dp),
-                                            text = name,
+                                            text = value,
                                             style = MaterialTheme.typography.bodyMedium,
+                                            modifier = Modifier.constrainAs(textValue) {
+                                                top.linkTo(textTitle.top)
+                                                start.linkTo(textTitle.end)
+                                                bottom.linkTo(textTitle.bottom)
+                                            }
                                         )
-
-                                        it.fieldValue?.adjustString()?.let { value ->
-                                            Text(
-                                                text = value,
-                                                style = MaterialTheme.typography.bodyMedium,
-                                            )
-                                        }
                                     }
 
-                                    Row(
-                                        modifier = Modifier
-                                            .padding(
-                                                start = 24.dp,
-                                                top = 0.dp,
-                                                end = 16.dp,
-                                                bottom = 8.dp
-                                            )
-                                            .fillMaxSize(),
-                                        horizontalArrangement = Arrangement.SpaceBetween,
-                                    ) {
-                                        if (it.fieldData != null) {
-                                            val date = it.fieldData.toString()
 
-                                            Text(
-                                                text = "Data: ${date.formattedAsDate()}",
-                                                style = MaterialTheme.typography.bodySmall,
-                                            )
-                                        }
+                                    if (it.fieldData != null) {
+                                        val date = it.fieldData.toString()
+
+                                        Text(
+                                            modifier = Modifier
+                                                .padding(start = 6.dp)
+                                                .constrainAs(dateText) {
+                                                    top.linkTo(textTitle.bottom, margin = 10.dp)
+                                                    start.linkTo(icon.end, margin = 10.dp)
+                                                },
+                                            text = "Data: ${date.formattedAsDate()}",
+                                            style = MaterialTheme.typography.bodySmall,
+                                        )
                                     }
 
-                                    Row(
-                                        modifier = Modifier
-                                            .padding(
-                                                start = 24.dp,
-                                                top = 0.dp,
-                                                end = 16.dp,
-                                                bottom = 8.dp
-                                            )
-                                            .fillMaxSize(),
-                                        horizontalArrangement = Arrangement.SpaceBetween,
-                                    ) {
-                                        if (it.fieldData != null) {
-                                            val time = it.fieldData.toString()
+                                    if (it.fieldData != null) {
+                                        val time = it.fieldData.toString()
 
-                                            Text(
-                                                text = "Enviado: ${time.formattedAsTime()}",
-                                                style = MaterialTheme.typography.bodySmall,
-                                            )
-                                        }
+                                        Text(
+                                            text = "Enviado: ${time.formattedAsTime()}",
+                                            style = MaterialTheme.typography.bodySmall,
+                                            modifier = Modifier
+                                                .padding(start = 6.dp, bottom = 16.dp)
+                                                .constrainAs(sendDateText) {
+                                                    top.linkTo(dateText.bottom, margin = 10.dp)
+                                                    start.linkTo(icon.end, margin = 10.dp)
+                                                },
+                                        )
                                     }
                                 }
                             }
