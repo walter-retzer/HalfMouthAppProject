@@ -1,10 +1,7 @@
 package screens.production
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,27 +31,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import components.MenuToolbar
 import components.DrawerMenuNavigation
+import components.MenuToolbar
 import components.MyAppCircularProgressIndicator
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import halfmouthappproject.composeapp.generated.resources.Res
-import halfmouthappproject.composeapp.generated.resources.icon_chart_line
 import halfmouthappproject.composeapp.generated.resources.icon_chart_line2
 import halfmouthappproject.composeapp.generated.resources.icon_freezer
 import halfmouthappproject.composeapp.generated.resources.icon_freezer_small
 import halfmouthappproject.composeapp.generated.resources.icon_motor
 import halfmouthappproject.composeapp.generated.resources.icon_temperature
-import halfmouthappproject.composeapp.generated.resources.icon_thermostat
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.vectorResource
-import theme.onSecondaryContainerDark
 import theme.onSurfaceVariantDark
 import util.adjustString
 import util.formattedAsDate
@@ -198,7 +191,6 @@ fun ProductionScreen(
                                             }
                                         )
                                     }
-
 
                                     if (it.fieldData != null) {
                                         val date = it.fieldData.toString()
