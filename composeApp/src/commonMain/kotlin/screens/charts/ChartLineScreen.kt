@@ -65,6 +65,7 @@ fun ChartLineScreen(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     var isSnackBarOpen by remember { mutableStateOf(false) }
+    var isSnackBarMessageErrorApiOpen by remember { mutableStateOf(false) }
 
 
     ModalNavigationDrawer(
@@ -164,6 +165,17 @@ fun ChartLineScreen(
                             gridOrientation = GridOrientation.GRID,
                             legendPosition = LegendPosition.BOTTOM,
                         )
+                    }
+                }
+
+                is ChartLineViewState.ErrorNetworkConnection -> {
+                    if(!isSnackBarMessageErrorApiOpen) {
+                        snackBarOnlyMessage(
+                            snackBarHostState = snackBarHostState,
+                            coroutineScope = scope,
+                            message = state.message
+                        )
+                        isSnackBarMessageErrorApiOpen = true
                     }
                 }
             }

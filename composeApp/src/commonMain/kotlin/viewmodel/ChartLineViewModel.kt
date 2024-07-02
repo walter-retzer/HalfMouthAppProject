@@ -3,12 +3,14 @@ package viewmodel
 import data.FeedsThingSpeak
 import data.ThingSpeakResponse
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import dev.tmapps.konnection.Konnection
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import network.ApiService
 import network.ResultNetwork
+import util.ConstantsApp
 import util.ConstantsApp.Companion.ERROR_API_CHART_LINE
 import util.ConstantsApp.Companion.ERROR_CHART_LINE
 import util.formattedAsTimeToChart
@@ -19,9 +21,16 @@ class ChartLineViewModel : ViewModel() {
     private val results = "5"
     private val _uiState = MutableStateFlow<ChartLineViewState>(ChartLineViewState.Dashboard)
     val uiState: StateFlow<ChartLineViewState> = _uiState.asStateFlow()
+    private val konnection = Konnection.instance
+    private val hasNetworkConnection = konnection.isConnected()
+
 
     fun fetchThingSpeakChannelField(fieldId: String) {
         _uiState.value = ChartLineViewState.Loading
+        if (!hasNetworkConnection){
+            _uiState.value = ChartLineViewState.ErrorNetworkConnection(ConstantsApp.ERROR_CONNECTION_MESSAGE)
+            return
+        }
         viewModelScope.launch {
             val responseApi = service.getThingSpeakChannelFeed(fieldId = fieldId, results = results)
             val thingSpeakResponse = handleResponseApi(responseApi)
@@ -88,6 +97,8 @@ sealed interface ChartLineViewState {
     data object Dashboard : ChartLineViewState
 
     data class Success(val listOfValues:  List<Double>, val listOfDate: List<String>) : ChartLineViewState
+
+    data class ErrorNetworkConnection(val message: String) : ChartLineViewState
 
     data class Error(val message: String) : ChartLineViewState
 
