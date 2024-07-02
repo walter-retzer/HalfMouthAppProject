@@ -22,5 +22,6 @@ class ConstantsApp {
             val MESSAGE_ERROR_DISCOUNT = "Não foi possível gerar o cupom de desconto com o QR Code apresentado"
             val ERROR_CHART_LINE = "Não foi possível exibir os dados do gráfico, por favor, tente mais tarde."
             val ERROR_API_CHART_LINE = "Não foi possível acessar os dados no ThingSpeak, por favor, tente mais tarde."
+            val ERROR_CONNECTION_MESSAGE = "Seu dispositivo está sem conexão com a internet."
         }
 }
