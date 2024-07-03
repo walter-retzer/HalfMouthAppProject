@@ -15,6 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import components.AppBottomNavigationBar
+import database.TicketDao
 import navigation.ArgumentsKey.FIELD_ID_KEY
 import navigation.ArgumentsKey.FIELD_ID_NAME
 import navigation.NavAnimations.popEnterRightAnimation
@@ -35,6 +36,7 @@ import screens.discounts.DiscountsScreen
 import screens.production.ProductionScreen
 import screens.profile.ProfileScreen
 import screens.splash.SplashScreen
+import screens.tickets.TicketScreen
 
 
 @Composable
@@ -42,6 +44,7 @@ import screens.splash.SplashScreen
 fun NavHostMain(
     darkTheme: Boolean,
     dynamicColor: Boolean,
+    ticketDao: TicketDao,
     navController: NavHostController = rememberNavController()
 ) {
     ScreenTheme(
@@ -57,7 +60,7 @@ fun NavHostMain(
                 popEnterTransition = popEnterRightAnimation,
                 popExitTransition = popExitRightAnimation
             ) {
-                loginNavGraph(navController)
+                loginNavGraph(navController, ticketDao)
             }
         }
     }
@@ -66,6 +69,7 @@ fun NavHostMain(
 
 private fun NavGraphBuilder.loginNavGraph(
     navController: NavHostController,
+    ticketDao: TicketDao,
 ) {
     navigation(
         route = AppGraphNav.LoginGraph.name,
@@ -110,11 +114,12 @@ private fun NavGraphBuilder.loginNavGraph(
                 }
             )
         }
-        homeNavGraph()
+        homeNavGraph(ticketDao)
     }
 }
 
 private fun NavGraphBuilder.homeNavGraph(
+    ticketDao: TicketDao
 ) {
     composable(
         route = AppGraphNav.HomeGraph.name,
@@ -188,11 +193,12 @@ private fun NavGraphBuilder.homeNavGraph(
                 composable(
                     route = AppNavigation.ContactRoute.name,
                 ) {
-                    ContactInfoScreen(
-                        onNavigateToProfile = {
-                            navController.navigate(AppNavigation.ProfileRoute.name)
-                        }
-                    )
+//                    ContactInfoScreen(
+//                        onNavigateToProfile = {
+//                            navController.navigate(AppNavigation.ProfileRoute.name)
+//                        }
+//                    )
+                    TicketScreen(ticketDao)
                 }
 
                 composable(
