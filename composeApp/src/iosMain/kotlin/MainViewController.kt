@@ -1,12 +1,16 @@
+import androidx.compose.runtime.remember
 import androidx.compose.ui.window.ComposeUIViewController
+import database.getTicketDataBase
 import navigation.NavHostMain
-import platform.UIKit.UIScreen
-import platform.UIKit.UIUserInterfaceStyle
 
 
 fun MainViewController() = ComposeUIViewController {
+
+    val ticketDao = remember { getTicketDataBase().ticketDao() }
+
     NavHostMain(
         darkTheme = true,
         dynamicColor = false,
+        ticketDao = ticketDao
     )
 }
