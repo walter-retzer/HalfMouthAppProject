@@ -6,6 +6,8 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.googleServices)
     alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
 }
 
 kotlin {
@@ -57,6 +59,8 @@ kotlin {
             implementation(libs.qr.kit)
             implementation(libs.chart)
             implementation(libs.konnection)
+            implementation(libs.room.runtime)
+            implementation(libs.sqlite.bundled)
         }
 
         iosMain.dependencies {
@@ -99,8 +103,13 @@ android {
     }
 }
 
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
 dependencies {
     commonMainApi(libs.mvvm.compose) // api mvvm-core, getViewModel for Compose Multiplatform
     commonMainApi(libs.moko.mvvm.flow.compose) // api mvvm-flow, binding extensions for Compose Multiplatform
     commonMainApi(libs.moko.mvvm.livedata.compose) // api mvvm-livedata, binding extensions for Compose Multiplatform
+    ksp(libs.room.compiler)
 }
