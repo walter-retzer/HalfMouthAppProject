@@ -5,9 +5,6 @@ import platform.UIKit.UIUserInterfaceStyle
 
 
 fun MainViewController() = ComposeUIViewController {
-    val isDarkTheme =
-        UIScreen.mainScreen.traitCollection.userInterfaceStyle ==
-                UIUserInterfaceStyle.UIUserInterfaceStyleDark
     NavHostMain(
         darkTheme = true,
         dynamicColor = false,
