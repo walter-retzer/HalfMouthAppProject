@@ -27,6 +27,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import components.MenuToolbar
 import components.DrawerMenuNavigation
+import database.TicketDao
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.address
 import halfmouthappproject.composeapp.generated.resources.icon_email
@@ -60,9 +62,13 @@ import util.OpenWhatsAppChat
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ContactInfoScreen(onNavigateToProfile:() -> Unit) {
-    val scrollBehavior =
-        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+fun ContactInfoScreen(
+    ticketDao: TicketDao,
+    onNavigateToProfile:() -> Unit,
+    onNavigateFromDrawerMenu: (route: String) -> Unit
+) {
+    val listOfTickets by ticketDao.getAllTickets().collectAsState(initial = emptyList())
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val snackBarHostState = remember { SnackbarHostState() }
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -75,7 +81,10 @@ fun ContactInfoScreen(onNavigateToProfile:() -> Unit) {
             DrawerMenuNavigation(
                 scope = scope,
                 drawerState = drawerState,
-                onNavigateToDrawerMenu = { },
+                tickets = listOfTickets.size,
+                onNavigateFromDrawerMenu = { route->
+                    onNavigateFromDrawerMenu(route)
+                }
             )
         },
         drawerState = drawerState
