@@ -5,9 +5,11 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Ticket(
-    val date: String,
-    val discount: String,
-    val dateTicketGenerated: String,
-    val timeTicketGenerated: String,
+    val expirationDate: String,
+    val discountValue: String,
+    val discountName: String,
+    val url: String,
+    val dateTicketCreated: String,
+    val timeTicketCreated: String,
     @PrimaryKey(autoGenerate = true) val id: Int = 0
 )

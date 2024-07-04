@@ -2,33 +2,45 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "aee2d005028d6974e4aa22fb2275fabc",
+    "identityHash": "f3f046f1a944fde3062fcbb967d48b00",
     "entities": [
       {
         "tableName": "Ticket",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`date` TEXT NOT NULL, `discount` TEXT NOT NULL, `dateTicketGenerated` TEXT NOT NULL, `timeTicketGenerated` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`expirationDate` TEXT NOT NULL, `discountValue` TEXT NOT NULL, `discountName` TEXT NOT NULL, `url` TEXT NOT NULL, `dateTicketCreated` TEXT NOT NULL, `timeTicketCreated` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
           {
-            "fieldPath": "date",
-            "columnName": "date",
+            "fieldPath": "expirationDate",
+            "columnName": "expirationDate",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "discount",
-            "columnName": "discount",
+            "fieldPath": "discountValue",
+            "columnName": "discountValue",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "dateTicketGenerated",
-            "columnName": "dateTicketGenerated",
+            "fieldPath": "discountName",
+            "columnName": "discountName",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "timeTicketGenerated",
-            "columnName": "timeTicketGenerated",
+            "fieldPath": "url",
+            "columnName": "url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dateTicketCreated",
+            "columnName": "dateTicketCreated",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timeTicketCreated",
+            "columnName": "timeTicketCreated",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -49,7 +61,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'aee2d005028d6974e4aa22fb2275fabc')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f3f046f1a944fde3062fcbb967d48b00')"
     ]
   }
 }
