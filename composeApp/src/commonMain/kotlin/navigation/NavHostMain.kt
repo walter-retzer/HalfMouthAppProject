@@ -173,6 +173,7 @@ private fun NavGraphBuilder.homeNavGraph(
                     route = AppNavigation.DiscountsRoute.name,
                 ) {
                     DiscountsScreen(
+                        ticketDao = ticketDao,
                         onNavigateToDrawerMenu = { },
                         onNavigateBack = {
                             navController.navigateUp()
