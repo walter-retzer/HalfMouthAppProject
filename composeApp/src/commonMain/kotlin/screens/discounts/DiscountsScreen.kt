@@ -88,13 +88,14 @@ import viewmodel.DiscountsViewState
 @Composable
 fun DiscountsScreen(
     ticketDao: TicketDao,
-    onNavigateToDrawerMenu: (route: String) -> Unit,
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
+    onNavigateFromDrawerMenu: (route: String) -> Unit
 ) {
     val viewModel = getViewModel(
         key = "discounts-screen",
         factory = viewModelFactory { DiscountsViewModel(ticketDao) }
     )
+    val listOfTickets by ticketDao.getAllTickets().collectAsState(initial = emptyList())
     val uiState by viewModel.uiState.collectAsState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val snackBarHostState = remember { SnackbarHostState() }
@@ -113,8 +114,9 @@ fun DiscountsScreen(
             DrawerMenuNavigation(
                 scope = scope,
                 drawerState = drawerState,
-                onNavigateToDrawerMenu = { route->
-                    onNavigateToDrawerMenu(route)
+                tickets = listOfTickets.size,
+                onNavigateFromDrawerMenu = { route->
+                    onNavigateFromDrawerMenu(route)
                 }
             )
         },
