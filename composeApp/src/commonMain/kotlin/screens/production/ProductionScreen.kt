@@ -41,6 +41,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import components.DrawerMenuNavigation
 import components.MenuToolbar
 import components.MyAppCircularProgressIndicator
+import database.TicketDao
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import halfmouthappproject.composeapp.generated.resources.Res
@@ -66,8 +67,10 @@ import viewmodel.ProductionViewState
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
 @Composable
 fun ProductionScreen(
+    ticketDao: TicketDao,
     onNavigateToProfile: () -> Unit,
-    onNavigateToChartLine: (fieldId: String, fieldName: String) -> Unit
+    onNavigateToChartLine: (fieldId: String, fieldName: String) -> Unit,
+    onNavigateToDrawerMenu: (route: String) -> Unit
 ) {
     val viewModel = getViewModel(
         key = "production-screen",
@@ -75,6 +78,7 @@ fun ProductionScreen(
             ProductionViewModel()
         }
     )
+    val listOfTickets by ticketDao.getAllTickets().collectAsState(initial = emptyList())
     val uiState by viewModel.uiState.collectAsState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val snackBarHostState = remember { SnackbarHostState() }
@@ -89,7 +93,10 @@ fun ProductionScreen(
             DrawerMenuNavigation(
                 scope = scope,
                 drawerState = drawerState,
-                onNavigateToDrawerMenu = { },
+                tickets = listOfTickets.size,
+                onNavigateFromDrawerMenu = { route->
+                    onNavigateToDrawerMenu(route)
+                }
             )
         },
         drawerState = drawerState
