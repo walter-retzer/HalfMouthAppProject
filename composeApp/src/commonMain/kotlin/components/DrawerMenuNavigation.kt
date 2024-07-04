@@ -24,7 +24,8 @@ import kotlinx.coroutines.launch
 fun DrawerMenuNavigation(
     scope: CoroutineScope,
     drawerState: DrawerState,
-    onNavigateToDrawerMenu: (route: String) -> Unit,
+    tickets: Int,
+    onNavigateFromDrawerMenu: (route: String) -> Unit
 ) {
     var selectedItemIndex by rememberSaveable { mutableStateOf(0) }
 
@@ -39,7 +40,7 @@ fun DrawerMenuNavigation(
                 },
                 selected = index == selectedItemIndex,
                 onClick = {
-                    onNavigateToDrawerMenu(item.route)
+                    onNavigateFromDrawerMenu(item.route)
                     selectedItemIndex = index
                     scope.launch {
                         drawerState.close()
@@ -54,8 +55,8 @@ fun DrawerMenuNavigation(
                     )
                 },
                 badge = {
-                    item.badgeCount?.let {
-                        Text(text = item.badgeCount.toString())
+                    if (item.isBadgeCountActivated) {
+                        Text(text = tickets.toString())
                     }
                 },
                 modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)

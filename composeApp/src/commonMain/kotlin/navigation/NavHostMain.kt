@@ -147,7 +147,8 @@ private fun NavGraphBuilder.homeNavGraph(
             ) {
                 composable(route = AppNavigation.HomeRoute.name) {
                     HomeScreen(
-                        onNavigateToDrawerMenu = { route->
+                        ticketDao = ticketDao,
+                        onNavigateFromDrawerMenu = { route->
                             navController.navigate(route)
                         },
                         onNavigateToProfile = {
@@ -160,6 +161,7 @@ private fun NavGraphBuilder.homeNavGraph(
                     route = AppNavigation.ProductionRoute.name,
                 ) {
                     ProductionScreen(
+                        ticketDao = ticketDao,
                         onNavigateToProfile = {
                             navController.navigate(AppNavigation.ProfileRoute.name)
                         },
@@ -167,7 +169,10 @@ private fun NavGraphBuilder.homeNavGraph(
                             navController.navigate("${AppNavigation.ChartLineRoute.name}/${fieldId}/${fieldName}") {
                                 launchSingleTop = true
                             }
-                        }
+                        },
+                        onNavigateFromDrawerMenu = { route->
+                            navController.navigate(route)
+                        },
                     )
                 }
 
@@ -176,7 +181,7 @@ private fun NavGraphBuilder.homeNavGraph(
                 ) {
                     DiscountsScreen(
                         ticketDao = ticketDao,
-                        onNavigateToDrawerMenu = { route ->
+                        onNavigateFromDrawerMenu = { route ->
                             navController.navigate(route)
                         },
                         onNavigateBack = {
@@ -199,9 +204,13 @@ private fun NavGraphBuilder.homeNavGraph(
                     route = AppNavigation.ContactRoute.name,
                 ) {
                     ContactInfoScreen(
+                        ticketDao = ticketDao,
                         onNavigateToProfile = {
                             navController.navigate(AppNavigation.ProfileRoute.name)
-                        }
+                        },
+                        onNavigateFromDrawerMenu = { route->
+                            navController.navigate(route)
+                        },
                     )
                 }
 
@@ -224,11 +233,15 @@ private fun NavGraphBuilder.homeNavGraph(
                     val fieldName = arguments.getString(FIELD_ID_NAME)
 
                     ChartLineScreen(
+                        ticketDao = ticketDao,
+                        fieldId = fieldId.toString(),
+                        fieldName = fieldName.toString(),
                         onNavigateToProduction = {
                             navController.navigate(AppNavigation.ProductionRoute.name)
                         },
-                        fieldId = fieldId.toString(),
-                        fieldName = fieldName.toString(),
+                        onNavigateFromDrawerMenu = { route->
+                            navController.navigate(route)
+                        },
                     )
                 }
             }
