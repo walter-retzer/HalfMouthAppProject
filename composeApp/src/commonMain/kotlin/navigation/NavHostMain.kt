@@ -147,7 +147,9 @@ private fun NavGraphBuilder.homeNavGraph(
             ) {
                 composable(route = AppNavigation.HomeRoute.name) {
                     HomeScreen(
-                        onNavigateToDrawerMenu = { },
+                        onNavigateToDrawerMenu = { route->
+                            navController.navigate(route)
+                        },
                         onNavigateToProfile = {
                             navController.navigate(AppNavigation.ProfileRoute.name)
                         }
@@ -174,7 +176,9 @@ private fun NavGraphBuilder.homeNavGraph(
                 ) {
                     DiscountsScreen(
                         ticketDao = ticketDao,
-                        onNavigateToDrawerMenu = { },
+                        onNavigateToDrawerMenu = { route ->
+                            navController.navigate(route)
+                        },
                         onNavigateBack = {
                             navController.navigateUp()
                         }
@@ -194,12 +198,21 @@ private fun NavGraphBuilder.homeNavGraph(
                 composable(
                     route = AppNavigation.ContactRoute.name,
                 ) {
-//                    ContactInfoScreen(
-//                        onNavigateToProfile = {
-//                            navController.navigate(AppNavigation.ProfileRoute.name)
-//                        }
-//                    )
-                    TicketScreen(ticketDao)
+                    ContactInfoScreen(
+                        onNavigateToProfile = {
+                            navController.navigate(AppNavigation.ProfileRoute.name)
+                        }
+                    )
+                }
+
+                composable(
+                    route = AppNavigation.TicketRoute.name,
+                ) {
+                    TicketScreen(
+                        ticketDao = ticketDao,
+                        onNavigateBack = { navController.navigateUp() },
+                        onNavigateClose = { navController.navigate(AppNavigation.HomeRoute.name) }
+                    )
                 }
 
                 composable(
