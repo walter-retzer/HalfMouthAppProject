@@ -24,6 +24,7 @@ class ConstantsApp {
             val ERROR_API_CHART_LINE = "Não foi possível acessar os dados no ThingSpeak, por favor, tente mais tarde."
             val ERROR_CONNECTION_MESSAGE = "Seu dispositivo está sem conexão com a internet."
             val TICKET_SUCCESS_INSERT = "Seu cupom de desconto foi adicionado com sucesso"
+            val TICKET_EMPTY_LIST = "Não há cupons de descontos salvos em sua lista"
             val TICKET_ERROR_INSERT = "Erro ao adicionar o cupom de desconto"
             val TICKET_IN_USE = "O ticket de desconto já foi adicionado com sucesso em sua lista de cupons"
             val DEFAULT_DATE = "##/##/####"
