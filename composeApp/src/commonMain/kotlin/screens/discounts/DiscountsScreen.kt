@@ -88,7 +88,7 @@ import viewmodel.DiscountsViewState
 @Composable
 fun DiscountsScreen(
     ticketDao: TicketDao,
-    onNavigateToDrawerMenu: () -> Unit,
+    onNavigateToDrawerMenu: (route: String) -> Unit,
     onNavigateBack: () -> Unit
 ) {
     val viewModel = getViewModel(
@@ -113,7 +113,9 @@ fun DiscountsScreen(
             DrawerMenuNavigation(
                 scope = scope,
                 drawerState = drawerState,
-                onNavigateToDrawerMenu = onNavigateToDrawerMenu,
+                onNavigateToDrawerMenu = { route->
+                    onNavigateToDrawerMenu(route)
+                }
             )
         },
         drawerState = drawerState
