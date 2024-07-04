@@ -61,6 +61,7 @@ import data.Ingredients
 import data.UserPreferences
 import data.beerTypeList
 import data.listOfIngredients
+import database.TicketDao
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import halfmouthappproject.composeapp.generated.resources.Res
@@ -80,16 +81,17 @@ import viewmodel.HomeViewModel
 @Composable
 @Preview
 fun HomeScreen(
-    onNavigateToDrawerMenu: (route: String) -> Unit,
+    ticketDao: TicketDao,
     onNavigateToProfile: () -> Unit,
+    onNavigateFromDrawerMenu: (route: String) -> Unit
 ) {
     val viewModel = getViewModel(
         key = "home-screen",
         factory = viewModelFactory { HomeViewModel() }
     )
     val messageNotification by viewModel.notificationMessage.collectAsState()
-    val scrollBehavior =
-        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+    val listOfTickets by ticketDao.getAllTickets().collectAsState(initial = emptyList())
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val snackBarHostState = remember { SnackbarHostState() }
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -103,7 +105,10 @@ fun HomeScreen(
             DrawerMenuNavigation(
                 scope = scope,
                 drawerState = drawerState,
-                onNavigateToDrawerMenu = onNavigateToDrawerMenu,
+                tickets = listOfTickets.size,
+                onNavigateFromDrawerMenu = { route->
+                    onNavigateFromDrawerMenu(route)
+                }
             )
         },
         drawerState = drawerState
