@@ -80,7 +80,7 @@ import viewmodel.HomeViewModel
 @Composable
 @Preview
 fun HomeScreen(
-    onNavigateToDrawerMenu: () -> Unit,
+    onNavigateToDrawerMenu: (route: String) -> Unit,
     onNavigateToProfile: () -> Unit,
 ) {
     val viewModel = getViewModel(
