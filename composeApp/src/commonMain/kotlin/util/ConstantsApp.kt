@@ -23,5 +23,7 @@ class ConstantsApp {
             val ERROR_CHART_LINE = "Não foi possível exibir os dados do gráfico, por favor, tente mais tarde."
             val ERROR_API_CHART_LINE = "Não foi possível acessar os dados no ThingSpeak, por favor, tente mais tarde."
             val ERROR_CONNECTION_MESSAGE = "Seu dispositivo está sem conexão com a internet."
+            val TICKET_SUCCESS_INSERT = "Seu cupom de desconto foi adicionado com sucesso"
+            val TICKET_ERROR_INSERT = "Erro ao adicionar o cupom de desconto"
         }
 }
