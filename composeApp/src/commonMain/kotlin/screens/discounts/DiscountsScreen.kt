@@ -67,7 +67,6 @@ import halfmouthappproject.composeapp.generated.resources.icon_qr_code
 import halfmouthappproject.composeapp.generated.resources.icon_qr_code_vector
 import halfmouthappproject.composeapp.generated.resources.icon_thumbs_down
 import halfmouthappproject.composeapp.generated.resources.logohalfmouth
-import halfmouthappproject.composeapp.generated.resources.qr_code_big
 import halfmouthappproject.composeapp.generated.resources.ticket_qr_code
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
