@@ -14,9 +14,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
-import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
@@ -130,9 +128,8 @@ fun ProfileToolbar(
     title: String,
     onNavigationIconBack: () -> Unit,
     onNavigationIconClose: () -> Unit,
-    scrollBehavior:  TopAppBarScrollBehavior? = null,
-
-    ) {
+    scrollBehavior: TopAppBarScrollBehavior? = null,
+) {
     LargeTopAppBar(
         colors = TopAppBarDefaults.largeTopAppBarColors(
             containerColor = color,
@@ -157,5 +154,40 @@ fun ProfileToolbar(
             }
         },
         scrollBehavior = scrollBehavior
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TicketsToolbar(
+    color: Color = Color.Black,
+    titleColor: Color = primaryDark,
+    title: String,
+    onNavigationIconBack: () -> Unit,
+    onNavigationIconClose: () -> Unit,
+) {
+    CenterAlignedTopAppBar(
+        colors = TopAppBarDefaults.largeTopAppBarColors(
+            containerColor = color,
+            scrolledContainerColor = color,
+            titleContentColor = titleColor,
+        ),
+        title = { Text(title) },
+        navigationIcon = {
+            IconButton(onClick = { onNavigationIconBack() }) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Localized description"
+                )
+            }
+        },
+        actions = {
+            IconButton(onClick = { onNavigationIconClose() }) {
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = "Localized description"
+                )
+            }
+        }
     )
 }
