@@ -36,6 +36,7 @@ import com.aay.compose.lineChart.model.LineType
 import components.DrawerMenuNavigation
 import components.MyAppCircularProgressIndicator
 import components.SimpleToolbar
+import database.TicketDao
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import kotlinx.coroutines.launch
@@ -48,17 +49,19 @@ import viewmodel.ChartLineViewState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChartLineScreen(
-    onNavigateToProduction: () -> Unit,
+    ticketDao: TicketDao,
     fieldId: String,
-    fieldName: String
+    fieldName: String,
+    onNavigateToProduction: () -> Unit,
+    onNavigateFromDrawerMenu: (route: String) -> Unit
 ) {
-
     val viewModel = getViewModel(
         key = "chart-line-screen",
         factory = viewModelFactory {
             ChartLineViewModel()
         }
     )
+    val listOfTickets by ticketDao.getAllTickets().collectAsState(initial = emptyList())
     val uiState by viewModel.uiState.collectAsState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val snackBarHostState = remember { SnackbarHostState() }
@@ -73,7 +76,10 @@ fun ChartLineScreen(
             DrawerMenuNavigation(
                 scope = scope,
                 drawerState = drawerState,
-                onNavigateToDrawerMenu = { },
+                tickets = listOfTickets.size,
+                onNavigateFromDrawerMenu = { route->
+                    onNavigateFromDrawerMenu(route)
+                }
             )
         },
         drawerState = drawerState
