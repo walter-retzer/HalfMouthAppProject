@@ -12,7 +12,7 @@ import util.ConstantsApp
 class HomeViewModel : ViewModel() {
 
     private val firebase = Firebase.database
-    private val _notificationMessage = MutableStateFlow(ConstantsApp.MESSAGE_DEFAULT_NOTIFICATION)
+    private val _notificationMessage = MutableStateFlow(ConstantsApp.DEFAULT_NOTIFICATION)
     val notificationMessage = _notificationMessage.asStateFlow()
 
     init {
@@ -24,7 +24,7 @@ class HomeViewModel : ViewModel() {
             try {
                 val notification = firebase.reference("halfmouth").valueEvents.first()
                 val message = notification.child("information").child("message").value
-                    ?: ConstantsApp.MESSAGE_DEFAULT_NOTIFICATION
+                    ?: ConstantsApp.DEFAULT_NOTIFICATION
                 _notificationMessage.value = message as String
             } catch (e: Exception) {
                 println(" Errror $e")

@@ -104,7 +104,7 @@ fun TicketScreen(
                     ) {
                         val shape = RoundedCornerShape(10.dp)
                         Text(
-                            text = ticket.discount,
+                            text = ticket.discountValue,
                             modifier = Modifier
                                 .padding(top = 12.dp, start = 20.dp)
                                 .border(1.dp, onBackgroundDark, shape)
@@ -121,7 +121,7 @@ fun TicketScreen(
                         )
 
                         Text(
-                            text = "Válido até ${ticket.date}",
+                            text = "Válido até ${ticket.expirationDate}",
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
@@ -135,7 +135,7 @@ fun TicketScreen(
                         )
 
                         Text(
-                            text = "Cupom de desconto gerado em ${ticket.dateTicketGenerated} às ${ticket.timeTicketGenerated}hrs",
+                            text = "Cupom de desconto gerado em ${ticket.dateTicketCreated} às ${ticket.timeTicketCreated}hrs",
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .wrapContentHeight()
