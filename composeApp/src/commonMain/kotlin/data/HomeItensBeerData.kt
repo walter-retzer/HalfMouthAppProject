@@ -40,7 +40,7 @@ data class NavigationMenuDrawerItem(
     val route: String,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
-    val badgeCount: Int? = null
+    val isBadgeCountActivated: Boolean = false
 )
 
 @OptIn(ExperimentalResourceApi::class)
@@ -103,7 +103,7 @@ val items = listOf(
         route = AppNavigation.TicketRoute.name,
         selectedIcon = Icons.Filled.Info,
         unselectedIcon = Icons.Outlined.Info,
-        badgeCount = 45
+        isBadgeCountActivated = true
     ),
     NavigationMenuDrawerItem(
         title = "Configurações",
