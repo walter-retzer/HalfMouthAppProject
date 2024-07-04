@@ -17,9 +17,13 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import util.ConstantsApp
+import util.ConstantsApp.Companion.DEFAULT_DATE
+import util.ConstantsApp.Companion.DEFAULT_DISCOUNT
+import util.ConstantsApp.Companion.DEFAULT_NAME
+import util.ConstantsApp.Companion.DEFAULT_NOTIFICATION
 import util.ConstantsApp.Companion.MESSAGE_ERROR_DISCOUNT
 import util.ConstantsApp.Companion.TICKET_ERROR_INSERT
+import util.ConstantsApp.Companion.TICKET_IN_USE
 
 
 class DiscountsViewModel(private val ticketDao: TicketDao) : ViewModel() {
@@ -30,6 +34,8 @@ class DiscountsViewModel(private val ticketDao: TicketDao) : ViewModel() {
     private var urlDiscount: String = ""
     private var discountMessage: String = ""
     private var expirationDate: String = ""
+    private var discountName: String = ""
+
 
     init {
         getUrlOnFirebaseDatabase()
@@ -38,20 +44,16 @@ class DiscountsViewModel(private val ticketDao: TicketDao) : ViewModel() {
     private fun getUrlOnFirebaseDatabase() {
         viewModelScope.launch {
             try {
-                val notification = firebase.reference("halfmouth").valueEvents.first()
-
-                val message = notification.child("information").child("url").value
-                    ?: ConstantsApp.MESSAGE_DEFAULT_NOTIFICATION
-
-                val discount = notification.child("information").child("discount").value
-                    ?: ConstantsApp.MESSAGE_DEFAULT_DISCOUNT
-
-                val expiration = notification.child("information").child("expirationDate").value
-                    ?: "##/##/####"
+                val notification = firebase.reference("halfmouth").valueEvents.first().child("information")
+                val message = notification.child("url").value ?: DEFAULT_NOTIFICATION
+                val discount = notification.child("discount").value ?: DEFAULT_DISCOUNT
+                val expiration = notification.child("expirationDate").value ?: DEFAULT_DATE
+                val name = notification.child("discountName").value ?: DEFAULT_NAME
 
                 urlDiscount = message as String
                 discountMessage = discount as String
                 expirationDate = expiration as String
+                discountName = name as String
             } catch (e: Exception) {
                 println(" Errror $e")
             }
@@ -59,32 +61,50 @@ class DiscountsViewModel(private val ticketDao: TicketDao) : ViewModel() {
     }
 
     fun getSuccess(qrCodeURL: String) {
+        var isTicketAlreadyInsert = false
         _uiState.value = DiscountsViewState.Loading
-        val now: Instant = Clock.System.now()
-        val today: LocalDate = now.toLocalDateTime(TimeZone.currentSystemDefault()).date
-        val expiration = "${today.dayOfMonth}/${today.monthNumber}/${today.year}"
-        val expirationMessage = "Parabéns, o seu cupom de desconto é valido até o dia $expiration"
-        val hour: LocalTime = now.toLocalDateTime(TimeZone.currentSystemDefault()).time
-        val timeItWasCreated = "${hour.hour}:${hour.minute}:${hour.second}"
 
-        val ticket = Ticket(
-            date = expirationDate,
-            discount = discountMessage,
-            timeTicketGenerated = timeItWasCreated,
-            dateTicketGenerated = expiration,
-        )
         viewModelScope.launch {
-            delay(2000L)
-            if (urlDiscount == qrCodeURL){
-                try{
-                    ticketDao.upsert(ticket)
-                    _uiState.value = DiscountsViewState.Success(discountMessage, expirationMessage )
-                } catch(e: Exception){
-                    _uiState.value = DiscountsViewState.Error(TICKET_ERROR_INSERT)
-                    println(e)
+            try {
+                val listOfTickets = ticketDao.getListOfTickets()
+                listOfTickets.forEach {
+                    isTicketAlreadyInsert = it.url.contains(qrCodeURL)
                 }
+
+                if (isTicketAlreadyInsert) {
+                    delay(2000L)
+                    _uiState.value = DiscountsViewState.Error(TICKET_IN_USE)
+                    return@launch
+                }
+
+                val now: Instant = Clock.System.now()
+                val today: LocalDate = now.toLocalDateTime(TimeZone.currentSystemDefault()).date
+                val expiration = "${today.dayOfMonth}/${today.monthNumber}/${today.year}"
+                val expirationMessage = "Parabéns, o seu cupom de desconto é valido até o dia $expiration"
+                val hour: LocalTime = now.toLocalDateTime(TimeZone.currentSystemDefault()).time
+                val timeItWasCreated = "${hour.hour}:${hour.minute}:${hour.second}"
+
+                val ticket = Ticket(
+                    expirationDate = expirationDate,
+                    discountValue = discountMessage,
+                    discountName = discountName,
+                    url = urlDiscount,
+                    timeTicketCreated = timeItWasCreated,
+                    dateTicketCreated = expiration,
+                )
+
+                delay(2000L)
+
+                if (urlDiscount == qrCodeURL){
+                    ticketDao.upsert(ticket)
+                    _uiState.value = DiscountsViewState.Success(discountMessage, expirationMessage)
+                }
+                else _uiState.value = DiscountsViewState.Error(MESSAGE_ERROR_DISCOUNT)
+
+            } catch (e: Exception) {
+                _uiState.value = DiscountsViewState.Error(TICKET_ERROR_INSERT)
+                println(e)
             }
-            else _uiState.value = DiscountsViewState.Error(MESSAGE_ERROR_DISCOUNT)
         }
     }
 
