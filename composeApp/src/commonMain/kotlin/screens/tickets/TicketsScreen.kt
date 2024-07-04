@@ -24,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,6 +37,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import theme.mainYellowColor
 import theme.onBackgroundDark
+import theme.surfaceBrightDark
 import theme.surfaceVariantDark
 
 @OptIn(ExperimentalResourceApi::class)
@@ -44,16 +46,16 @@ fun TicketScreen(ticketDao: TicketDao){
     val ticket by ticketDao.getAllTickets().collectAsState(initial = emptyList())
     val scope = rememberCoroutineScope()
 
-    LaunchedEffect(true) {
-        val ticketList = listOf(
-            Ticket(date = "11/05/1988", url = "wwwww"),
-            Ticket(date = "12/06/1993", url = "wfwgcgcgcgc"),
-            Ticket(date = "12/08/2093", url = "wwvhvhvhvhhvhvh"),
-        )
-        ticketList.forEach {
-            ticketDao.upsert(it)
-        }
-    }
+//    LaunchedEffect(true) {
+//        val ticketList = listOf(
+//            Ticket(date = "11/05/1988", url = "wwwww"),
+//            Ticket(date = "12/06/1993", url = "wfwgcgcgcgc"),
+//            Ticket(date = "12/08/2093", url = "wwvhvhvhvhhvhvh"),
+//        )
+//        ticketList.forEach {
+//            ticketDao.upsert(it)
+//        }
+//    }
 
     LazyColumn(
         modifier = Modifier
@@ -90,10 +92,11 @@ fun TicketScreen(ticketDao: TicketDao){
                 ) {
                     val shape = RoundedCornerShape(10.dp)
                     Text(
-                        text = "Desconto de 10%",
+                        text = info.discount,
                         modifier = Modifier
                             .padding(top = 12.dp, start = 20.dp)
                             .border(1.dp, onBackgroundDark, shape)
+                            .background(surfaceBrightDark, shape)
                             .padding(start = 4.dp, end = 4.dp)
                             .clickable {
                                 scope.launch {
@@ -106,7 +109,7 @@ fun TicketScreen(ticketDao: TicketDao){
                     )
 
                     Text(
-                        text = "Válido até 11/06/2024",
+                        text = "Válido até ${info.date}",
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
@@ -120,7 +123,7 @@ fun TicketScreen(ticketDao: TicketDao){
                     )
 
                     Text(
-                        text = "Cupom de desconto gerado em 11/05/2024 às 12:32:55hrs",
+                        text = "Cupom de desconto gerado em ${info.dateTicketGenerated} às ${info.timeTicketGenerated}hrs",
                         modifier = Modifier
                             .fillMaxWidth()
                             .wrapContentHeight()
