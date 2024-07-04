@@ -17,6 +17,7 @@ import halfmouthappproject.composeapp.generated.resources.brewingbeer
 import halfmouthappproject.composeapp.generated.resources.leveduras
 import halfmouthappproject.composeapp.generated.resources.lupulo
 import halfmouthappproject.composeapp.generated.resources.malte
+import navigation.AppNavigation
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
@@ -36,6 +37,7 @@ data class BeerType @OptIn(ExperimentalResourceApi::class) constructor(
 
 data class NavigationMenuDrawerItem(
     val title: String,
+    val route: String,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
     val badgeCount: Int? = null
@@ -92,17 +94,20 @@ val beerTypeList = listOf(
 val items = listOf(
     NavigationMenuDrawerItem(
         title = "Menu",
+        route = AppNavigation.HomeRoute.name,
         selectedIcon = Icons.Filled.Home,
         unselectedIcon = Icons.Outlined.Home,
     ),
     NavigationMenuDrawerItem(
-        title = "Informação",
+        title = "Meus Cupons",
+        route = AppNavigation.TicketRoute.name,
         selectedIcon = Icons.Filled.Info,
         unselectedIcon = Icons.Outlined.Info,
         badgeCount = 45
     ),
     NavigationMenuDrawerItem(
         title = "Configurações",
+        route = AppNavigation.ProfileRoute.name,
         selectedIcon = Icons.Filled.Settings,
         unselectedIcon = Icons.Outlined.Settings,
     )
