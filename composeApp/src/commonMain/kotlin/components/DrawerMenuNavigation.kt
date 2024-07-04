@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 fun DrawerMenuNavigation(
     scope: CoroutineScope,
     drawerState: DrawerState,
-    onNavigateToDrawerMenu: () -> Unit,
+    onNavigateToDrawerMenu: (route: String) -> Unit,
 ) {
     var selectedItemIndex by rememberSaveable { mutableStateOf(0) }
 
@@ -39,8 +39,7 @@ fun DrawerMenuNavigation(
                 },
                 selected = index == selectedItemIndex,
                 onClick = {
-                    // navController.navigate(item.route)
-                    onNavigateToDrawerMenu()
+                    onNavigateToDrawerMenu(item.route)
                     selectedItemIndex = index
                     scope.launch {
                         drawerState.close()
