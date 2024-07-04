@@ -1,19 +1,17 @@
 package data
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.ui.graphics.vector.ImageVector
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.agua
 import halfmouthappproject.composeapp.generated.resources.beer_craft_glass
 import halfmouthappproject.composeapp.generated.resources.beer_growler
 import halfmouthappproject.composeapp.generated.resources.beer_mug_ipa
 import halfmouthappproject.composeapp.generated.resources.brewingbeer
+import halfmouthappproject.composeapp.generated.resources.icon_home_menu
+import halfmouthappproject.composeapp.generated.resources.icon_home_on
+import halfmouthappproject.composeapp.generated.resources.icon_settings_menu
+import halfmouthappproject.composeapp.generated.resources.icon_settings_on
+import halfmouthappproject.composeapp.generated.resources.icon_tickets_off
+import halfmouthappproject.composeapp.generated.resources.icon_tickets_on
 import halfmouthappproject.composeapp.generated.resources.leveduras
 import halfmouthappproject.composeapp.generated.resources.lupulo
 import halfmouthappproject.composeapp.generated.resources.malte
@@ -35,11 +33,11 @@ data class BeerType @OptIn(ExperimentalResourceApi::class) constructor(
     val imageId: DrawableResource,
 )
 
-data class NavigationMenuDrawerItem(
+data class NavigationMenuDrawerItem @OptIn(ExperimentalResourceApi::class) constructor(
     val title: String,
     val route: String,
-    val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector,
+    val selectedIcon: DrawableResource,
+    val unselectedIcon: DrawableResource,
     val isBadgeCountActivated: Boolean = false
 )
 
@@ -91,24 +89,25 @@ val beerTypeList = listOf(
     ),
 )
 
+@OptIn(ExperimentalResourceApi::class)
 val items = listOf(
     NavigationMenuDrawerItem(
         title = "Menu",
         route = AppNavigation.HomeRoute.name,
-        selectedIcon = Icons.Filled.Home,
-        unselectedIcon = Icons.Outlined.Home,
+        selectedIcon = Res.drawable.icon_home_on,
+        unselectedIcon = Res.drawable.icon_home_menu,
     ),
     NavigationMenuDrawerItem(
         title = "Meus Cupons",
         route = AppNavigation.TicketRoute.name,
-        selectedIcon = Icons.Filled.Info,
-        unselectedIcon = Icons.Outlined.Info,
+        selectedIcon = Res.drawable.icon_tickets_on,
+        unselectedIcon = Res.drawable.icon_tickets_off,
         isBadgeCountActivated = true
     ),
     NavigationMenuDrawerItem(
         title = "Configurações",
         route = AppNavigation.ProfileRoute.name,
-        selectedIcon = Icons.Filled.Settings,
-        unselectedIcon = Icons.Outlined.Settings,
+        selectedIcon = Res.drawable.icon_settings_on,
+        unselectedIcon = Res.drawable.icon_settings_menu,
     )
 )

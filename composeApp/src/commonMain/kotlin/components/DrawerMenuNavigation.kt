@@ -19,7 +19,10 @@ import androidx.compose.ui.unit.dp
 import data.items
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.vectorResource
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun DrawerMenuNavigation(
     scope: CoroutineScope,
@@ -49,8 +52,8 @@ fun DrawerMenuNavigation(
                 icon = {
                     Icon(
                         imageVector = if (index == selectedItemIndex) {
-                            item.selectedIcon
-                        } else item.unselectedIcon,
+                            vectorResource(item.selectedIcon)
+                        } else vectorResource(item.unselectedIcon),
                         contentDescription = item.title
                     )
                 },
