@@ -64,6 +64,7 @@ import halfmouthappproject.composeapp.generated.resources.icon_bolt_fill_off
 import halfmouthappproject.composeapp.generated.resources.icon_bolt_fill_on
 import halfmouthappproject.composeapp.generated.resources.icon_gallery_send
 import halfmouthappproject.composeapp.generated.resources.icon_qr_code
+import halfmouthappproject.composeapp.generated.resources.icon_qr_code_vector
 import halfmouthappproject.composeapp.generated.resources.icon_thumbs_down
 import halfmouthappproject.composeapp.generated.resources.logohalfmouth
 import halfmouthappproject.composeapp.generated.resources.qr_code_big
@@ -412,13 +413,13 @@ fun DiscountsScreen(
                                                 }
                                         )
 
-                                        val topQrCodeGuideLine = createGuidelineFromTop(0.40f)
+                                        val topQrCodeGuideLine = createGuidelineFromTop(0.41f)
                                         val startQrCodeGuideLine = createGuidelineFromStart(0.20f)
                                         val endQrCodeGuideLine = createGuidelineFromEnd(0.20f)
-                                        val bottomQrCodeGuideLine = createGuidelineFromBottom(0.25f)
+                                        val bottomQrCodeGuideLine = createGuidelineFromBottom(0.24f)
 
                                         Image(
-                                            painter = painterResource(Res.drawable.qr_code_big),
+                                            painter = painterResource(Res.drawable.icon_qr_code_vector),
                                             contentDescription = "qr-code",
                                             contentScale = ContentScale.Crop,
                                             modifier = Modifier
