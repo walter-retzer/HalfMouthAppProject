@@ -54,7 +54,9 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import components.ButtonWithIcon
 import components.DrawerMenuNavigation
+import components.MyAppCircularProgressIndicator
 import components.SimpleToolbar
+import database.TicketDao
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import halfmouthappproject.composeapp.generated.resources.Res
@@ -75,6 +77,8 @@ import theme.mainYellowColor
 import theme.onSurfaceVariantDark
 import theme.surfaceBrightDark
 import theme.surfaceVariantDark
+import util.ConstantsApp.Companion.TICKET_SUCCESS_INSERT
+import util.snackBarOnlyMessage
 import util.snackBarWithActionButton
 import viewmodel.DiscountsViewModel
 import viewmodel.DiscountsViewState
@@ -83,12 +87,13 @@ import viewmodel.DiscountsViewState
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
 @Composable
 fun DiscountsScreen(
+    ticketDao: TicketDao,
     onNavigateToDrawerMenu: () -> Unit,
     onNavigateBack: () -> Unit
 ) {
     val viewModel = getViewModel(
         key = "discounts-screen",
-        factory = viewModelFactory { DiscountsViewModel() }
+        factory = viewModelFactory { DiscountsViewModel(ticketDao) }
     )
     val uiState by viewModel.uiState.collectAsState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
@@ -100,6 +105,7 @@ fun DiscountsScreen(
     var flashlightOn by remember { mutableStateOf(false) }
     var launchGallery by remember { mutableStateOf( false) }
     var isSnackBarDisplaying by remember { mutableStateOf( false) }
+    var isSnackBarSuccessDisplaying by remember { mutableStateOf( false) }
 
 
     ModalNavigationDrawer(
@@ -618,7 +624,7 @@ fun DiscountsScreen(
                                 val endTitleGuideLine = createGuidelineFromEnd(0.15f)
 
                                 Text(
-                                    text = "Parabéns, o seu cupom de desconto é valido até o dia 31/07/2024",
+                                    text = state.expirationMessage,
                                     textAlign = TextAlign.Center,
                                     style = MaterialTheme.typography.titleLarge.copy(
                                         lineBreak = LineBreak.Paragraph
@@ -671,6 +677,24 @@ fun DiscountsScreen(
                                 )
                             }
                         }
+                    }
+
+                    if(!isSnackBarSuccessDisplaying){
+                        snackBarOnlyMessage(
+                            snackBarHostState = snackBarHostState,
+                            coroutineScope = scope,
+                            message = TICKET_SUCCESS_INSERT
+                        )
+                        isSnackBarSuccessDisplaying = true
+                    }
+                }
+
+                is DiscountsViewState.Loading -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        MyAppCircularProgressIndicator()
                     }
                 }
             }

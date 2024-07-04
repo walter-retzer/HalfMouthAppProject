@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "8c7ab60da429bb301e705f322afdae27",
+    "identityHash": "aee2d005028d6974e4aa22fb2275fabc",
     "entities": [
       {
         "tableName": "Ticket",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`date` TEXT NOT NULL, `url` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`date` TEXT NOT NULL, `discount` TEXT NOT NULL, `dateTicketGenerated` TEXT NOT NULL, `timeTicketGenerated` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
           {
             "fieldPath": "date",
@@ -15,8 +15,20 @@
             "notNull": true
           },
           {
-            "fieldPath": "url",
-            "columnName": "url",
+            "fieldPath": "discount",
+            "columnName": "discount",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dateTicketGenerated",
+            "columnName": "dateTicketGenerated",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timeTicketGenerated",
+            "columnName": "timeTicketGenerated",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -37,7 +49,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8c7ab60da429bb301e705f322afdae27')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'aee2d005028d6974e4aa22fb2275fabc')"
     ]
   }
 }
