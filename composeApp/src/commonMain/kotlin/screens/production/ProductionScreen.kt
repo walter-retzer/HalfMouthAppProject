@@ -70,7 +70,7 @@ fun ProductionScreen(
     ticketDao: TicketDao,
     onNavigateToProfile: () -> Unit,
     onNavigateToChartLine: (fieldId: String, fieldName: String) -> Unit,
-    onNavigateToDrawerMenu: (route: String) -> Unit
+    onNavigateFromDrawerMenu: (route: String) -> Unit
 ) {
     val viewModel = getViewModel(
         key = "production-screen",
@@ -95,7 +95,7 @@ fun ProductionScreen(
                 drawerState = drawerState,
                 tickets = listOfTickets.size,
                 onNavigateFromDrawerMenu = { route->
-                    onNavigateToDrawerMenu(route)
+                    onNavigateFromDrawerMenu(route)
                 }
             )
         },
