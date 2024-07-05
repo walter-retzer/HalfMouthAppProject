@@ -11,54 +11,61 @@ import io.ktor.client.request.parameter
 import io.ktor.client.request.url
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpStatusCode
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 
-class ApiServiceImpl(
-    private val client: HttpClient
-) : ApiService {
+class ApiServiceImpl {
 
-    override suspend fun getThingSpeakValues(results: String): ResultNetwork<ThingSpeakResponse> =
+    suspend fun getThingSpeakValues(results: String): ResultNetwork<ThingSpeakResponse> =
         makeRequest {
-            client.get{
+            client.get {
                 url(HttpRoutes.REQUEST_URL)
                 parameter("api_key", "ZL0IH5O2QK5U4NNS")
                 parameter("results", results)
             }
         }
 
-    override suspend fun getThingSpeakChannelFeed(fieldId: String, results: String): ResultNetwork<ThingSpeakResponse> =
+    suspend fun getThingSpeakChannelFeed(
+        fieldId: String,
+        results: String
+    ): ResultNetwork<ThingSpeakResponse> =
         makeRequest {
-            client.get{
+            client.get {
                 url(HttpRoutes.REQUEST_CHANNEL_FEED + "$fieldId.json?")
                 parameter("api_key", "ZL0IH5O2QK5U4NNS")
                 parameter("results", results)
             }
         }
-}
 
 
-private suspend inline fun <reified T> makeRequest(crossinline request: suspend () -> HttpResponse): ResultNetwork<T> {
-    return try {
-        val response: HttpResponse = request()
-        if (response.status == HttpStatusCode.OK) {
-            ResultNetwork.success(response.body())
-        } else {
-            ResultNetwork.failure(Exception("HTTP ${response.status.value}: ${response.status.description}"))
+    suspend inline fun <reified T> makeRequest(crossinline request: suspend () -> HttpResponse): ResultNetwork<T> {
+        return try {
+            val response: HttpResponse = request()
+            if (response.status == HttpStatusCode.OK) {
+                ResultNetwork.success(response.body())
+            } else {
+                ResultNetwork.failure(Exception("HTTP ${response.status.value}: ${response.status.description}"))
+            }
+        } catch (e: RedirectResponseException) {
+            // 3xx - response
+            println("Error: ${e.response.status.description}")
+            ResultNetwork.failure(e)
+        } catch (e: ClientRequestException) {
+            // 4xx - response
+            println("Error: ${e.response.status.description}")
+            ResultNetwork.failure(e)
+        } catch (e: ServerResponseException) {
+            // 5xx - response
+            println("Error: ${e.response.status.description}")
+            ResultNetwork.failure(e)
+        } catch (e: Exception) {
+            println("Error: ${e.printStackTrace()}")
+            ResultNetwork.failure(e)
         }
-    } catch (e: RedirectResponseException) {
-        // 3xx - response
-        println("Error: ${e.response.status.description}")
-        ResultNetwork.failure(e)
-    } catch (e: ClientRequestException) {
-        // 4xx - response
-        println("Error: ${e.response.status.description}")
-        ResultNetwork.failure(e)
-    } catch (e: ServerResponseException) {
-        // 5xx - response
-        println("Error: ${e.response.status.description}")
-        ResultNetwork.failure(e)
-    } catch (e: Exception) {
-        println("Error: ${e.printStackTrace()}")
-        ResultNetwork.failure(e)
+    }
+
+    companion object: KoinComponent{
+        val client: HttpClient by inject()
     }
 }
