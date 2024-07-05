@@ -8,10 +8,10 @@ import io.ktor.http.ContentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-actual class ClientHtt() {
+
+actual class ClientHttp() {
     actual fun build(): HttpClient {
         return HttpClient {
-
             install(Logging) {
                 level = LogLevel.ALL
             }
