@@ -3,6 +3,7 @@ package di
 import android.content.Context
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
+import org.koin.compose.KoinApplication
 import org.koin.core.context.startKoin
 
 actual class KoinInitializer(
@@ -12,7 +13,7 @@ actual class KoinInitializer(
         startKoin {
             androidContext(context)
             androidLogger()
-            modules(appModule, viewModelModule)
+            modules(appModule, viewModelModule, platformModule())
         }
     }
 }
