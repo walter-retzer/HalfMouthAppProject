@@ -1,24 +1,22 @@
 package viewmodel
 
-import data.FeedsThingSpeak
-import data.ThingSpeakResponse
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import data.FeedsThingSpeak
+import data.ThingSpeakResponse
 import dev.tmapps.konnection.Konnection
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import network.ApiService
+import network.ApiServiceImpl
 import network.ResultNetwork
-import util.ConstantsApp
 import util.ConstantsApp.Companion.ERROR_API_CHART_LINE
 import util.ConstantsApp.Companion.ERROR_CHART_LINE
 import util.formattedAsTimeToChart
 
-class ChartLineViewModel : ViewModel() {
+class ChartLineViewModel(private var service: ApiServiceImpl) : ViewModel() {
 
-    private val service = ApiService.create()
     private val results = "5"
     private val _uiState = MutableStateFlow<ChartLineViewState>(ChartLineViewState.Dashboard)
     val uiState: StateFlow<ChartLineViewState> = _uiState.asStateFlow()
