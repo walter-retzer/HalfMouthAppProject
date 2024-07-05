@@ -36,6 +36,9 @@ kotlin {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.android)
+            implementation(libs.koin.android)
+            implementation(libs.koin.androidx.compose)
+
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -61,6 +64,9 @@ kotlin {
             implementation(libs.konnection)
             implementation(libs.room.runtime)
             implementation(libs.sqlite.bundled)
+            api(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.lifecycle.viewmodel)
         }
 
         iosMain.dependencies {
