@@ -2,7 +2,8 @@ package viewmodel
 
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.database.database
-import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
