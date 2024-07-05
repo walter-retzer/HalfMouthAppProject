@@ -6,6 +6,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -26,13 +28,15 @@ import navigation.NavAnimations.slideLeftEnterAnimation
 import navigation.NavAnimations.slideLeftExitAnimation
 import navigation.home.NavItem
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.KoinContext
+import org.koin.compose.currentKoinScope
 import presentation.ScreenTheme
 import screens.account.LoginScreen
 import screens.account.SignInScreen
 import screens.charts.ChartLineScreen
 import screens.contactInfo.ContactInfoScreen
-import screens.home.HomeScreen
 import screens.discounts.DiscountsScreen
+import screens.home.HomeScreen
 import screens.production.ProductionScreen
 import screens.profile.ProfileScreen
 import screens.splash.SplashScreen
@@ -47,20 +51,22 @@ fun NavHostMain(
     ticketDao: TicketDao,
     navController: NavHostController = rememberNavController()
 ) {
-    ScreenTheme(
-        darkTheme = darkTheme,
-        dynamicColor = dynamicColor
-    ) {
-        Surface(modifier = Modifier.fillMaxSize()) {
-            NavHost(
-                navController = navController,
-                startDestination = AppGraphNav.LoginGraph.name,
-                enterTransition = slideLeftEnterAnimation,
-                exitTransition = slideLeftExitAnimation,
-                popEnterTransition = popEnterRightAnimation,
-                popExitTransition = popExitRightAnimation
-            ) {
-                loginNavGraph(navController, ticketDao)
+    KoinContext {
+        ScreenTheme(
+            darkTheme = darkTheme,
+            dynamicColor = dynamicColor
+        ) {
+            Surface(modifier = Modifier.fillMaxSize()) {
+                NavHost(
+                    navController = navController,
+                    startDestination = AppGraphNav.LoginGraph.name,
+                    enterTransition = slideLeftEnterAnimation,
+                    exitTransition = slideLeftExitAnimation,
+                    popEnterTransition = popEnterRightAnimation,
+                    popExitTransition = popExitRightAnimation
+                ) {
+                    loginNavGraph(navController, ticketDao)
+                }
             }
         }
     }
@@ -257,4 +263,13 @@ private fun NavGraphBuilder.homeNavGraph(
 object ArgumentsKey {
     const val FIELD_ID_KEY = "FIELD_ID"
     const val FIELD_ID_NAME = "FIELD_NAME"
+}
+
+
+@Composable
+inline fun <reified T: ViewModel> koinViewModel(): T {
+    val scope = currentKoinScope()
+    return viewModel {
+        scope.get<T>()
+    }
 }
