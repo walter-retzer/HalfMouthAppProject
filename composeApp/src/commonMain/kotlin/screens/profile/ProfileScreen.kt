@@ -47,8 +47,6 @@ import com.russhwolf.settings.get
 import components.LoadingWithLine
 import components.ProfileToolbar
 import data.UserPreferences
-import dev.icerock.moko.mvvm.compose.getViewModel
-import dev.icerock.moko.mvvm.compose.viewModelFactory
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.icon_account
 import halfmouthappproject.composeapp.generated.resources.icon_email
@@ -58,6 +56,7 @@ import halfmouthappproject.composeapp.generated.resources.icon_phone
 import halfmouthappproject.composeapp.generated.resources.splashscreenlogo
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.koinInject
 import util.ConstantsApp
 import util.RestartApp
 import util.formattedAsPhone
@@ -66,18 +65,13 @@ import util.snackBarWithActionButton
 import viewmodel.ProfileViewModel
 import viewmodel.ProfileViewState
 
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
 @Composable
 fun ProfileScreen(
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
+    viewModel: ProfileViewModel = koinInject()
 ) {
-
-    val viewModel = getViewModel(
-        key = "profile-screen",
-        factory = viewModelFactory {
-            ProfileViewModel()
-        }
-    )
     val uiState by viewModel.uiState.collectAsState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val scope = rememberCoroutineScope()
