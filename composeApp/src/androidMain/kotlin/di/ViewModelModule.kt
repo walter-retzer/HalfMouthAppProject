@@ -3,6 +3,7 @@ package di
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 import viewmodel.ChartLineViewModel
+import viewmodel.DiscountsViewModel
 import viewmodel.HomeViewModel
 import viewmodel.LoginUserViewModel
 import viewmodel.ProductionViewModel
@@ -17,4 +18,5 @@ actual val viewModelModule = module{
     viewModelOf(::LoginUserViewModel)
     viewModelOf(::SignInViewModel)
     viewModelOf(::ProductionViewModel)
+    viewModelOf(::DiscountsViewModel)
 }

@@ -57,8 +57,6 @@ import components.DrawerMenuNavigation
 import components.MyAppCircularProgressIndicator
 import components.SimpleToolbar
 import database.TicketDao
-import dev.icerock.moko.mvvm.compose.getViewModel
-import dev.icerock.moko.mvvm.compose.viewModelFactory
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.icon_bolt_fill_off
 import halfmouthappproject.composeapp.generated.resources.icon_bolt_fill_on
@@ -72,6 +70,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
+import org.koin.compose.koinInject
 import qrscanner.QrScanner
 import theme.mainYellowColor
 import theme.onSurfaceVariantDark
@@ -89,12 +88,9 @@ import viewmodel.DiscountsViewState
 fun DiscountsScreen(
     ticketDao: TicketDao,
     onNavigateBack: () -> Unit,
-    onNavigateFromDrawerMenu: (route: String) -> Unit
+    onNavigateFromDrawerMenu: (route: String) -> Unit,
+    viewModel: DiscountsViewModel
 ) {
-    val viewModel = getViewModel(
-        key = "discounts-screen",
-        factory = viewModelFactory { DiscountsViewModel(ticketDao) }
-    )
     val listOfTickets by ticketDao.getAllTickets().collectAsState(initial = emptyList())
     val uiState by viewModel.uiState.collectAsState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())

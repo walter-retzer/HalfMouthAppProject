@@ -30,6 +30,8 @@ import navigation.home.NavItem
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinContext
 import org.koin.compose.currentKoinScope
+import org.koin.compose.koinInject
+import org.koin.core.parameter.parametersOf
 import presentation.ScreenTheme
 import screens.account.LoginScreen
 import screens.account.SignInScreen
@@ -192,7 +194,8 @@ private fun NavGraphBuilder.homeNavGraph(
                         },
                         onNavigateBack = {
                             navController.navigateUp()
-                        }
+                        },
+                        viewModel = koinInject(parameters = { parametersOf(ticketDao) })
                     )
                 }
 
