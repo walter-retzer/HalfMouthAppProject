@@ -4,21 +4,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import data.Feeds
 import data.ThingSpeakResponse
-
 import dev.tmapps.konnection.Konnection
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import network.ApiService
+import network.ApiServiceImpl
 import network.ResultNetwork
 import util.ConstantsApp
 import util.ConstantsApp.Companion.ERROR_CONNECTION_MESSAGE
 
 
-class ProductionViewModel : ViewModel() {
+class ProductionViewModel(private val service: ApiServiceImpl) : ViewModel() {
 
-    private val service = ApiService.create()
     private val results = "2"
     private val _uiState = MutableStateFlow<ProductionViewState>(ProductionViewState.Loading)
     val uiState: StateFlow<ProductionViewState> = _uiState.asStateFlow()
