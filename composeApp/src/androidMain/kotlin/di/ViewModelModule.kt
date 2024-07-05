@@ -5,6 +5,7 @@ import org.koin.dsl.module
 import viewmodel.ChartLineViewModel
 import viewmodel.HomeViewModel
 import viewmodel.LoginUserViewModel
+import viewmodel.ProductionViewModel
 import viewmodel.ProfileViewModel
 import viewmodel.SignInViewModel
 
@@ -15,4 +16,5 @@ actual val viewModelModule = module{
     viewModelOf(::ProfileViewModel)
     viewModelOf(::LoginUserViewModel)
     viewModelOf(::SignInViewModel)
+    viewModelOf(::ProductionViewModel)
 }
