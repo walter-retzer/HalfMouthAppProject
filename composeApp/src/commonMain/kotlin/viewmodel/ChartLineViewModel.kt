@@ -13,6 +13,7 @@ import network.ApiServiceImpl
 import network.ResultNetwork
 import util.ConstantsApp.Companion.ERROR_API_CHART_LINE
 import util.ConstantsApp.Companion.ERROR_CHART_LINE
+import util.ConstantsApp.Companion.ERROR_CONNECTION_MESSAGE
 import util.formattedAsTimeToChart
 
 class ChartLineViewModel(private var service: ApiServiceImpl) : ViewModel() {
@@ -27,7 +28,7 @@ class ChartLineViewModel(private var service: ApiServiceImpl) : ViewModel() {
     fun fetchThingSpeakChannelField(fieldId: String) {
         _uiState.value = ChartLineViewState.Loading
         if (!hasNetworkConnection){
-            _uiState.value = ChartLineViewState.ErrorNetworkConnection(ConstantsApp.ERROR_CONNECTION_MESSAGE)
+            _uiState.value = ChartLineViewState.ErrorNetworkConnection(ERROR_CONNECTION_MESSAGE)
             return
         }
         viewModelScope.launch {
