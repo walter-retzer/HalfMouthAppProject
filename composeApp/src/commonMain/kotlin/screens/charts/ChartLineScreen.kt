@@ -37,14 +37,14 @@ import components.DrawerMenuNavigation
 import components.MyAppCircularProgressIndicator
 import components.SimpleToolbar
 import database.TicketDao
-import dev.icerock.moko.mvvm.compose.getViewModel
-import dev.icerock.moko.mvvm.compose.viewModelFactory
 import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
 import theme.mainYellowColor
 import theme.surfaceVariantDark
 import util.snackBarOnlyMessage
 import viewmodel.ChartLineViewModel
 import viewmodel.ChartLineViewState
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,14 +53,9 @@ fun ChartLineScreen(
     fieldId: String,
     fieldName: String,
     onNavigateToProduction: () -> Unit,
-    onNavigateFromDrawerMenu: (route: String) -> Unit
+    onNavigateFromDrawerMenu: (route: String) -> Unit,
+    viewModel: ChartLineViewModel = koinInject()
 ) {
-    val viewModel = getViewModel(
-        key = "chart-line-screen",
-        factory = viewModelFactory {
-            ChartLineViewModel()
-        }
-    )
     val listOfTickets by ticketDao.getAllTickets().collectAsState(initial = emptyList())
     val uiState by viewModel.uiState.collectAsState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
