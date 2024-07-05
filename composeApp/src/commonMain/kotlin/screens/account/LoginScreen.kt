@@ -49,14 +49,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import components.ProgressButton
-import dev.icerock.moko.mvvm.compose.getViewModel
-import dev.icerock.moko.mvvm.compose.viewModelFactory
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.splashscreenlogo
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.koinInject
 import theme.mainYellowColor
 import util.ConstantsApp
 import util.snackBarOnlyMessage
@@ -70,14 +69,9 @@ import viewmodel.LoginUserViewState
 fun LoginScreen(
     modifier: Modifier = Modifier,
     onNavigateToSignIn: () -> Unit,
-    onNavigateToHome: () -> Unit
+    onNavigateToHome: () -> Unit,
+    viewModel: LoginUserViewModel = koinInject()
 ) {
-    val viewModel = getViewModel(
-        key = "login-screen",
-        factory = viewModelFactory {
-            LoginUserViewModel()
-        }
-    )
     val userLogin by viewModel.userLoginState.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
     val emailError by viewModel.emailError.collectAsState()
