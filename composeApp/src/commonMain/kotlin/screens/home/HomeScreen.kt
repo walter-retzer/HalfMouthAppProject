@@ -54,22 +54,21 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.get
-import components.MenuToolbar
 import components.DrawerMenuNavigation
+import components.MenuToolbar
 import data.BeerType
 import data.Ingredients
 import data.UserPreferences
 import data.beerTypeList
 import data.listOfIngredients
 import database.TicketDao
-import dev.icerock.moko.mvvm.compose.getViewModel
-import dev.icerock.moko.mvvm.compose.viewModelFactory
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.splashscreenlogo
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.koinInject
 import theme.onBackgroundDark
 import theme.onSecondaryContainerDark
 import theme.secondaryContainerDark
@@ -83,12 +82,9 @@ import viewmodel.HomeViewModel
 fun HomeScreen(
     ticketDao: TicketDao,
     onNavigateToProfile: () -> Unit,
-    onNavigateFromDrawerMenu: (route: String) -> Unit
+    onNavigateFromDrawerMenu: (route: String) -> Unit,
+    viewModel: HomeViewModel = koinInject()
 ) {
-    val viewModel = getViewModel(
-        key = "home-screen",
-        factory = viewModelFactory { HomeViewModel() }
-    )
     val messageNotification by viewModel.notificationMessage.collectAsState()
     val listOfTickets by ticketDao.getAllTickets().collectAsState(initial = emptyList())
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
