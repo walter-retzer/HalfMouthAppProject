@@ -15,7 +15,7 @@ import util.ConstantsApp
 import util.ConstantsApp.Companion.ERROR_CONNECTION_MESSAGE
 
 
-class ProductionViewModel(private val service: ApiServiceImpl) : ViewModel() {
+class ProductionViewModel(private var service: ApiServiceImpl) : ViewModel() {
 
     private val results = "2"
     private val _uiState = MutableStateFlow<ProductionViewState>(ProductionViewState.Loading)
@@ -24,15 +24,17 @@ class ProductionViewModel(private val service: ApiServiceImpl) : ViewModel() {
     private val hasNetworkConnection = konnection.isConnected()
 
     init {
+        println("ProductionViewModel init ")
         fetchThingSpeakInformation()
     }
 
     private fun fetchThingSpeakInformation() {
-        if (!hasNetworkConnection){
-            _uiState.value = ProductionViewState.ErrorNetworkConnection(ERROR_CONNECTION_MESSAGE)
-            return
-        }
+//        if (!hasNetworkConnection){
+//            _uiState.value = ProductionViewState.ErrorNetworkConnection(ERROR_CONNECTION_MESSAGE)
+//            return
+//        }
         viewModelScope.launch {
+            println("ProductionViewModel viewmodel ")
             val responseApi = service.getThingSpeakValues(results = results)
             val thingSpeakResponse = handleResponseApi(responseApi)
             adjustValuesInListFeed(mutableListOf(thingSpeakResponse))

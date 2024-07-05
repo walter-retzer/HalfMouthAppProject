@@ -11,7 +11,6 @@ import viewmodel.ProfileViewModel
 import viewmodel.SignInViewModel
 
 val appModule = module {
-    single<ApiServiceImpl> { ApiServiceImpl() }
     single<LoginUserViewModel> { LoginUserViewModel() }
     single<SignInViewModel> { SignInViewModel() }
     single<HomeViewModel> { HomeViewModel() }

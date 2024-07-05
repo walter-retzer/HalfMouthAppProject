@@ -27,10 +27,10 @@ class ChartLineViewModel(private var service: ApiServiceImpl) : ViewModel() {
 
     fun fetchThingSpeakChannelField(fieldId: String) {
         _uiState.value = ChartLineViewState.Loading
-        if (!hasNetworkConnection){
-            _uiState.value = ChartLineViewState.ErrorNetworkConnection(ERROR_CONNECTION_MESSAGE)
-            return
-        }
+//        if (!hasNetworkConnection){
+//            _uiState.value = ChartLineViewState.ErrorNetworkConnection(ERROR_CONNECTION_MESSAGE)
+//            return
+//        }
         viewModelScope.launch {
             val responseApi = service.getThingSpeakChannelFeed(fieldId = fieldId, results = results)
             val thingSpeakResponse = handleResponseApi(responseApi)
