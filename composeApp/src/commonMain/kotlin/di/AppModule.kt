@@ -15,6 +15,6 @@ val appModule = module {
     single<HomeViewModel> { HomeViewModel() }
     single<ProfileViewModel> { ProfileViewModel() }
     single<DiscountsViewModel> { DiscountsViewModel(get()) }
-    factory<ProductionViewModel> { ProductionViewModel() }
-    factory<ChartLineViewModel> { ChartLineViewModel() }
+    factory<ProductionViewModel> { ProductionViewModel(get()) }
+    factory<ChartLineViewModel> { ChartLineViewModel(get()) }
 }
