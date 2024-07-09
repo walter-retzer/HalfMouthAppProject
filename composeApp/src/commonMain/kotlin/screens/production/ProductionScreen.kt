@@ -42,8 +42,6 @@ import components.DrawerMenuNavigation
 import components.MenuToolbar
 import components.MyAppCircularProgressIndicator
 import database.TicketDao
-import dev.icerock.moko.mvvm.compose.getViewModel
-import dev.icerock.moko.mvvm.compose.viewModelFactory
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.icon_chart_line2
 import halfmouthappproject.composeapp.generated.resources.icon_freezer
@@ -61,7 +59,6 @@ import util.adjustString
 import util.formattedAsDate
 import util.formattedAsTime
 import util.snackBarOnlyMessage
-import viewmodel.ChartLineViewModel
 import viewmodel.ProductionViewModel
 import viewmodel.ProductionViewState
 

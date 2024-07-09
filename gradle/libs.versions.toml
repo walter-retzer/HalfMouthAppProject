@@ -24,9 +24,6 @@ gservices = "4.4.1"
 composeNavigation = "2.7.0-alpha07"
 kotlinxDatetime = "0.6.0"
 logbackClassic = "1.2.3"
-mvvmCompose = "0.16.1"
-mvvmFlowCompose = "0.16.1"
-mvvmLivedataCompose = "0.16.1"
 multiplatformSettings = "1.1.1"
 ktor = "2.3.7"
 qrKit = "1.0.4"
@@ -85,11 +82,6 @@ multiplatformSettings-noargs = { module = "com.russhwolf:multiplatform-settings-
 
 #Constraint Layout Compose Library
 constraintlayout-compose-multiplatform = { module = "tech.annexflow.compose:constraintlayout-compose-multiplatform", version.ref = "constraintlayoutComposeMultiplatform" }
-
-#Moko Library - ViewModels, Flow, LiveData..
-moko-mvvm-flow-compose = { module = "dev.icerock.moko:mvvm-flow-compose", version.ref = "mvvmFlowCompose" }
-moko-mvvm-livedata-compose = { module = "dev.icerock.moko:mvvm-livedata-compose", version.ref = "mvvmLivedataCompose" }
-mvvm-compose = { module = "dev.icerock.moko:mvvm-compose", version.ref = "mvvmCompose" }
 
 #Navigation Compose Library
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "composeNavigation" }

@@ -114,8 +114,5 @@ room {
 }
 
 dependencies {
-    commonMainApi(libs.mvvm.compose) // api mvvm-core, getViewModel for Compose Multiplatform
-    commonMainApi(libs.moko.mvvm.flow.compose) // api mvvm-flow, binding extensions for Compose Multiplatform
-    commonMainApi(libs.moko.mvvm.livedata.compose) // api mvvm-livedata, binding extensions for Compose Multiplatform
     ksp(libs.room.compiler)
 }
