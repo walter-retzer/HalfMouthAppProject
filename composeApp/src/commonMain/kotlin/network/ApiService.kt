@@ -16,18 +16,7 @@ interface ApiService {
 
     suspend fun getThingSpeakChannelFeed(fieldId: String, results: String): ResultNetwork<ThingSpeakResponse>
 
-    companion object {
-        fun create(): ApiService {
-            return ApiServiceImpl(
-                client = HttpClient {
-                    install(Logging) {
-                        level = LogLevel.ALL
-                    }
-                    install(ContentNegotiation) {
-                        json(json = Json { ignoreUnknownKeys = true }, contentType = ContentType.Any)
-                    }
-                }
-            )
-        }
-    }
+//    companion object {
+//        fun create(): ApiService
+//    }
 }
