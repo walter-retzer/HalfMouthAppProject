@@ -9,16 +9,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import network.ApiService
+import network.NetworkRepository
 import network.ResultNetwork
 import util.ConstantsApp.Companion.ERROR_API_CHART_LINE
 import util.ConstantsApp.Companion.ERROR_CHART_LINE
 import util.ConstantsApp.Companion.ERROR_CONNECTION_MESSAGE
 import util.formattedAsTimeToChart
 
-class ChartLineViewModel : ViewModel() {
+class ChartLineViewModel(private val repository: NetworkRepository) : ViewModel() {
 
-    private val service = ApiService.create()
     private val results = "10"
     private val _uiState = MutableStateFlow<ChartLineViewState>(ChartLineViewState.Dashboard)
     val uiState: StateFlow<ChartLineViewState> = _uiState.asStateFlow()
@@ -33,7 +32,7 @@ class ChartLineViewModel : ViewModel() {
             return
         }
         viewModelScope.launch {
-            val responseApi = service.getThingSpeakChannelFeed(fieldId = fieldId, results = results)
+            val responseApi = repository.getThingSpeakChannelFeed(fieldId = fieldId, results = results)
             val thingSpeakResponse = handleResponseApi(responseApi)
             adjustValuesChannelField(mutableListOf(thingSpeakResponse), fieldId)
         }
