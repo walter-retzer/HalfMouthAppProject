@@ -8,7 +8,7 @@ de equipamentos da cervejaria artesanal HALF MOUTH.
 
 ## 🛠 Ferramentas Utilizadas
 - [Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform) - Compose Multiplatform, moderno UI framework para Kotlin.
-- [Android Studio](https://developer.android.com/studio/intro) - Android Studio é o oficial IDE (Integrated Development Environment) para desenvolvimento de aplicativos Androi.
+- [Android Studio](https://developer.android.com/studio/intro) - Android Studio é o oficial IDE (Integrated Development Environment) para desenvolvimento de aplicativos Android.
 - [XCode](https://developer.apple.com/xcode/) - Xcode 15.4 para desenvolvimento, integração e testes de aplicativos da plataforma Apple.
 
 
@@ -28,7 +28,7 @@ de equipamentos da cervejaria artesanal HALF MOUTH.
 - **Kotlin Coroutines:**
   - `kotlinx.coroutines` para realização de tarefas assíncronas.
 - **Gráficos:**
-  - `io.github.thechance101:chart` para visuaLização dos gráficos de linha.
+  - `io.github.thechance101:chart` para visualização dos gráficos de linha.
 - **Settings:**
   - `com.russhwolf:multiplatform-settings-no-arg` para salvar e acessar dados primitivos através de chave-valor.
 
@@ -47,27 +47,27 @@ de equipamentos da cervejaria artesanal HALF MOUTH.
 
 ### Firebase
 - **Auth:**
-  - `dev.gitlive:firebase-auth` para autenticação de usuários
+  - `dev.gitlive:firebase-auth` para criação e autenticação de usuários.
 - **Real Time Data Base:**
-  - `dev.gitlive:firebase-database` para acesso remoto a valores do Real Time Data Base do Firebase
+  - `dev.gitlive:firebase-database` para acesso remoto a valores do Real Time Data Base do Firebase.
 
 ### Leitor de QR Code
 - **QR Kit:**
-  - `network.chaintech:qr-kit` para leitura de QR Code através da câmera ou pela galeria do dispositivo
+  - `network.chaintech:qr-kit` para leitura de QR Code através da câmera ou pela galeria do dispositivo.
 
 ### Banco de Dados Local
 - **Room:**
   - `androidx.room:room-runtime`
   - `androidx.room:room-runtime-android`
   - `androidx.room:room-compiler`
-  - `androidx.sqlite:sqlite-bundled` para salvar dados do QR Code no banco de dados local
+  - `androidx.sqlite:sqlite-bundled` para salvar dados do QR Code no banco de dados local.
 
 ### Injeção de Dependências
 - **Koin:**
   - `o.insert-koin:koin-android`
   - `io.insert-koin:koin-androidx-compose`
   - `io.insert-koin:koin-core`
-  - `io.insert-koin:koin-compose` para injeção de dependências
+  - `io.insert-koin:koin-compose` para injeção de dependências.
 
 
 ## 📂 Trello
