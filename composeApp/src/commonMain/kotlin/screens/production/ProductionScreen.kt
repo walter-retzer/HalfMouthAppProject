@@ -42,6 +42,8 @@ import components.DrawerMenuNavigation
 import components.MenuToolbar
 import components.MyAppCircularProgressIndicator
 import database.TicketDao
+import dev.icerock.moko.mvvm.compose.getViewModel
+import dev.icerock.moko.mvvm.compose.viewModelFactory
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.icon_chart_line2
 import halfmouthappproject.composeapp.generated.resources.icon_freezer
@@ -51,7 +53,6 @@ import halfmouthappproject.composeapp.generated.resources.icon_temperature
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.vectorResource
-import org.koin.compose.koinInject
 import theme.mainYellowColor
 import theme.onBackgroundDark
 import theme.onSurfaceVariantDark
@@ -69,9 +70,14 @@ fun ProductionScreen(
     ticketDao: TicketDao,
     onNavigateToProfile: () -> Unit,
     onNavigateToChartLine: (fieldId: String, fieldName: String) -> Unit,
-    onNavigateFromDrawerMenu: (route: String) -> Unit,
-    viewModel: ProductionViewModel = koinInject()
+    onNavigateFromDrawerMenu: (route: String) -> Unit
 ) {
+    val viewModel = getViewModel(
+        key = "production-screen",
+        factory = viewModelFactory {
+            ProductionViewModel()
+        }
+    )
     val listOfTickets by ticketDao.getAllTickets().collectAsState(initial = emptyList())
     val uiState by viewModel.uiState.collectAsState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())

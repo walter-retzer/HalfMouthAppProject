@@ -2,8 +2,7 @@ package viewmodel
 
 import data.FeedsThingSpeak
 import data.ThingSpeakResponse
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import dev.tmapps.konnection.Konnection
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -11,15 +10,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import network.ApiService
 import network.ResultNetwork
-import util.ConstantsApp
 import util.ConstantsApp.Companion.ERROR_API_CHART_LINE
 import util.ConstantsApp.Companion.ERROR_CHART_LINE
+import util.ConstantsApp.Companion.ERROR_CONNECTION_MESSAGE
 import util.formattedAsTimeToChart
 
 class ChartLineViewModel : ViewModel() {
 
     private val service = ApiService.create()
-    private val results = "5"
+    private val results = "10"
     private val _uiState = MutableStateFlow<ChartLineViewState>(ChartLineViewState.Dashboard)
     val uiState: StateFlow<ChartLineViewState> = _uiState.asStateFlow()
     private val konnection = Konnection.instance
@@ -29,7 +28,7 @@ class ChartLineViewModel : ViewModel() {
     fun fetchThingSpeakChannelField(fieldId: String) {
         _uiState.value = ChartLineViewState.Loading
         if (!hasNetworkConnection){
-            _uiState.value = ChartLineViewState.ErrorNetworkConnection(ConstantsApp.ERROR_CONNECTION_MESSAGE)
+            _uiState.value = ChartLineViewState.ErrorNetworkConnection(ERROR_CONNECTION_MESSAGE)
             return
         }
         viewModelScope.launch {
@@ -62,26 +61,69 @@ class ChartLineViewModel : ViewModel() {
                 }
             }
 
-            val listOfFields = channelFeed.mapNotNull {
+            val listOfDate = mutableListOf<String>()
+            val listOfValues = mutableListOf<Double>()
+
+            channelFeed.mapNotNull {
                 when (fieldId) {
-                    "1" -> it?.field1?.toDouble()
-                    "2" -> it?.field2?.toDouble()
-                    "3" -> it?.field3?.toDouble()
-                    "4" -> it?.field4?.toDouble()
-                    "5" -> it?.field5?.toDouble()
-                    "6" -> it?.field6?.toDouble()
-                    "7" -> it?.field7?.toDouble()
-                    "8" -> it?.field8?.toDouble()
+                    "1" -> {
+                        if (it?.field1 != null) {
+                            listOfValues.add(it.field1.toDouble())
+                            listOfDate.add(it.created_at.formattedAsTimeToChart())
+                        } else return@mapNotNull
+                    }
+
+                    "2" -> {
+                        if (it?.field2 != null) {
+                            listOfValues.add(it.field2.toDouble())
+                            listOfDate.add(it.created_at.formattedAsTimeToChart())
+                        } else return@mapNotNull
+                    }
+
+                    "3" -> {
+                        if (it?.field3 != null) {
+                            listOfValues.add(it.field3.toDouble())
+                            listOfDate.add(it.created_at.formattedAsTimeToChart())
+                        } else return@mapNotNull
+                    }
+
+                    "4" -> {
+                        if (it?.field4 != null) {
+                            listOfValues.add(it.field4.toDouble())
+                            listOfDate.add(it.created_at.formattedAsTimeToChart())
+                        } else return@mapNotNull
+                    }
+
+                    "5" -> {
+                        if (it?.field5 != null) {
+                            listOfValues.add(it.field5.toDouble())
+                            listOfDate.add(it.created_at.formattedAsTimeToChart())
+                        } else return@mapNotNull
+                    }
+
+                    "6" -> {
+                        if (it?.field6 != null) {
+                            listOfValues.add(it.field6.toDouble())
+                            listOfDate.add(it.created_at.formattedAsTimeToChart())
+                        } else return@mapNotNull
+                    }
+
+                    "7" -> {
+                        if (it?.field7 != null) {
+                            listOfValues.add(it.field7.toDouble())
+                            listOfDate.add(it.created_at.formattedAsTimeToChart())
+                        } else return@mapNotNull
+                    }
+
+                    "8" -> {
+                        if (it?.field8 != null) {
+                            listOfValues.add(it.field8.toDouble())
+                            listOfDate.add(it.created_at.formattedAsTimeToChart())
+                        } else return@mapNotNull
+                    }
+
                     else -> emptyList<Double>()
                 }
-            }
-
-            val listOfValues = listOfFields.map {
-                it.toString().toDouble()
-            }
-
-            val listOfDate = channelFeed.mapNotNull {
-                it?.created_at.toString().formattedAsTimeToChart()
             }
 
             if (listOfValues.isEmpty() || listOfValues.size != listOfDate.size) _uiState.value =
@@ -96,12 +138,8 @@ class ChartLineViewModel : ViewModel() {
 
 sealed interface ChartLineViewState {
     data object Dashboard : ChartLineViewState
-
     data class Success(val listOfValues:  List<Double>, val listOfDate: List<String>) : ChartLineViewState
-
     data class ErrorNetworkConnection(val message: String) : ChartLineViewState
-
     data class Error(val message: String) : ChartLineViewState
-
     data object Loading : ChartLineViewState
 }
