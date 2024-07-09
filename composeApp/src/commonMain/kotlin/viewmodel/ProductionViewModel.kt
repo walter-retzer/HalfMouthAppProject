@@ -10,15 +10,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import network.ApiService
+import network.NetworkRepository
 import network.ResultNetwork
 import util.ConstantsApp
 import util.ConstantsApp.Companion.ERROR_CONNECTION_MESSAGE
 
 
-class ProductionViewModel : ViewModel() {
+class ProductionViewModel(private val repository: NetworkRepository) : ViewModel() {
 
-    private val service = ApiService.create()
     private val results = "2"
     private val _uiState = MutableStateFlow<ProductionViewState>(ProductionViewState.Loading)
     val uiState: StateFlow<ProductionViewState> = _uiState.asStateFlow()
@@ -35,7 +34,7 @@ class ProductionViewModel : ViewModel() {
             return
         }
         viewModelScope.launch {
-            val responseApi = service.getThingSpeakValues(results = results)
+            val responseApi = repository.getThingSpeakValues(results = results)
             val thingSpeakResponse = handleResponseApi(responseApi)
             adjustValuesInListFeed(mutableListOf(thingSpeakResponse))
         }
