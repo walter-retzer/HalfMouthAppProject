@@ -1,8 +1,9 @@
 package viewmodel
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import data.FeedsThingSpeak
 import data.ThingSpeakResponse
-import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import dev.tmapps.konnection.Konnection
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

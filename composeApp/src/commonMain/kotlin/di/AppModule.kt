@@ -1,6 +1,7 @@
 package di
 
 import org.koin.dsl.module
+import viewmodel.ChartLineViewModel
 import viewmodel.DiscountsViewModel
 import viewmodel.HomeViewModel
 import viewmodel.LoginUserViewModel
@@ -13,4 +14,5 @@ val appModule = module {
     single<HomeViewModel> { HomeViewModel() }
     single<ProfileViewModel> { ProfileViewModel() }
     single<DiscountsViewModel> { DiscountsViewModel(get()) }
+    factory<ChartLineViewModel> { ChartLineViewModel() }
 }

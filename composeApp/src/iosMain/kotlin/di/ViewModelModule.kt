@@ -1,5 +1,6 @@
 package di
 
+import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 import viewmodel.ChartLineViewModel
@@ -11,11 +12,11 @@ import viewmodel.ProfileViewModel
 import viewmodel.SignInViewModel
 
 actual val viewModelModule = module{
-    singleOf(::HomeViewModel)
-    singleOf(::ChartLineViewModel)
-    singleOf(::ProfileViewModel)
     singleOf(::LoginUserViewModel)
     singleOf(::SignInViewModel)
-    singleOf(::ProductionViewModel)
+    singleOf(::HomeViewModel)
+    singleOf(::ProfileViewModel)
     singleOf(::DiscountsViewModel)
+    factoryOf(::ProductionViewModel)
+    factoryOf(::ChartLineViewModel)
 }

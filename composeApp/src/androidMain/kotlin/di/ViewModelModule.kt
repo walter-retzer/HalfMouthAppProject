@@ -12,11 +12,11 @@ import viewmodel.SignInViewModel
 
 
 actual val viewModelModule = module{
-    viewModelOf(::HomeViewModel)
-    viewModelOf(::ChartLineViewModel)
-    viewModelOf(::ProfileViewModel)
     viewModelOf(::LoginUserViewModel)
     viewModelOf(::SignInViewModel)
-    viewModelOf(::ProductionViewModel)
+    viewModelOf(::HomeViewModel)
+    viewModelOf(::ProfileViewModel)
     viewModelOf(::DiscountsViewModel)
+    viewModelOf(::ProductionViewModel)
+    viewModelOf(::ChartLineViewModel)
 }
