@@ -59,7 +59,7 @@ chart = { module = "io.github.thechance101:chart", version.ref = "chart" }
 #Qr Code Reader and Generate Library
 qr-kit = { module = "network.chaintech:qr-kit", version.ref = "qrKit" }
 
-#Ktor Library
+#Firebase Library
 firebase-database = { module = "dev.gitlive:firebase-database", version.ref = "firebaseDatabase" }
 firebase-auth = { module = "dev.gitlive:firebase-auth", version.ref = "firebaseAuth" }
 
