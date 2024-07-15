@@ -2,6 +2,7 @@ package di
 
 
 import io.ktor.client.HttpClient
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
@@ -13,6 +14,12 @@ import org.koin.dsl.module
 val provideHttpClientModule = module {
     single {
         HttpClient {
+            install(HttpTimeout) {
+                val timeout = 30000L
+                connectTimeoutMillis = timeout
+                requestTimeoutMillis = timeout
+                socketTimeoutMillis = timeout
+            }
             install(Logging) {
                 level = LogLevel.ALL
             }
