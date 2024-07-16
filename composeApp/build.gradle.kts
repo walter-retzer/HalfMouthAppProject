@@ -150,7 +150,12 @@ android {
     }
     buildTypes {
         getByName("release") {
+            isMinifyEnabled = true
+            setProguardFiles(listOf(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"))
+        }
+        getByName("debug") {
             isMinifyEnabled = false
+            setProguardFiles(listOf(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"))
         }
     }
     compileOptions {
