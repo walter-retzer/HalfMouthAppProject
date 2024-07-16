@@ -1,4 +1,4 @@
-<img align="left" width="70" src="screen/logo.jpeg" />
+<img align="left" width="70" src="screen/logo/logo.jpeg" />
 
 # HALF MOUTH BEER APP
 
