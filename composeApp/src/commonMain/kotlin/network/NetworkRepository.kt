@@ -11,6 +11,7 @@ import io.ktor.client.request.parameter
 import io.ktor.client.request.url
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpStatusCode
+import secrets.BuildConfig
 
 
 class NetworkRepository(private val client: HttpClient) {
@@ -19,7 +20,7 @@ class NetworkRepository(private val client: HttpClient) {
         makeRequest {
             client.get{
                 url(HttpRoutes.REQUEST_URL)
-                parameter("api_key", "ZL0IH5O2QK5U4NNS")
+                parameter("api_key", BuildConfig.API_KEY)
                 parameter("results", results)
             }
         }
@@ -28,7 +29,7 @@ class NetworkRepository(private val client: HttpClient) {
         makeRequest {
             client.get{
                 url(HttpRoutes.REQUEST_CHANNEL_FEED + "$fieldId.json?")
-                parameter("api_key", "ZL0IH5O2QK5U4NNS")
+                parameter("api_key", BuildConfig.API_KEY)
                 parameter("results", results)
             }
         }
