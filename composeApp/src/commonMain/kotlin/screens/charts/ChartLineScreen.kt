@@ -1,12 +1,8 @@
 package screens.charts
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalNavigationDrawer
@@ -27,19 +23,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.aay.compose.baseComponents.model.GridOrientation
-import com.aay.compose.baseComponents.model.LegendPosition
-import com.aay.compose.lineChart.LineChart
-import com.aay.compose.lineChart.model.LineParameters
-import com.aay.compose.lineChart.model.LineType
 import components.DrawerMenuNavigation
 import components.MyAppCircularProgressIndicator
 import components.SimpleToolbar
@@ -59,7 +45,6 @@ import network.chaintech.cmpcharts.ui.linechart.model.LinePlotData
 import network.chaintech.cmpcharts.ui.linechart.model.LineStyle
 import org.koin.compose.koinInject
 import theme.mainYellowColor
-import theme.outlineDark
 import theme.surfaceVariantDark
 import util.snackBarOnlyMessage
 import viewmodel.ChartLineViewModel
@@ -84,7 +69,6 @@ fun ChartLineScreen(
     val scope = rememberCoroutineScope()
     var isSnackBarOpen by remember { mutableStateOf(false) }
     var isSnackBarMessageErrorApiOpen by remember { mutableStateOf(false) }
-
 
     ModalNavigationDrawer(
         drawerContent = {
