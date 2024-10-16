@@ -126,7 +126,7 @@ fun ChartLineScreen(
 
                 is ChartLineViewState.Success -> {
                     Box(modifier = Modifier.padding(innerPadding)) {
-                        SingleLineChartWithGridLines(state.points)
+                        SingleLineChartWithGridLines(state.listOfPointsToPlot)
                     }
                 }
 
