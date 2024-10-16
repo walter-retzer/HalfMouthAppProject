@@ -3,7 +3,10 @@ package screens.charts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalNavigationDrawer
@@ -25,7 +28,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aay.compose.baseComponents.model.GridOrientation
@@ -38,8 +45,21 @@ import components.MyAppCircularProgressIndicator
 import components.SimpleToolbar
 import database.TicketDao
 import kotlinx.coroutines.launch
+import network.chaintech.chartsLib.ui.linechart.model.IntersectionPoint
+import network.chaintech.cmpcharts.axis.AxisProperties
+import network.chaintech.cmpcharts.common.extensions.formatToSinglePrecision
+import network.chaintech.cmpcharts.common.model.Point
+import network.chaintech.cmpcharts.common.ui.GridLinesUtil
+import network.chaintech.cmpcharts.common.ui.SelectionHighlightPoint
+import network.chaintech.cmpcharts.common.ui.SelectionHighlightPopUp
+import network.chaintech.cmpcharts.ui.linechart.LineChart
+import network.chaintech.cmpcharts.ui.linechart.model.Line
+import network.chaintech.cmpcharts.ui.linechart.model.LineChartProperties
+import network.chaintech.cmpcharts.ui.linechart.model.LinePlotData
+import network.chaintech.cmpcharts.ui.linechart.model.LineStyle
 import org.koin.compose.koinInject
 import theme.mainYellowColor
+import theme.outlineDark
 import theme.surfaceVariantDark
 import util.snackBarOnlyMessage
 import viewmodel.ChartLineViewModel
@@ -84,7 +104,7 @@ fun ChartLineScreen(
             snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
             topBar = {
                 SimpleToolbar(
-                    title = "Gráfico",
+                    title = fieldName,
                     onNavigationToMenu = {
                         scope.launch {
                             drawerState.open()
@@ -121,51 +141,8 @@ fun ChartLineScreen(
                 }
 
                 is ChartLineViewState.Success -> {
-                    val lineParameters: List<LineParameters> = listOf(
-                        LineParameters(
-                            label = fieldName,
-                            data = state.listOfValues,
-                            lineColor = mainYellowColor,
-                            lineType = LineType.CURVED_LINE,
-                            lineShadow = true,
-                        )
-                    )
-
-                    Box(
-                        modifier = Modifier.padding(innerPadding)
-                    ) {
-                        LineChart(
-                            modifier = Modifier
-                                .background(surfaceVariantDark)
-                                .padding(20.dp)
-                                .fillMaxSize(),
-                            linesParameters = lineParameters,
-                            isGrid = true,
-                            gridColor = Color.Gray,
-                            xAxisData = state.listOfDate,
-                            animateChart = true,
-                            showGridWithSpacer = true,
-                            descriptionStyle = TextStyle(
-                                fontSize = 14.sp,
-                                color = Color.White,
-                                fontWeight = FontWeight.W400
-                            ),
-                            yAxisStyle = TextStyle(
-                                fontSize = 14.sp,
-                                color = Color.Gray,
-                            ),
-                            xAxisStyle = TextStyle(
-                                fontSize = 14.sp,
-                                color = Color.Gray,
-                                fontWeight = FontWeight.W400
-                            ),
-                            yAxisRange = 4,
-                            oneLineChart = false,
-                            showXAxis = true,
-                            showYAxis = true,
-                            gridOrientation = GridOrientation.GRID,
-                            legendPosition = LegendPosition.BOTTOM,
-                        )
+                    Box(modifier = Modifier.padding(innerPadding)) {
+                        SingleLineChartWithGridLines(state.points)
                     }
                 }
 
@@ -182,4 +159,73 @@ fun ChartLineScreen(
             }
         }
     }
+}
+
+@Composable
+fun SingleLineChartWithGridLines(
+    pointsData: List<Point>
+) {
+    val textMeasurer = rememberTextMeasurer()
+    val steps = 5
+
+    val xAxisProperties = AxisProperties(
+        font = null,
+        labelPadding = 10.dp,
+        labelColor = Color.Gray,
+        lineColor = Color.Gray,
+        stepCount = pointsData.size -1,
+        labelFormatter = { i -> pointsData[i/2].description },
+        shouldExtendLineToEnd = true
+    )
+
+    val yAxisProperties = AxisProperties(
+        font = null,
+        stepCount = steps,
+        labelColor = Color.Gray,
+        lineColor = Color.Gray,
+        labelFormatter = { i ->
+            val yMin = pointsData.minOf { it.y }
+            val yMax = pointsData.maxOf { it.y }
+            val yScale = (yMax - yMin) / steps
+            ((i * yScale) + yMin).formatToSinglePrecision()
+        }
+    )
+
+    val lineChartProperties = LineChartProperties(
+        linePlotData = LinePlotData(
+            lines = listOf(
+                Line(
+                    dataPoints = pointsData,
+                    LineStyle(
+                        color = mainYellowColor
+                    ),
+                    IntersectionPoint(
+                        color = mainYellowColor
+                    ),
+                    SelectionHighlightPoint(
+                        color = Color.White
+                    ),
+                   null,
+                    SelectionHighlightPopUp(
+                        textMeasurer = textMeasurer,
+                        backgroundColor = Color.White,
+                        labelColor = Color.Black,
+                        labelTypeface = FontWeight.Bold
+                    )
+                )
+            )
+        ),
+        xAxisProperties = xAxisProperties,
+        yAxisProperties = yAxisProperties,
+        gridLines = GridLinesUtil(color = Color.Gray),
+        backgroundColor = surfaceVariantDark,
+        paddingTop = 40.dp,
+        bottomPadding =  30.dp,
+        paddingRight = 20.dp,
+        containerPaddingEnd= 30.dp,
+    )
+    LineChart(
+        modifier = Modifier.fillMaxSize(),
+        lineChartProperties = lineChartProperties
+    )
 }
