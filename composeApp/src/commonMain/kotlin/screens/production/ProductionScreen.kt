@@ -155,7 +155,7 @@ fun ProductionScreen(
                                             }.clickable {
                                                 onNavigateToChartLine(
                                                     it.fieldId.toString(),
-                                                    it.fieldType.toString() + it.fieldName.toString()
+                                                    it.fieldName.toString()
                                                 )
                                             }
                                     )
