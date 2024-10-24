@@ -55,6 +55,7 @@ kotlin {
                 |object BuildConfig {
                 |  const val API_KEY = "${secretProperties.getPropertyValue("API_KEY")}"
                 |  const val CHANNEL_ID = "${secretProperties.getPropertyValue("CHANNEL_ID")}"
+                |  const val RESULTS = "${secretProperties.getPropertyValue("RESULTS")}"
                 |}
                 |
                 """.trimMargin()
