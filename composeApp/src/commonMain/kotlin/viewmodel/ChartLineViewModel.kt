@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import network.NetworkRepository
 import network.ResultNetwork
 import network.chaintech.cmpcharts.common.model.Point
+import secrets.BuildConfig
 import util.ConstantsApp.Companion.ERROR_API_CHART_LINE
 import util.ConstantsApp.Companion.ERROR_CHART_LINE
 import util.ConstantsApp.Companion.ERROR_CONNECTION_MESSAGE
@@ -19,11 +20,12 @@ import util.formattedAsTimeToChart
 
 class ChartLineViewModel(private val repository: NetworkRepository) : ViewModel() {
 
-    private val results = "50"
-    private val _uiState = MutableStateFlow<ChartLineViewState>(ChartLineViewState.Dashboard)
-    val uiState: StateFlow<ChartLineViewState> = _uiState.asStateFlow()
+    private val results = BuildConfig.RESULTS
     private val konnection = Konnection.instance
     private val hasNetworkConnection = konnection.isConnected()
+    private val _uiState = MutableStateFlow<ChartLineViewState>(ChartLineViewState.Dashboard)
+    val uiState: StateFlow<ChartLineViewState> = _uiState.asStateFlow()
+
 
     fun fetchThingSpeakChannelField(fieldId: String) {
         _uiState.value = ChartLineViewState.Loading
