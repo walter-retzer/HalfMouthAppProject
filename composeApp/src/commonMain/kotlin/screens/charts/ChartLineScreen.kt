@@ -21,6 +21,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
@@ -38,11 +39,13 @@ import network.chaintech.cmpcharts.common.model.Point
 import network.chaintech.cmpcharts.common.ui.GridLinesUtil
 import network.chaintech.cmpcharts.common.ui.SelectionHighlightPoint
 import network.chaintech.cmpcharts.common.ui.SelectionHighlightPopUp
+import network.chaintech.cmpcharts.common.ui.ShadowUnderLine
 import network.chaintech.cmpcharts.ui.linechart.LineChart
 import network.chaintech.cmpcharts.ui.linechart.model.Line
 import network.chaintech.cmpcharts.ui.linechart.model.LineChartProperties
 import network.chaintech.cmpcharts.ui.linechart.model.LinePlotData
 import network.chaintech.cmpcharts.ui.linechart.model.LineStyle
+import network.chaintech.cmpcharts.ui.linechart.model.LineType
 import org.koin.compose.koinInject
 import theme.mainYellowColor
 import theme.surfaceVariantDark
@@ -158,7 +161,9 @@ fun SingleLineChartWithGridLines(
         labelColor = Color.Gray,
         lineColor = Color.Gray,
         stepCount = pointsData.size -1,
-        labelFormatter = { i -> pointsData[i/2].description },
+        labelFormatter = {
+            pointsData[it/2].description
+        },
         shouldExtendLineToEnd = true
     )
 
@@ -180,17 +185,26 @@ fun SingleLineChartWithGridLines(
             lines = listOf(
                 Line(
                     dataPoints = pointsData,
-                    LineStyle(
+                    lineStyle = LineStyle(
+                        lineType = LineType.SmoothCurve(true),
                         color = mainYellowColor
                     ),
-                    IntersectionPoint(
+                    intersectionPoint = IntersectionPoint(
                         color = mainYellowColor
                     ),
-                    SelectionHighlightPoint(
+                    selectionHighlightPoint = SelectionHighlightPoint(
                         color = Color.White
                     ),
-                   null,
-                    SelectionHighlightPopUp(
+                    shadowUnderLine = ShadowUnderLine(
+                        brush = Brush.verticalGradient(
+                            listOf(
+                                mainYellowColor,
+                                Color.Transparent
+                            )
+                        ),
+                        alpha = 0.25f
+                    ),
+                    selectionHighlightPopUp = SelectionHighlightPopUp(
                         textMeasurer = textMeasurer,
                         backgroundColor = Color.White,
                         labelColor = Color.Black,
@@ -207,6 +221,7 @@ fun SingleLineChartWithGridLines(
         bottomPadding =  30.dp,
         paddingRight = 20.dp,
         containerPaddingEnd= 30.dp,
+        isZoomAllowed = false
     )
     LineChart(
         modifier = Modifier.fillMaxSize(),
