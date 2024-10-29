@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
@@ -31,9 +32,11 @@ import components.DrawerMenuNavigation
 import components.MyAppCircularProgressIndicator
 import components.SimpleToolbar
 import database.TicketDao
+import halfmouthappproject.composeapp.generated.resources.Res
+import halfmouthappproject.composeapp.generated.resources.Roboto_Bold
 import kotlinx.coroutines.launch
 import network.chaintech.chartsLib.ui.linechart.model.IntersectionPoint
-import network.chaintech.cmpcharts.axis.AxisProperties
+import network.chaintech.cmpcharts.axis.AxisData
 import network.chaintech.cmpcharts.common.extensions.formatToSinglePrecision
 import network.chaintech.cmpcharts.common.model.Point
 import network.chaintech.cmpcharts.common.ui.GridLinesUtil
@@ -42,10 +45,11 @@ import network.chaintech.cmpcharts.common.ui.SelectionHighlightPopUp
 import network.chaintech.cmpcharts.common.ui.ShadowUnderLine
 import network.chaintech.cmpcharts.ui.linechart.LineChart
 import network.chaintech.cmpcharts.ui.linechart.model.Line
-import network.chaintech.cmpcharts.ui.linechart.model.LineChartProperties
+import network.chaintech.cmpcharts.ui.linechart.model.LineChartData
 import network.chaintech.cmpcharts.ui.linechart.model.LinePlotData
 import network.chaintech.cmpcharts.ui.linechart.model.LineStyle
 import network.chaintech.cmpcharts.ui.linechart.model.LineType
+import org.jetbrains.compose.resources.Font
 import org.koin.compose.koinInject
 import theme.mainYellowColor
 import theme.surfaceVariantDark
@@ -151,36 +155,47 @@ fun ChartLineScreen(
 @Composable
 fun SingleLineChartWithGridLines(
     pointsData: List<Point>
-) {
+){
     val textMeasurer = rememberTextMeasurer()
     val steps = 5
 
-    val xAxisProperties = AxisProperties(
-        font = null,
-        labelPadding = 10.dp,
-        labelColor = Color.Gray,
-        lineColor = Color.Gray,
-        stepCount = pointsData.size -1,
-        labelFormatter = {
-            pointsData[it/2].description
-        },
-        shouldExtendLineToEnd = true
-    )
+    val xAxisData = AxisData.Builder()
+        .fontFamily(
+            fontFamily = FontFamily(
+                Font(Res.font.Roboto_Bold, weight = FontWeight.Black)
+            )
+        )
+        .axisStepSize(30.dp)
+        .topPadding(105.dp)
+        .axisLabelColor(Color.Gray)
+        .axisLineColor(Color.Gray)
+        .steps(pointsData.size - 1)
+        .labelData { i -> pointsData[i/2].description }
+        .labelAndAxisLinePadding(15.dp)
+        .build()
 
-    val yAxisProperties = AxisProperties(
-        font = null,
-        stepCount = steps,
-        labelColor = Color.Gray,
-        lineColor = Color.Gray,
-        labelFormatter = { i ->
+    val yAxisData = AxisData.Builder()
+        .fontFamily(
+            fontFamily = FontFamily(
+                Font(Res.font.Roboto_Bold, weight = FontWeight.Black)
+            )
+        )
+        .startPadding(20.dp)
+        .startDrawPadding(20.dp)
+        .steps(steps)
+        .axisLabelColor(Color.Gray)
+        .axisLineColor(Color.Gray)
+        .labelAndAxisLinePadding(20.dp)
+        .labelData { i ->
+            // Add yMin to get the negative axis values to the scale
             val yMin = pointsData.minOf { it.y }
             val yMax = pointsData.maxOf { it.y }
             val yScale = (yMax - yMin) / steps
             ((i * yScale) + yMin).formatToSinglePrecision()
         }
-    )
+        .build()
 
-    val lineChartProperties = LineChartProperties(
+    val lineChartProperties = LineChartData(
         linePlotData = LinePlotData(
             lines = listOf(
                 Line(
@@ -213,8 +228,8 @@ fun SingleLineChartWithGridLines(
                 )
             )
         ),
-        xAxisProperties = xAxisProperties,
-        yAxisProperties = yAxisProperties,
+        xAxisData = xAxisData,
+        yAxisData = yAxisData,
         gridLines = GridLinesUtil(color = Color.Gray),
         backgroundColor = surfaceVariantDark,
         paddingTop = 40.dp,
@@ -225,6 +240,6 @@ fun SingleLineChartWithGridLines(
     )
     LineChart(
         modifier = Modifier.fillMaxSize(),
-        lineChartProperties = lineChartProperties
+        lineChartData = lineChartProperties
     )
 }
