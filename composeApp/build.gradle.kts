@@ -56,6 +56,7 @@ kotlin {
                 |  const val API_KEY = "${secretProperties.getPropertyValue("API_KEY")}"
                 |  const val CHANNEL_ID = "${secretProperties.getPropertyValue("CHANNEL_ID")}"
                 |  const val RESULTS = "${secretProperties.getPropertyValue("RESULTS")}"
+                |  const val SIMPLE_RESULTS = "${secretProperties.getPropertyValue("SIMPLE_RESULTS")}"
                 |}
                 |
                 """.trimMargin()
