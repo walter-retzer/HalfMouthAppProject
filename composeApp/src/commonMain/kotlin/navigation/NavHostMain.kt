@@ -20,6 +20,7 @@ import components.AppBottomNavigationBar
 import database.TicketDao
 import navigation.ArgumentsKey.FIELD_ID_KEY
 import navigation.ArgumentsKey.FIELD_ID_NAME
+import navigation.ArgumentsKey.FIELD_ID_RESULTS
 import navigation.NavAnimations.popEnterRightAnimation
 import navigation.NavAnimations.popExitRightAnimation
 import navigation.NavAnimations.slideFadeInAnimation
@@ -156,7 +157,7 @@ private fun NavGraphBuilder.homeNavGraph(
                 composable(route = AppNavigation.HomeRoute.name) {
                     HomeScreen(
                         ticketDao = ticketDao,
-                        onNavigateFromDrawerMenu = { route->
+                        onNavigateFromDrawerMenu = { route ->
                             navController.navigate(route)
                         },
                         onNavigateToProfile = {
@@ -173,12 +174,12 @@ private fun NavGraphBuilder.homeNavGraph(
                         onNavigateToProfile = {
                             navController.navigate(AppNavigation.ProfileRoute.name)
                         },
-                        onNavigateToChartLine = { fieldId, fieldName ->
-                            navController.navigate("${AppNavigation.ChartLineRoute.name}/${fieldId}/${fieldName}") {
+                        onNavigateToChartLine = { fieldId, fieldName, fieldResult ->
+                            navController.navigate("${AppNavigation.ChartLineRoute.name}/${fieldId}/${fieldName}/${fieldResult}") {
                                 launchSingleTop = true
                             }
                         },
-                        onNavigateFromDrawerMenu = { route->
+                        onNavigateFromDrawerMenu = { route ->
                             navController.navigate(route)
                         },
                     )
@@ -217,7 +218,7 @@ private fun NavGraphBuilder.homeNavGraph(
                         onNavigateToProfile = {
                             navController.navigate(AppNavigation.ProfileRoute.name)
                         },
-                        onNavigateFromDrawerMenu = { route->
+                        onNavigateFromDrawerMenu = { route ->
                             navController.navigate(route)
                         },
                     )
@@ -234,21 +235,27 @@ private fun NavGraphBuilder.homeNavGraph(
                 }
 
                 composable(
-                    route = "${AppNavigation.ChartLineRoute.name}/{$FIELD_ID_KEY}/{$FIELD_ID_NAME}",
-                    arguments = listOf(navArgument(FIELD_ID_KEY) { type = NavType.StringType }, navArgument(FIELD_ID_NAME) { type = NavType.StringType }),
+                    route = "${AppNavigation.ChartLineRoute.name}/{$FIELD_ID_KEY}/{$FIELD_ID_NAME}/{$FIELD_ID_RESULTS}",
+                    arguments = listOf(
+                        navArgument(FIELD_ID_KEY) { type = NavType.StringType },
+                        navArgument(FIELD_ID_NAME) { type = NavType.StringType },
+                        navArgument(FIELD_ID_RESULTS) { type = NavType.StringType }
+                    ),
                 ) {
                     val arguments = requireNotNull(it.arguments)
                     val fieldId = arguments.getString(FIELD_ID_KEY)
                     val fieldName = arguments.getString(FIELD_ID_NAME)
+                    val fieldResult = arguments.getString(FIELD_ID_RESULTS)
 
                     ChartLineScreen(
                         ticketDao = ticketDao,
                         fieldId = fieldId.toString(),
                         fieldName = fieldName.toString(),
+                        fieldResult = fieldResult.toString(),
                         onNavigateToProduction = {
                             navController.navigate(AppNavigation.ProductionRoute.name)
                         },
-                        onNavigateFromDrawerMenu = { route->
+                        onNavigateFromDrawerMenu = { route ->
                             navController.navigate(route)
                         },
                     )
@@ -266,11 +273,12 @@ private fun NavGraphBuilder.homeNavGraph(
 object ArgumentsKey {
     const val FIELD_ID_KEY = "FIELD_ID"
     const val FIELD_ID_NAME = "FIELD_NAME"
+    const val FIELD_ID_RESULTS = "FIELD_RERSULTS"
 }
 
 
 @Composable
-inline fun <reified T: ViewModel> koinViewModel(): T {
+inline fun <reified T : ViewModel> koinViewModel(): T {
     val scope = currentKoinScope()
     return viewModel {
         scope.get<T>()
