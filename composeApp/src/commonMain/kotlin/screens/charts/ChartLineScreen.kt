@@ -2,7 +2,6 @@ package screens.charts
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
@@ -36,6 +35,7 @@ import com.aay.compose.baseComponents.model.GridOrientation
 import com.aay.compose.baseComponents.model.LegendPosition
 import com.aay.compose.lineChart.LineChart
 import com.aay.compose.lineChart.model.LineParameters
+import com.aay.compose.lineChart.model.LineType
 import components.DrawerMenuNavigation
 import components.MyAppCircularProgressIndicator
 import components.SimpleToolbar
@@ -43,7 +43,6 @@ import database.TicketDao
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.Roboto_Bold
 import kotlinx.coroutines.launch
-import kotlinx.datetime.format.Padding
 import network.chaintech.chartsLib.ui.linechart.model.IntersectionPoint
 import network.chaintech.cmpcharts.axis.AxisData
 import network.chaintech.cmpcharts.common.extensions.formatToSinglePrecision
@@ -92,7 +91,7 @@ fun ChartLineScreen(
                 scope = scope,
                 drawerState = drawerState,
                 tickets = listOfTickets.size,
-                onNavigateFromDrawerMenu = { route->
+                onNavigateFromDrawerMenu = { route ->
                     onNavigateFromDrawerMenu(route)
                 }
             )
@@ -117,7 +116,7 @@ fun ChartLineScreen(
 
             when (val state = uiState) {
                 is ChartLineViewState.Dashboard -> {
-                    viewModel.fetchThingSpeakChannelField(fieldId)
+                    viewModel.fetchThingSpeakChannelField(fieldId, fieldResult)
                 }
 
                 is ChartLineViewState.Error -> {
@@ -147,13 +146,13 @@ fun ChartLineScreen(
                 }
 
                 is ChartLineViewState.SuccessSimpleChart -> {
-
-                        SimpleChart(fieldName, state.listOfValues, state.listOfDate, innerPadding)
-
+                    Box(modifier = Modifier.padding(innerPadding)) {
+                        SimpleChart(fieldName, state.listOfValues, state.listOfDate)
+                    }
                 }
 
                 is ChartLineViewState.ErrorNetworkConnection -> {
-                    if(!isSnackBarMessageErrorApiOpen) {
+                    if (!isSnackBarMessageErrorApiOpen) {
                         snackBarOnlyMessage(
                             snackBarHostState = snackBarHostState,
                             coroutineScope = scope,
@@ -170,7 +169,7 @@ fun ChartLineScreen(
 @Composable
 fun SingleLineChartWithGridLines(
     pointsData: List<Point>
-){
+) {
     val textMeasurer = rememberTextMeasurer()
     val steps = 5
 
@@ -185,7 +184,7 @@ fun SingleLineChartWithGridLines(
         .axisLabelColor(Color.Gray)
         .axisLineColor(Color.Gray)
         .steps(pointsData.size - 1)
-        .labelData { i -> pointsData[i/2].description }
+        .labelData { i -> pointsData[i / 2].description }
         .labelAndAxisLinePadding(15.dp)
         .build()
 
@@ -216,7 +215,9 @@ fun SingleLineChartWithGridLines(
                 Line(
                     dataPoints = pointsData,
                     lineStyle = LineStyle(
-                        lineType = network.chaintech.cmpcharts.ui.linechart.model.LineType.SmoothCurve(true),
+                        lineType = network.chaintech.cmpcharts.ui.linechart.model.LineType.SmoothCurve(
+                            true
+                        ),
                         color = mainYellowColor
                     ),
                     intersectionPoint = IntersectionPoint(
@@ -248,9 +249,9 @@ fun SingleLineChartWithGridLines(
         gridLines = GridLinesUtil(color = Color.Gray),
         backgroundColor = surfaceVariantDark,
         paddingTop = 40.dp,
-        bottomPadding =  30.dp,
+        bottomPadding = 30.dp,
         paddingRight = 20.dp,
-        containerPaddingEnd= 30.dp,
+        containerPaddingEnd = 30.dp,
         isZoomAllowed = false
     )
     LineChart(
@@ -260,48 +261,50 @@ fun SingleLineChartWithGridLines(
 }
 
 @Composable
-fun SimpleChart(fieldName: String, data: List<Double>, listOfDate: List<String>, innerPadding: PaddingValues){
+fun SimpleChart(
+    fieldName: String,
+    data: List<Double>,
+    listOfDate: List<String>
+) {
     val lineParameters: List<LineParameters> = listOf(
         LineParameters(
             label = fieldName,
             data = data,
             lineColor = mainYellowColor,
-            lineType = com.aay.compose.lineChart.model.LineType.CURVED_LINE,
+            lineType = LineType.CURVED_LINE,
             lineShadow = true,
         )
     )
-    Box(modifier = Modifier.padding(innerPadding)) {
-        LineChart(
-            modifier = Modifier
-                .background(surfaceVariantDark)
-                .padding(20.dp)
-                .fillMaxSize(),
-            linesParameters = lineParameters,
-            isGrid = true,
-            gridColor = Color.Gray,
-            xAxisData = listOfDate,
-            animateChart = true,
-            showGridWithSpacer = true,
-            descriptionStyle = TextStyle(
-                fontSize = 14.sp,
-                color = Color.White,
-                fontWeight = FontWeight.W400
-            ),
-            yAxisStyle = TextStyle(
-                fontSize = 14.sp,
-                color = Color.Gray,
-            ),
-            xAxisStyle = TextStyle(
-                fontSize = 14.sp,
-                color = Color.Gray,
-                fontWeight = FontWeight.W400
-            ),
-            yAxisRange = 4,
-            oneLineChart = false,
-            showXAxis = true,
-            showYAxis = true,
-            gridOrientation = GridOrientation.GRID,
-            legendPosition = LegendPosition.BOTTOM,
-        )
-    }
+    LineChart(
+        modifier = Modifier
+            .background(surfaceVariantDark)
+            .padding(20.dp)
+            .fillMaxSize(),
+        linesParameters = lineParameters,
+        isGrid = true,
+        gridColor = Color.Gray,
+        xAxisData = listOfDate,
+        animateChart = true,
+        showGridWithSpacer = true,
+        descriptionStyle = TextStyle(
+            fontSize = 14.sp,
+            color = Color.White,
+            fontWeight = FontWeight.W400
+        ),
+        yAxisStyle = TextStyle(
+            fontSize = 14.sp,
+            color = Color.Gray,
+        ),
+        xAxisStyle = TextStyle(
+            fontSize = 14.sp,
+            color = Color.Gray,
+            fontWeight = FontWeight.W400
+        ),
+        yAxisRange = 4,
+        oneLineChart = false,
+        showXAxis = true,
+        showYAxis = true,
+        gridOrientation = GridOrientation.GRID,
+        legendPosition = LegendPosition.BOTTOM,
+    )
 }
