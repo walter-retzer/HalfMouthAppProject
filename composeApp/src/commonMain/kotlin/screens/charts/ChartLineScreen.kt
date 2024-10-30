@@ -1,6 +1,8 @@
 package screens.charts
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
@@ -24,10 +26,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.aay.compose.baseComponents.model.GridOrientation
+import com.aay.compose.baseComponents.model.LegendPosition
+import com.aay.compose.lineChart.LineChart
+import com.aay.compose.lineChart.model.LineParameters
 import components.DrawerMenuNavigation
 import components.MyAppCircularProgressIndicator
 import components.SimpleToolbar
@@ -35,6 +43,7 @@ import database.TicketDao
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.Roboto_Bold
 import kotlinx.coroutines.launch
+import kotlinx.datetime.format.Padding
 import network.chaintech.chartsLib.ui.linechart.model.IntersectionPoint
 import network.chaintech.cmpcharts.axis.AxisData
 import network.chaintech.cmpcharts.common.extensions.formatToSinglePrecision
@@ -48,7 +57,6 @@ import network.chaintech.cmpcharts.ui.linechart.model.Line
 import network.chaintech.cmpcharts.ui.linechart.model.LineChartData
 import network.chaintech.cmpcharts.ui.linechart.model.LinePlotData
 import network.chaintech.cmpcharts.ui.linechart.model.LineStyle
-import network.chaintech.cmpcharts.ui.linechart.model.LineType
 import org.jetbrains.compose.resources.Font
 import org.koin.compose.koinInject
 import theme.mainYellowColor
@@ -64,6 +72,7 @@ fun ChartLineScreen(
     ticketDao: TicketDao,
     fieldId: String,
     fieldName: String,
+    fieldResult: String,
     onNavigateToProduction: () -> Unit,
     onNavigateFromDrawerMenu: (route: String) -> Unit,
     viewModel: ChartLineViewModel = koinInject()
@@ -137,6 +146,12 @@ fun ChartLineScreen(
                     }
                 }
 
+                is ChartLineViewState.SuccessSimpleChart -> {
+
+                        SimpleChart(fieldName, state.listOfValues, state.listOfDate, innerPadding)
+
+                }
+
                 is ChartLineViewState.ErrorNetworkConnection -> {
                     if(!isSnackBarMessageErrorApiOpen) {
                         snackBarOnlyMessage(
@@ -201,7 +216,7 @@ fun SingleLineChartWithGridLines(
                 Line(
                     dataPoints = pointsData,
                     lineStyle = LineStyle(
-                        lineType = LineType.SmoothCurve(true),
+                        lineType = network.chaintech.cmpcharts.ui.linechart.model.LineType.SmoothCurve(true),
                         color = mainYellowColor
                     ),
                     intersectionPoint = IntersectionPoint(
@@ -242,4 +257,51 @@ fun SingleLineChartWithGridLines(
         modifier = Modifier.fillMaxSize(),
         lineChartData = lineChartProperties
     )
+}
+
+@Composable
+fun SimpleChart(fieldName: String, data: List<Double>, listOfDate: List<String>, innerPadding: PaddingValues){
+    val lineParameters: List<LineParameters> = listOf(
+        LineParameters(
+            label = fieldName,
+            data = data,
+            lineColor = mainYellowColor,
+            lineType = com.aay.compose.lineChart.model.LineType.CURVED_LINE,
+            lineShadow = true,
+        )
+    )
+    Box(modifier = Modifier.padding(innerPadding)) {
+        LineChart(
+            modifier = Modifier
+                .background(surfaceVariantDark)
+                .padding(20.dp)
+                .fillMaxSize(),
+            linesParameters = lineParameters,
+            isGrid = true,
+            gridColor = Color.Gray,
+            xAxisData = listOfDate,
+            animateChart = true,
+            showGridWithSpacer = true,
+            descriptionStyle = TextStyle(
+                fontSize = 14.sp,
+                color = Color.White,
+                fontWeight = FontWeight.W400
+            ),
+            yAxisStyle = TextStyle(
+                fontSize = 14.sp,
+                color = Color.Gray,
+            ),
+            xAxisStyle = TextStyle(
+                fontSize = 14.sp,
+                color = Color.Gray,
+                fontWeight = FontWeight.W400
+            ),
+            yAxisRange = 4,
+            oneLineChart = false,
+            showXAxis = true,
+            showYAxis = true,
+            gridOrientation = GridOrientation.GRID,
+            legendPosition = LegendPosition.BOTTOM,
+        )
+    }
 }
