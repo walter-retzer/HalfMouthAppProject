@@ -46,6 +46,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -65,12 +67,13 @@ import halfmouthappproject.composeapp.generated.resources.icon_qr_code
 import halfmouthappproject.composeapp.generated.resources.icon_qr_code_vector
 import halfmouthappproject.composeapp.generated.resources.icon_thumbs_down
 import halfmouthappproject.composeapp.generated.resources.logohalfmouth
+import halfmouthappproject.composeapp.generated.resources.poppins_semibold
 import halfmouthappproject.composeapp.generated.resources.ticket_qr_code
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
-import org.koin.compose.koinInject
 import qrscanner.QrScanner
 import theme.mainYellowColor
 import theme.onSurfaceVariantDark
@@ -237,6 +240,7 @@ fun DiscountsScreen(
                                                         textAlign = TextAlign.Center,
                                                         style = MaterialTheme.typography.titleLarge,
                                                         fontSize = 15.sp,
+                                                        fontFamily = FontFamily(Font(Res.font.poppins_semibold, weight = FontWeight.Black))
                                                     )
 
                                                     VerticalDivider(
@@ -261,6 +265,7 @@ fun DiscountsScreen(
                                                         textAlign = TextAlign.Center,
                                                         style = MaterialTheme.typography.titleLarge,
                                                         fontSize = 15.sp,
+                                                        fontFamily = FontFamily(Font(Res.font.poppins_semibold, weight = FontWeight.Black))
                                                     )
 
                                                     Spacer(modifier = Modifier.width(10.dp))
@@ -280,6 +285,7 @@ fun DiscountsScreen(
                                             lineBreak = LineBreak.Paragraph
                                         ),
                                         fontSize = 18.sp,
+                                        fontFamily = FontFamily(Font(Res.font.poppins_semibold, weight = FontWeight.Black)),
                                         color = surfaceBrightDark,
                                         modifier = Modifier
                                             .constrainAs(textTitle) {
@@ -398,6 +404,7 @@ fun DiscountsScreen(
                                                 lineBreak = LineBreak.Paragraph
                                             ),
                                             fontSize = 18.sp,
+                                            fontFamily = FontFamily(Font(Res.font.poppins_semibold, weight = FontWeight.Black)),
                                             color = surfaceBrightDark,
                                             modifier = Modifier
                                                 .constrainAs(textTitle) {
@@ -538,6 +545,7 @@ fun DiscountsScreen(
                                     textAlign = TextAlign.Center,
                                     style = MaterialTheme.typography.titleLarge,
                                     fontSize = 24.sp,
+                                    fontFamily = FontFamily(Font(Res.font.poppins_semibold, weight = FontWeight.Black)),
                                     color = surfaceBrightDark,
                                     modifier = Modifier
                                         .constrainAs(textDiscount) {
@@ -630,6 +638,7 @@ fun DiscountsScreen(
                                         lineBreak = LineBreak.Paragraph
                                     ),
                                     fontSize = 18.sp,
+                                    fontFamily = FontFamily(Font(Res.font.poppins_semibold, weight = FontWeight.Black)),
                                     color = surfaceBrightDark,
                                     modifier = Modifier
                                         .constrainAs(textTitle) {
@@ -666,6 +675,7 @@ fun DiscountsScreen(
                                     textAlign = TextAlign.Center,
                                     style = MaterialTheme.typography.titleLarge,
                                     fontSize = 24.sp,
+                                    fontFamily = FontFamily(Font(Res.font.poppins_semibold, weight = FontWeight.Black)),
                                     color = surfaceBrightDark,
                                     modifier = Modifier
                                         .constrainAs(textDiscount) {

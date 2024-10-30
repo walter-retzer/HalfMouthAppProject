@@ -38,19 +38,24 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import components.MenuToolbar
 import components.DrawerMenuNavigation
+import components.MenuToolbar
 import database.TicketDao
+import halfmouthappproject.composeapp.generated.resources.Poppins_Regular
 import halfmouthappproject.composeapp.generated.resources.Res
+import halfmouthappproject.composeapp.generated.resources.Roboto_Bold
 import halfmouthappproject.composeapp.generated.resources.address
 import halfmouthappproject.composeapp.generated.resources.icon_email
 import halfmouthappproject.composeapp.generated.resources.icon_location
 import halfmouthappproject.composeapp.generated.resources.icon_phone
 import halfmouthappproject.composeapp.generated.resources.icon_whats_app
+import halfmouthappproject.composeapp.generated.resources.poppins_semibold
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import theme.mainYellowColor
 import theme.onBackgroundDark
@@ -130,7 +135,6 @@ fun ContactInfoScreen(
     }
 }
 
-@OptIn(ExperimentalResourceApi::class)
 fun LazyListScope.subListHalfMouthContact(
     onOpenWhatsAppChat: () -> Unit,
     onOpenGoogleMaps: () -> Unit
@@ -141,6 +145,7 @@ fun LazyListScope.subListHalfMouthContact(
             text = "Fale Conosco",
             style = MaterialTheme.typography.titleLarge,
             fontSize = 20.sp,
+            fontFamily = FontFamily(Font(Res.font.poppins_semibold, weight = FontWeight.Black))
         )
         Text(
             modifier = Modifier
@@ -149,6 +154,7 @@ fun LazyListScope.subListHalfMouthContact(
             text = "Solicite um orçamento através dos canais:",
             style = MaterialTheme.typography.titleMedium,
             fontSize = 16.sp,
+            fontFamily = FontFamily(Font(Res.font.Poppins_Regular, weight = FontWeight.Black))
         )
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -166,6 +172,7 @@ fun LazyListScope.subListHalfMouthContact(
                 style = MaterialTheme.typography.titleMedium,
                 fontSize = 16.sp,
                 color = onSecondaryContainerDark,
+                fontFamily = FontFamily(Font(Res.font.Roboto_Bold, weight = FontWeight.Black))
             )
         }
         Row(
@@ -186,6 +193,7 @@ fun LazyListScope.subListHalfMouthContact(
                 style = MaterialTheme.typography.titleMedium,
                 fontSize = 16.sp,
                 color = onSecondaryContainerDark,
+                fontFamily = FontFamily(Font(Res.font.Roboto_Bold, weight = FontWeight.Black))
             )
         }
 
@@ -210,6 +218,7 @@ fun LazyListScope.subListHalfMouthContact(
                 text = "Entre em contato pelo WhatsApp e faça o seu pedido agora!",
                 style = MaterialTheme.typography.titleMedium,
                 fontSize = 17.sp,
+                fontFamily = FontFamily(Font(Res.font.Poppins_Regular, weight = FontWeight.Black))
             )
         }
 
@@ -226,6 +235,7 @@ fun LazyListScope.subListHalfMouthContact(
             text = "Nosso Endereço",
             style = MaterialTheme.typography.titleLarge,
             fontSize = 20.sp,
+            fontFamily = FontFamily(Font(Res.font.poppins_semibold, weight = FontWeight.Black))
         )
         Text(
             modifier = Modifier
@@ -234,6 +244,7 @@ fun LazyListScope.subListHalfMouthContact(
             text = "Venha encher os seus growlers.",
             style = MaterialTheme.typography.titleMedium,
             fontSize = 16.sp,
+            fontFamily = FontFamily(Font(Res.font.Poppins_Regular, weight = FontWeight.Black))
         )
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -255,6 +266,7 @@ fun LazyListScope.subListHalfMouthContact(
                 style = MaterialTheme.typography.titleMedium,
                 fontSize = 16.sp,
                 color = onSecondaryContainerDark,
+                fontFamily = FontFamily(Font(Res.font.Roboto_Bold, weight = FontWeight.Black))
             )
         }
 

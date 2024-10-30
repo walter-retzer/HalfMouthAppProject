@@ -47,6 +47,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -63,9 +65,11 @@ import data.beerTypeList
 import data.listOfIngredients
 import database.TicketDao
 import halfmouthappproject.composeapp.generated.resources.Res
+import halfmouthappproject.composeapp.generated.resources.Roboto_Bold
+import halfmouthappproject.composeapp.generated.resources.poppins_semibold
 import halfmouthappproject.composeapp.generated.resources.splashscreenlogo
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
@@ -153,7 +157,6 @@ fun HomeScreen(
 }
 
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun BeerCard(itemList: BeerType) {
     ConstraintLayout {
@@ -204,6 +207,7 @@ fun BeerCard(itemList: BeerType) {
             text = itemList.title,
             style = MaterialTheme.typography.titleLarge,
             fontSize = 22.sp,
+            fontFamily = FontFamily(Font(Res.font.Roboto_Bold, weight = FontWeight.Black)),
             color = Color.White,
             textAlign = TextAlign.Center,
             modifier = Modifier
@@ -266,12 +270,12 @@ fun SubItemTitle(title: String, paddingBottom: Dp = 0.dp) {
         Text(
             style = MaterialTheme.typography.bodyMedium,
             fontSize = 18.sp,
+            fontFamily = FontFamily(Font(Res.font.poppins_semibold, weight = FontWeight.Black)),
             text = title
         )
     }
 }
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun SubListIngredients(ingredients: List<Ingredients>) {
     LazyRow(
@@ -300,7 +304,7 @@ fun SubListIngredients(ingredients: List<Ingredients>) {
                 Text(
                     modifier = Modifier
                         .constrainAs(text) {
-                            top.linkTo(image.bottom)
+                            top.linkTo(image.bottom, 5.dp)
                             start.linkTo(parent.start)
                             end.linkTo(parent.end)
                         },

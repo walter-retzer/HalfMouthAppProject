@@ -36,6 +36,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import components.DrawerMenuNavigation
@@ -43,12 +45,14 @@ import components.MenuToolbar
 import components.MyAppCircularProgressIndicator
 import database.TicketDao
 import halfmouthappproject.composeapp.generated.resources.Res
+import halfmouthappproject.composeapp.generated.resources.Roboto_Bold
 import halfmouthappproject.composeapp.generated.resources.icon_chart_line2
 import halfmouthappproject.composeapp.generated.resources.icon_freezer
 import halfmouthappproject.composeapp.generated.resources.icon_freezer_small
 import halfmouthappproject.composeapp.generated.resources.icon_motor
 import halfmouthappproject.composeapp.generated.resources.icon_temperature
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.vectorResource
 import org.koin.compose.koinInject
 import secrets.BuildConfig
@@ -197,12 +201,14 @@ fun ProductionScreen(
                                             },
                                         text = name,
                                         style = MaterialTheme.typography.bodyMedium,
+                                        fontFamily = FontFamily(Font(Res.font.Roboto_Bold, weight = FontWeight.Black))
                                     )
 
                                     it.fieldValue?.adjustString()?.let { value ->
                                         Text(
                                             text = value,
                                             style = MaterialTheme.typography.bodyMedium,
+                                            fontFamily = FontFamily(Font(Res.font.Roboto_Bold, weight = FontWeight.Black)),
                                             modifier = Modifier.constrainAs(textValue) {
                                                 top.linkTo(textTitle.top)
                                                 start.linkTo(textTitle.end)
@@ -223,6 +229,7 @@ fun ProductionScreen(
                                                 },
                                             text = "Data do Envio: ${date.formattedAsDate()}",
                                             style = MaterialTheme.typography.bodySmall,
+                                            fontFamily = FontFamily(Font(Res.font.Roboto_Bold, weight = FontWeight.Black))
                                         )
                                     }
 

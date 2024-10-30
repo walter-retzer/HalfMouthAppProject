@@ -5,10 +5,8 @@ import halfmouthappproject.composeapp.generated.resources.icon_beer
 import halfmouthappproject.composeapp.generated.resources.icon_discount
 import halfmouthappproject.composeapp.generated.resources.icon_home
 import halfmouthappproject.composeapp.generated.resources.icon_phone
-import halfmouthappproject.composeapp.generated.resources.icon_qr_code
 import navigation.AppNavigation
 import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 
 object NavTitle {
@@ -18,14 +16,12 @@ object NavTitle {
     const val CONTACT = "Contato"
 }
 
-@OptIn(ExperimentalResourceApi::class)
 open class Item(
     val pathRoute: String,
     val title: String,
     val icon: DrawableResource,
 )
 
-@OptIn(ExperimentalResourceApi::class)
 sealed class NavItem {
     object Home :
         Item(
