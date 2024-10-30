@@ -40,8 +40,11 @@ coreKtx = "1.6.1"
 composeTest = "1.7.4"
 
 [libraries]
-#Chart Lines CMPCharts Library
+#CMPCharts Library
 cmpcharts = { module = "network.chaintech:cmpcharts", version.ref = "cmpcharts" }
+
+#Simple Chart Line Library
+chart = { module = "io.github.thechance101:chart", version.ref = "chart" }
 
 #Unit Test Libs
 assertk = { module = "com.willowtreeapps.assertk:assertk", version.ref = "assertk" }
@@ -64,9 +67,6 @@ sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sql
 
 #Connection Library
 konnection = { module = "dev.tmapps:konnection", version.ref = "konnection" }
-
-#Chart Line Library
-chart = { module = "io.github.thechance101:chart", version.ref = "chart" }
 
 #Qr Code Reader and Generate Library
 qr-kit = { module = "network.chaintech:qr-kit", version.ref = "qrKit" }
