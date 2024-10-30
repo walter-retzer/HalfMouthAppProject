@@ -12,7 +12,6 @@ import kotlinx.coroutines.launch
 import network.NetworkRepository
 import network.ResultNetwork
 import network.chaintech.cmpcharts.common.model.Point
-import secrets.BuildConfig
 import util.ConstantsApp.Companion.ERROR_API_CHART_LINE
 import util.ConstantsApp.Companion.ERROR_CHART_LINE
 import util.ConstantsApp.Companion.ERROR_CONNECTION_MESSAGE
@@ -20,21 +19,21 @@ import util.formattedAsTimeToChart
 
 class ChartLineViewModel(private val repository: NetworkRepository) : ViewModel() {
 
-    private val results = BuildConfig.RESULTS
     private val konnection = Konnection.instance
     private val hasNetworkConnection = konnection.isConnected()
     private val _uiState = MutableStateFlow<ChartLineViewState>(ChartLineViewState.Dashboard)
     val uiState: StateFlow<ChartLineViewState> = _uiState.asStateFlow()
 
 
-    fun fetchThingSpeakChannelField(fieldId: String) {
+    fun fetchThingSpeakChannelField(fieldId: String, results: String) {
         _uiState.value = ChartLineViewState.Loading
         if (!hasNetworkConnection) {
             _uiState.value = ChartLineViewState.ErrorNetworkConnection(ERROR_CONNECTION_MESSAGE)
             return
         }
         viewModelScope.launch {
-            val responseApi = repository.getThingSpeakChannelFeed(fieldId = fieldId, results = results)
+            val responseApi =
+                repository.getThingSpeakChannelFeed(fieldId = fieldId, results = results)
             val thingSpeakResponse = handleResponseApi(responseApi)
             adjustValuesChannelField(mutableListOf(thingSpeakResponse), fieldId)
         }
@@ -81,13 +80,7 @@ class ChartLineViewModel(private val repository: NetworkRepository) : ViewModel(
                             )
                         } else return@mapNotNull
 
-                        if (listOfValues.isEmpty() || listOfValues.size != listOfDate.size) _uiState.value =
-                            ChartLineViewState.Error(ERROR_CHART_LINE)
-                        else _uiState.value = ChartLineViewState.SuccessSimpleChart(listOfValues, listOfDate)
-
-//                        if (listOfValues.isEmpty() || listOfValues.size != listOfDate.size) _uiState.value =
-//                            ChartLineViewState.Error(ERROR_CHART_LINE)
-//                        else _uiState.value = ChartLineViewState.Success(listOfPointsToPlot)
+                        checkSuccess(listOfValues, listOfDate, listOfPointsToPlot)
                     }
 
                     "2" -> {
@@ -103,9 +96,7 @@ class ChartLineViewModel(private val repository: NetworkRepository) : ViewModel(
                             )
                         } else return@mapNotNull
 
-                        if (listOfValues.isEmpty() || listOfValues.size != listOfDate.size) _uiState.value =
-                            ChartLineViewState.Error(ERROR_CHART_LINE)
-                        else _uiState.value = ChartLineViewState.Success(listOfPointsToPlot)
+                        checkSuccess(listOfValues, listOfDate, listOfPointsToPlot)
                     }
 
                     "3" -> {
@@ -121,9 +112,7 @@ class ChartLineViewModel(private val repository: NetworkRepository) : ViewModel(
                             )
                         } else return@mapNotNull
 
-                        if (listOfValues.isEmpty() || listOfValues.size != listOfDate.size) _uiState.value =
-                            ChartLineViewState.Error(ERROR_CHART_LINE)
-                        else _uiState.value = ChartLineViewState.Success(listOfPointsToPlot)
+                        checkSuccess(listOfValues, listOfDate, listOfPointsToPlot)
                     }
 
                     "4" -> {
@@ -132,9 +121,7 @@ class ChartLineViewModel(private val repository: NetworkRepository) : ViewModel(
                             listOfDate.add(it.created_at.formattedAsTimeToChart())
                         } else return@mapNotNull
 
-                        if (listOfValues.isEmpty() || listOfValues.size != listOfDate.size) _uiState.value =
-                            ChartLineViewState.Error(ERROR_CHART_LINE)
-                        else _uiState.value = ChartLineViewState.SuccessSimpleChart(listOfValues, listOfDate)
+                        checkSimpleChartSuccess(listOfValues, listOfDate)
                     }
 
                     "5" -> {
@@ -150,46 +137,25 @@ class ChartLineViewModel(private val repository: NetworkRepository) : ViewModel(
                             )
                         } else return@mapNotNull
 
-                        if (listOfValues.isEmpty() || listOfValues.size != listOfDate.size) _uiState.value =
-                            ChartLineViewState.Error(ERROR_CHART_LINE)
-                        else _uiState.value = ChartLineViewState.Success(listOfPointsToPlot)
-
+                        checkSuccess(listOfValues, listOfDate, listOfPointsToPlot)
                     }
 
                     "6" -> {
                         if (it?.field6 != null) {
                             listOfValues.add(it.field6.toDouble())
                             listOfDate.add(it.created_at.formattedAsTimeToChart())
-                            listOfPointsToPlot.add(
-                                Point(
-                                    it.entry_id.toFloat(),
-                                    it.field6.toFloat(),
-                                    it.created_at.formattedAsTimeToChart()
-                                )
-                            )
                         } else return@mapNotNull
 
-                        if (listOfValues.isEmpty() || listOfValues.size != listOfDate.size) _uiState.value =
-                            ChartLineViewState.Error(ERROR_CHART_LINE)
-                        else _uiState.value = ChartLineViewState.Success(listOfPointsToPlot)
+                        checkSimpleChartSuccess(listOfValues, listOfDate)
                     }
 
                     "7" -> {
                         if (it?.field7 != null) {
                             listOfValues.add(it.field7.toDouble())
                             listOfDate.add(it.created_at.formattedAsTimeToChart())
-                            listOfPointsToPlot.add(
-                                Point(
-                                    it.entry_id.toFloat(),
-                                    it.field7.toFloat(),
-                                    it.created_at.formattedAsTimeToChart()
-                                )
-                            )
                         } else return@mapNotNull
 
-                        if (listOfValues.isEmpty() || listOfValues.size != listOfDate.size) _uiState.value =
-                            ChartLineViewState.Error(ERROR_CHART_LINE)
-                        else _uiState.value = ChartLineViewState.Success(listOfPointsToPlot)
+                        checkSimpleChartSuccess(listOfValues, listOfDate)
                     }
 
                     "8" -> {
@@ -205,9 +171,7 @@ class ChartLineViewModel(private val repository: NetworkRepository) : ViewModel(
                             )
                         } else return@mapNotNull
 
-                        if (listOfValues.isEmpty() || listOfValues.size != listOfDate.size) _uiState.value =
-                            ChartLineViewState.Error(ERROR_CHART_LINE)
-                        else _uiState.value = ChartLineViewState.Success(listOfPointsToPlot)
+                        checkSuccess(listOfValues, listOfDate, listOfPointsToPlot)
                     }
 
                     else -> emptyList<Double>()
@@ -219,12 +183,33 @@ class ChartLineViewModel(private val repository: NetworkRepository) : ViewModel(
             println(e)
         }
     }
+
+    private fun checkSuccess(
+        listOfValues: MutableList<Double>,
+        listOfDate: List<String>,
+        listOfPointsToPlot: MutableList<Point>
+    ) {
+        if (listOfValues.isEmpty() || listOfValues.size != listOfDate.size) _uiState.value =
+            ChartLineViewState.Error(ERROR_CHART_LINE)
+        else _uiState.value = ChartLineViewState.Success(listOfPointsToPlot)
+
+    }
+
+    private fun checkSimpleChartSuccess(
+        listOfValues: MutableList<Double>,
+        listOfDate: List<String>
+    ) {
+        if (listOfValues.isEmpty() || listOfValues.size != listOfDate.size) _uiState.value =
+            ChartLineViewState.Error(ERROR_CHART_LINE)
+        else _uiState.value = ChartLineViewState.SuccessSimpleChart(listOfValues, listOfDate)
+    }
 }
+
 
 sealed interface ChartLineViewState {
     data object Dashboard : ChartLineViewState
     data class Success(val listOfPointsToPlot: List<Point>) : ChartLineViewState
-    data class SuccessSimpleChart(val listOfValues:  List<Double>, val listOfDate: List<String>) : ChartLineViewState
+    data class SuccessSimpleChart(val listOfValues: List<Double>, val listOfDate: List<String>) : ChartLineViewState
     data class ErrorNetworkConnection(val message: String) : ChartLineViewState
     data class Error(val message: String) : ChartLineViewState
     data object Loading : ChartLineViewState
