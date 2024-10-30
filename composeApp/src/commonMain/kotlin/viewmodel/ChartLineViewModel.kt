@@ -80,6 +80,14 @@ class ChartLineViewModel(private val repository: NetworkRepository) : ViewModel(
                                 )
                             )
                         } else return@mapNotNull
+
+                        if (listOfValues.isEmpty() || listOfValues.size != listOfDate.size) _uiState.value =
+                            ChartLineViewState.Error(ERROR_CHART_LINE)
+                        else _uiState.value = ChartLineViewState.SuccessSimpleChart(listOfValues, listOfDate)
+
+//                        if (listOfValues.isEmpty() || listOfValues.size != listOfDate.size) _uiState.value =
+//                            ChartLineViewState.Error(ERROR_CHART_LINE)
+//                        else _uiState.value = ChartLineViewState.Success(listOfPointsToPlot)
                     }
 
                     "2" -> {
@@ -94,6 +102,10 @@ class ChartLineViewModel(private val repository: NetworkRepository) : ViewModel(
                                 )
                             )
                         } else return@mapNotNull
+
+                        if (listOfValues.isEmpty() || listOfValues.size != listOfDate.size) _uiState.value =
+                            ChartLineViewState.Error(ERROR_CHART_LINE)
+                        else _uiState.value = ChartLineViewState.Success(listOfPointsToPlot)
                     }
 
                     "3" -> {
@@ -108,20 +120,21 @@ class ChartLineViewModel(private val repository: NetworkRepository) : ViewModel(
                                 )
                             )
                         } else return@mapNotNull
+
+                        if (listOfValues.isEmpty() || listOfValues.size != listOfDate.size) _uiState.value =
+                            ChartLineViewState.Error(ERROR_CHART_LINE)
+                        else _uiState.value = ChartLineViewState.Success(listOfPointsToPlot)
                     }
 
                     "4" -> {
                         if (it?.field4 != null) {
                             listOfValues.add(it.field4.toDouble())
                             listOfDate.add(it.created_at.formattedAsTimeToChart())
-                            listOfPointsToPlot.add(
-                                Point(
-                                    it.entry_id.toFloat(),
-                                    it.field4.toFloat(),
-                                    it.created_at.formattedAsTimeToChart()
-                                )
-                            )
                         } else return@mapNotNull
+
+                        if (listOfValues.isEmpty() || listOfValues.size != listOfDate.size) _uiState.value =
+                            ChartLineViewState.Error(ERROR_CHART_LINE)
+                        else _uiState.value = ChartLineViewState.SuccessSimpleChart(listOfValues, listOfDate)
                     }
 
                     "5" -> {
@@ -136,6 +149,11 @@ class ChartLineViewModel(private val repository: NetworkRepository) : ViewModel(
                                 )
                             )
                         } else return@mapNotNull
+
+                        if (listOfValues.isEmpty() || listOfValues.size != listOfDate.size) _uiState.value =
+                            ChartLineViewState.Error(ERROR_CHART_LINE)
+                        else _uiState.value = ChartLineViewState.Success(listOfPointsToPlot)
+
                     }
 
                     "6" -> {
@@ -150,6 +168,10 @@ class ChartLineViewModel(private val repository: NetworkRepository) : ViewModel(
                                 )
                             )
                         } else return@mapNotNull
+
+                        if (listOfValues.isEmpty() || listOfValues.size != listOfDate.size) _uiState.value =
+                            ChartLineViewState.Error(ERROR_CHART_LINE)
+                        else _uiState.value = ChartLineViewState.Success(listOfPointsToPlot)
                     }
 
                     "7" -> {
@@ -164,6 +186,10 @@ class ChartLineViewModel(private val repository: NetworkRepository) : ViewModel(
                                 )
                             )
                         } else return@mapNotNull
+
+                        if (listOfValues.isEmpty() || listOfValues.size != listOfDate.size) _uiState.value =
+                            ChartLineViewState.Error(ERROR_CHART_LINE)
+                        else _uiState.value = ChartLineViewState.Success(listOfPointsToPlot)
                     }
 
                     "8" -> {
@@ -178,15 +204,16 @@ class ChartLineViewModel(private val repository: NetworkRepository) : ViewModel(
                                 )
                             )
                         } else return@mapNotNull
+
+                        if (listOfValues.isEmpty() || listOfValues.size != listOfDate.size) _uiState.value =
+                            ChartLineViewState.Error(ERROR_CHART_LINE)
+                        else _uiState.value = ChartLineViewState.Success(listOfPointsToPlot)
                     }
 
                     else -> emptyList<Double>()
                 }
             }
 
-            if (listOfValues.isEmpty() || listOfValues.size != listOfDate.size) _uiState.value =
-                ChartLineViewState.Error(ERROR_CHART_LINE)
-            else _uiState.value = ChartLineViewState.Success(listOfPointsToPlot)
         } catch (e: Exception) {
             _uiState.value = ChartLineViewState.Error(ERROR_API_CHART_LINE)
             println(e)
@@ -197,6 +224,7 @@ class ChartLineViewModel(private val repository: NetworkRepository) : ViewModel(
 sealed interface ChartLineViewState {
     data object Dashboard : ChartLineViewState
     data class Success(val listOfPointsToPlot: List<Point>) : ChartLineViewState
+    data class SuccessSimpleChart(val listOfValues:  List<Double>, val listOfDate: List<String>) : ChartLineViewState
     data class ErrorNetworkConnection(val message: String) : ChartLineViewState
     data class Error(val message: String) : ChartLineViewState
     data object Loading : ChartLineViewState
