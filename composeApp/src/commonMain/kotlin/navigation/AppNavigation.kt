@@ -13,10 +13,8 @@ import halfmouthappproject.composeapp.generated.resources.profile_route
 import halfmouthappproject.composeapp.generated.resources.sign_in_route
 import halfmouthappproject.composeapp.generated.resources.splash_screen_route
 import halfmouthappproject.composeapp.generated.resources.ticket_route
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
 
-@OptIn(ExperimentalResourceApi::class)
 enum class AppNavigation(val title: StringResource) {
     SplashScreenRoute(title = Res.string.splash_screen_route),
     LoginRoute(title = Res.string.login_route),
@@ -30,7 +28,6 @@ enum class AppNavigation(val title: StringResource) {
     TicketRoute(title = Res.string.ticket_route),
 }
 
-@OptIn(ExperimentalResourceApi::class)
 enum class AppGraphNav(val title: StringResource) {
     LoginGraph(title = Res.string.login_graph_name),
     HomeGraph(title = Res.string.home_graph_name),
