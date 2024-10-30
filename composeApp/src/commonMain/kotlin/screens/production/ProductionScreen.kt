@@ -49,9 +49,9 @@ import halfmouthappproject.composeapp.generated.resources.icon_freezer_small
 import halfmouthappproject.composeapp.generated.resources.icon_motor
 import halfmouthappproject.composeapp.generated.resources.icon_temperature
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.vectorResource
 import org.koin.compose.koinInject
+import secrets.BuildConfig
 import theme.mainYellowColor
 import theme.onBackgroundDark
 import theme.onSurfaceVariantDark
@@ -63,12 +63,12 @@ import viewmodel.ProductionViewModel
 import viewmodel.ProductionViewState
 
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductionScreen(
     ticketDao: TicketDao,
     onNavigateToProfile: () -> Unit,
-    onNavigateToChartLine: (fieldId: String, fieldName: String) -> Unit,
+    onNavigateToChartLine: (fieldId: String, fieldName: String, fieldResult: String) -> Unit,
     onNavigateFromDrawerMenu: (route: String) -> Unit,
     viewModel: ProductionViewModel = koinInject()
 ) {
@@ -153,9 +153,17 @@ fun ProductionScreen(
                                                 start.linkTo(startIconGuideLine)
                                                 bottom.linkTo(bottomIconGuideLine)
                                             }.clickable {
+                                                val result =
+                                                    if (it.fieldName.toString() == "TI-004") "15"
+                                                    else if (it.fieldName.toString() == "TI-001") "12"
+                                                    else if (it.fieldName.toString() == "CAMARA FRIA") "5"
+                                                    else if (it.fieldName.toString() == "BOMBA RECIRCULAÇÃO") "5"
+                                                    else BuildConfig.RESULTS
+
                                                 onNavigateToChartLine(
                                                     it.fieldId.toString(),
-                                                    it.fieldName.toString()
+                                                    it.fieldName.toString(),
+                                                    result
                                                 )
                                             }
                                     )
