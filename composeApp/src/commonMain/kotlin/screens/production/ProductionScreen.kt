@@ -153,11 +153,9 @@ fun ProductionScreen(
                                                 start.linkTo(startIconGuideLine)
                                                 bottom.linkTo(bottomIconGuideLine)
                                             }.clickable {
-                                                val result =
-                                                    if (it.fieldName.toString() == "TI-004") "15"
-                                                    else if (it.fieldName.toString() == "TI-001") "12"
-                                                    else if (it.fieldName.toString() == "CAMARA FRIA") "5"
-                                                    else if (it.fieldName.toString() == "BOMBA RECIRCULAÇÃO") "5"
+                                                val result = if (it.fieldName.toString() == "TI-004") BuildConfig.SIMPLE_RESULTS
+                                                    else if (it.fieldName.toString() == "CAMARA FRIA") BuildConfig.SIMPLE_RESULTS
+                                                    else if (it.fieldName.toString() == "BOMBA RECIRCULAÇÃO") BuildConfig.SIMPLE_RESULTS
                                                     else BuildConfig.RESULTS
 
                                                 onNavigateToChartLine(
