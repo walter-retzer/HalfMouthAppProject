@@ -70,7 +70,6 @@ import halfmouthappproject.composeapp.generated.resources.logohalfmouth
 import halfmouthappproject.composeapp.generated.resources.poppins_semibold
 import halfmouthappproject.composeapp.generated.resources.ticket_qr_code
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
@@ -86,7 +85,7 @@ import viewmodel.DiscountsViewModel
 import viewmodel.DiscountsViewState
 
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DiscountsScreen(
     ticketDao: TicketDao,
