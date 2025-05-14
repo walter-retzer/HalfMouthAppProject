@@ -1,5 +1,5 @@
 [versions]
-agp = "8.2.0"
+agp = "8.10.0"
 android-compileSdk = "34"
 android-minSdk = "24"
 android-targetSdk = "34"
@@ -20,7 +20,7 @@ firebaseAuth = "1.13.0"
 firebaseDatabase = "1.13.0"
 junit = "4.13.2"
 konnection = "1.4.1"
-kotlin = "1.9.23"
+kotlin = "2.1.0"
 gservices = "4.4.2"
 composeNavigation = "2.7.0-alpha07"
 kotlinxDatetime = "0.6.0"
@@ -28,8 +28,8 @@ logbackClassic = "1.2.11"
 multiplatformSettings = "1.1.1"
 ktor = "2.3.11"
 qrKit = "1.0.4"
-room = "2.7.0-alpha05"
-ksp = "1.9.23-1.0.19"
+room = "2.7.1"
+ksp = "2.1.21-2.0.1"
 sqlite = "2.5.0-SNAPSHOT"
 lifecycleViewModel = "2.8.6"
 koin = "3.6.0-alpha3"
@@ -122,6 +122,7 @@ googleServices = {id = "com.google.gms.google-services", version.ref = "gservice
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room = { id = "androidx.room", version.ref = "room" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
 [bundles]
 ktor = ["ktor-client-core", "ktor-client-content-negotiation"]
