@@ -10,8 +10,8 @@
     "sourceSetName": "iosMain"
   },
   {
-    "moduleId": "androidx.sqlite:sqlite-bundled:2.5.0",
-    "file": "/Users/walter/Downloads/HalfMouthAppProject/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/androidx.sqlite-sqlite-bundled-2.5.0-nativeMain-cinterop/androidx.sqlite_sqlite-bundled-cinterop-androidXBundledSqlite-BHP1JA.klib",
+    "moduleId": "androidx.sqlite:sqlite-bundled:2.5.1",
+    "file": "/Users/walter/Downloads/HalfMouthAppProject/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/androidx.sqlite-sqlite-bundled-2.5.1-nativeMain-cinterop/androidx.sqlite_sqlite-bundled-cinterop-androidXBundledSqlite-BHP1JA.klib",
     "sourceSetName": "nativeMain"
   },
   {
@@ -20,8 +20,8 @@
     "sourceSetName": "nativeMain"
   },
   {
-    "moduleId": "org.jetbrains.compose.ui:ui-uikit:1.6.11",
-    "file": "/Users/walter/Downloads/HalfMouthAppProject/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/org.jetbrains.compose.ui-ui-uikit-1.6.11-uikitMain-cinterop/org.jetbrains.compose.ui_ui-uikit-cinterop-utils-oguluQ.klib",
+    "moduleId": "org.jetbrains.compose.ui:ui-uikit:1.7.3",
+    "file": "/Users/walter/Downloads/HalfMouthAppProject/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/org.jetbrains.compose.ui-ui-uikit-1.7.3-uikitMain-cinterop/org.jetbrains.compose.ui_ui-uikit-cinterop-utils-aNVDjg.klib",
     "sourceSetName": "uikitMain"
   },
   {
@@ -30,13 +30,18 @@
     "sourceSetName": "iosMain"
   },
   {
-    "moduleId": "androidx.sqlite:sqlite-framework:2.5.0",
-    "file": "/Users/walter/Downloads/HalfMouthAppProject/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/androidx.sqlite-sqlite-framework-2.5.0-nativeMain-cinterop/androidx.sqlite_sqlite-framework-cinterop-sqlite3-kyeICw.klib",
+    "moduleId": "androidx.sqlite:sqlite-framework:2.5.1",
+    "file": "/Users/walter/Downloads/HalfMouthAppProject/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/androidx.sqlite-sqlite-framework-2.5.1-nativeMain-cinterop/androidx.sqlite_sqlite-framework-cinterop-sqlite3-kyeICw.klib",
     "sourceSetName": "nativeMain"
   },
   {
-    "moduleId": "io.ktor:ktor-utils:2.3.11",
-    "file": "/Users/walter/Downloads/HalfMouthAppProject/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/io.ktor-ktor-utils-2.3.11-iosMain-cinterop/io.ktor_ktor-utils-cinterop-threadUtils-TE4abA.klib",
+    "moduleId": "io.ktor:ktor-utils:3.0.3",
+    "file": "/Users/walter/Downloads/HalfMouthAppProject/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/io.ktor-ktor-utils-3.0.3-iosMain-cinterop/io.ktor_ktor-utils-cinterop-threadUtils-kGNXpQ.klib",
+    "sourceSetName": "iosMain"
+  },
+  {
+    "moduleId": "io.ktor:ktor-io:3.0.3",
+    "file": "/Users/walter/Downloads/HalfMouthAppProject/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/io.ktor-ktor-io-3.0.3-iosMain-cinterop/io.ktor_ktor-io-cinterop-mutex-G8iuZg.klib",
     "sourceSetName": "iosMain"
   }
 ]
