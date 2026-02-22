@@ -129,15 +129,18 @@ fun String.formattedAsTimeToChart(): String {
 
 fun String.adjustString(): String {
     var text = ""
-    if (this == "0.00000") text = " = Desligado"
-    else if (this == "1.00000") text = " = Ligado"
-    else {
-        try {
-            val value = this.toDouble().formatDecimal()
-            text = " = ${value.replace(",", ".")}°C"
-        } catch (e: Exception) {
-            println("Erro ao Converter a String: $e")
-        }
+    try {
+        val value = this.toDouble().formatDecimal()
+        text = " = ${value.replace(",", ".")}°C"
+    } catch (e: Exception) {
+        println("Erro ao Converter a String: $e")
     }
+    return text
+}
+
+fun String.adjustStatusString(): String {
+    var text = ""
+    if (this == "0") text = " = Desligado"
+    if (this == "1") text = " = Ligado"
     return text
 }
