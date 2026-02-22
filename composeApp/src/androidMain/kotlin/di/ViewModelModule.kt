@@ -10,7 +10,8 @@ import viewmodel.ProductionViewModel
 import viewmodel.ProfileViewModel
 import viewmodel.SignInViewModel
 import viewmodel.SetpointAdjustViewModel
-
+import viewmodel.TemperatureViewModel
+import viewmodel.DigitalInputViewModel
 
 actual val viewModelModule = module{
     viewModelOf(::LoginUserViewModel)
@@ -21,4 +22,6 @@ actual val viewModelModule = module{
     viewModelOf(::ProductionViewModel)
     viewModelOf(::ChartLineViewModel)
     viewModelOf(::SetpointAdjustViewModel)
+    viewModelOf(::TemperatureViewModel)
+    viewModelOf(::DigitalInputViewModel)
 }
