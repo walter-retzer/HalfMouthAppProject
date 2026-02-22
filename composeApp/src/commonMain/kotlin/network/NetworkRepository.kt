@@ -29,8 +29,8 @@ class NetworkRepository(private val client: HttpClient) {
     ): ResultNetwork<Int> =
         makeRequest {
             client.get{
-                url(HttpRoutes.REQUEST_CHANNEL_UPDATE_FIELD)
-                parameter("api_key", BuildConfig.API_KEY_SETPOINT)
+                url(HttpRoutes.REQUEST_URL_UPDATE_FIELDS)
+                parameter("api_key", BuildConfig.API_KEY_WRITE_SETPOINT)
                 parameter("field$fieldNumber1", value.toString())
                 parameter("field$fieldNumber2", value.toString())
                 parameter("field$fieldNumber3", value.toString())
@@ -43,12 +43,30 @@ class NetworkRepository(private val client: HttpClient) {
         }
 
 
-    suspend fun getThingSpeakValues(results: String): ResultNetwork<ThingSpeakResponse> =
+    suspend fun getThingSpeakSetPointValues(): ResultNetwork<ThingSpeakResponse> =
         makeRequest {
             client.get{
                 url(HttpRoutes.REQUEST_URL)
-                parameter("api_key", BuildConfig.API_KEY)
-                parameter("results", results)
+                parameter("api_key", BuildConfig.API_KEY_READ_SETPOINT)
+                parameter("results", BuildConfig.RESULTS)
+            }
+        }
+
+    suspend fun getThingSpeakTemperatureValues(): ResultNetwork<ThingSpeakResponse> =
+        makeRequest {
+            client.get{
+                url(HttpRoutes.REQUEST_URL)
+                parameter("api_key", BuildConfig.API_KEY_READ_TEMPERATURE)
+                parameter("results", BuildConfig.RESULTS)
+            }
+        }
+
+    suspend fun getThingSpeakDigitalInputsValues(): ResultNetwork<ThingSpeakResponse> =
+        makeRequest {
+            client.get{
+                url(HttpRoutes.REQUEST_URL)
+                parameter("api_key", BuildConfig.API_KEY_READ_DIGITAL_INPUT)
+                parameter("results", BuildConfig.RESULTS)
             }
         }
 
