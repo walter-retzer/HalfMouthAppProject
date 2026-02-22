@@ -25,12 +25,12 @@ class NetworkRepository(private val client: HttpClient) {
         fieldNumber6: Int = 6,
         fieldNumber7: Int = 7,
         fieldNumber8: Int = 8,
-        value: Float = 22.75f
+        value: Int = 10
     ): ResultNetwork<Int> =
         makeRequest {
             client.get{
                 url(HttpRoutes.REQUEST_URL_UPDATE_FIELDS)
-                parameter("api_key", BuildConfig.API_KEY_WRITE_SETPOINT)
+                parameter("api_key", BuildConfig.API_KEY_WRITE_TEMPERATURE)
                 parameter("field$fieldNumber1", value.toString())
                 parameter("field$fieldNumber2", value.toString())
                 parameter("field$fieldNumber3", value.toString())
@@ -46,7 +46,7 @@ class NetworkRepository(private val client: HttpClient) {
     suspend fun getThingSpeakSetPointValues(): ResultNetwork<ThingSpeakResponse> =
         makeRequest {
             client.get{
-                url(HttpRoutes.REQUEST_URL)
+                url(HttpRoutes.REQUEST_URL_READ_SETPOINT)
                 parameter("api_key", BuildConfig.API_KEY_READ_SETPOINT)
                 parameter("results", BuildConfig.RESULTS)
             }
@@ -55,7 +55,7 @@ class NetworkRepository(private val client: HttpClient) {
     suspend fun getThingSpeakTemperatureValues(): ResultNetwork<ThingSpeakResponse> =
         makeRequest {
             client.get{
-                url(HttpRoutes.REQUEST_URL)
+                url(HttpRoutes.REQUEST_URL_READ_TEMPERATURE)
                 parameter("api_key", BuildConfig.API_KEY_READ_TEMPERATURE)
                 parameter("results", BuildConfig.RESULTS)
             }
@@ -64,8 +64,8 @@ class NetworkRepository(private val client: HttpClient) {
     suspend fun getThingSpeakDigitalInputValues(): ResultNetwork<ThingSpeakResponse> =
         makeRequest {
             client.get{
-                url(HttpRoutes.REQUEST_URL)
-                parameter("api_key", BuildConfig.API_KEY_READ_DIGITAL_INPUT)
+                url(HttpRoutes.REQUEST_URL_READ_DIGITAL_INPUT)
+                parameter("api_key", BuildConfig.API_KEY_READ_DIGITAL_INPUTS)
                 parameter("results", BuildConfig.RESULTS)
             }
         }
@@ -74,7 +74,7 @@ class NetworkRepository(private val client: HttpClient) {
         makeRequest {
             client.get{
                 url(HttpRoutes.REQUEST_CHANNEL_FEED + "$fieldId.json?")
-                parameter("api_key", BuildConfig.API_KEY)
+                parameter("api_key", BuildConfig.API_KEY_READ_SETPOINT)
                 parameter("results", results)
             }
         }
