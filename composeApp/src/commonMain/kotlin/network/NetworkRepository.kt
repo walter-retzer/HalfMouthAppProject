@@ -17,14 +17,28 @@ import secrets.BuildConfig
 class NetworkRepository(private val client: HttpClient) {
 
     suspend fun updateFieldValue(
-        fieldNumber: Int = 1,
-        value: Int = 222
+        fieldNumber1: Int = 1,
+        fieldNumber2: Int = 2,
+        fieldNumber3: Int = 3,
+        fieldNumber4: Int = 4,
+        fieldNumber5: Int = 5,
+        fieldNumber6: Int = 6,
+        fieldNumber7: Int = 7,
+        fieldNumber8: Int = 8,
+        value: Float = 22.75f
     ): ResultNetwork<Int> =
         makeRequest {
             client.get{
                 url(HttpRoutes.REQUEST_CHANNEL_UPDATE_FIELD)
                 parameter("api_key", BuildConfig.API_KEY_SETPOINT)
-                parameter("field$fieldNumber", value.toString())
+                parameter("field$fieldNumber1", value.toString())
+                parameter("field$fieldNumber2", value.toString())
+                parameter("field$fieldNumber3", value.toString())
+                parameter("field$fieldNumber4", value.toString())
+                parameter("field$fieldNumber5", value.toString())
+                parameter("field$fieldNumber6", value.toString())
+                parameter("field$fieldNumber7", value.toString())
+                parameter("field$fieldNumber8", value.toString())
             }
         }
 
