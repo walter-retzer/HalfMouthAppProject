@@ -4,6 +4,7 @@ import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.icon_beer
 import halfmouthappproject.composeapp.generated.resources.icon_discount
 import halfmouthappproject.composeapp.generated.resources.icon_home
+import halfmouthappproject.composeapp.generated.resources.icon_input_value
 import halfmouthappproject.composeapp.generated.resources.icon_phone
 import halfmouthappproject.composeapp.generated.resources.icon_qr_code
 import navigation.AppNavigation
@@ -14,7 +15,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 object NavTitle {
     const val HOME = "Menu"
     const val PRODUCTION = "Produção"
-    const val DISCOUNTS = "Descontos"
+    const val SETPPOINT = "Setpoint"
     const val CONTACT = "Contato"
 }
 
@@ -44,8 +45,8 @@ sealed class NavItem {
     object Setpoint :
         Item(
             pathRoute = AppNavigation.SetpointRoute.name,
-            title = NavTitle.DISCOUNTS,
-            icon = Res.drawable.icon_discount
+            title = NavTitle.SETPPOINT,
+            icon = Res.drawable.icon_input_value
         )
 
     object Contact :
