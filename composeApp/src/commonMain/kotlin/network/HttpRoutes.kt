@@ -4,7 +4,9 @@ import secrets.BuildConfig
 
 object HttpRoutes {
     private const val BASE_URL = "https://api.thingspeak.com"
-    const val REQUEST_URL = "$BASE_URL/channels/${BuildConfig.CHANNEL_ID}/feeds.json?"
-    const val REQUEST_CHANNEL_FEED = "$BASE_URL/channels/${BuildConfig.CHANNEL_ID}/fields/"
+    const val REQUEST_URL_READ_SETPOINT = "$BASE_URL/channels/${BuildConfig.CHANNEL_ID_READ_SETPOINT}/feeds.json?"
+    const val REQUEST_URL_READ_TEMPERATURE = "$BASE_URL/channels/${BuildConfig.CHANNEL_ID_READ_TEMPERATURE}/feeds.json?"
+    const val REQUEST_URL_READ_DIGITAL_INPUT = "$BASE_URL/channels/${BuildConfig.CHANNEL_ID_READ_DIGITAL_INPUT}/feeds.json?"
+    const val REQUEST_CHANNEL_FEED = "$BASE_URL/channels/${BuildConfig.CHANNEL_ID_READ_SETPOINT}/fields/"
     const val REQUEST_URL_UPDATE_FIELDS = "$BASE_URL/update"
 }
