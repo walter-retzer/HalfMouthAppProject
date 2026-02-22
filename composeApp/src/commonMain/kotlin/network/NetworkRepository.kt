@@ -16,6 +16,19 @@ import secrets.BuildConfig
 
 class NetworkRepository(private val client: HttpClient) {
 
+    suspend fun updateFieldValue(
+        fieldNumber: Int = 1,
+        value: Int = 222
+    ): ResultNetwork<Int> =
+        makeRequest {
+            client.get{
+                url(HttpRoutes.REQUEST_CHANNEL_UPDATE_FIELD)
+                parameter("api_key", BuildConfig.API_KEY_SETPOINT)
+                parameter("field$fieldNumber", value.toString())
+            }
+        }
+
+
     suspend fun getThingSpeakValues(results: String): ResultNetwork<ThingSpeakResponse> =
         makeRequest {
             client.get{
