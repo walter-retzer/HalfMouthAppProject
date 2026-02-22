@@ -6,6 +6,7 @@ class ConstantsApp {
             val PHONE_MAX_NUMBER = 11
             val NAME_MAX_NUMBER = 25
             val ERROR_API = "Não foi possível exibir os dados, por favor, tente mais tarde."
+            val ERROR_API_UPDATE_VALUE = "Não foi possível atualizar os valores de setpoint, tente novamente em 20 segundos!."
             val ERROR_SIGN_IN = "Não foi possível acessar a sua conta, por favor, tente mais tarde."
             val SUCCESS_SIGN_IN = "Login realizado com Sucesso!"
             val ERROR_DELETE_ACCOUNT = "Não foi possível deletar a sua conta, por favor, tente mais tarde."
@@ -23,6 +24,7 @@ class ConstantsApp {
             val ERROR_CHART_LINE = "Não foi possível exibir os dados do gráfico, por favor, tente mais tarde."
             val ERROR_API_CHART_LINE = "Não foi possível acessar os dados no ThingSpeak, por favor, tente mais tarde."
             val ERROR_CONNECTION_MESSAGE = "Seu dispositivo está sem conexão com a internet."
+            val ERROR_UPDATE_MESSAGE = "Ocorreu erro ao realizar a requisição."
             val TICKET_SUCCESS_INSERT = "Seu cupom de desconto foi adicionado com sucesso"
             val TICKET_EMPTY_LIST = "Não há cupons de descontos salvos em sua lista"
             val TICKET_ERROR_INSERT = "Erro ao adicionar o cupom de desconto"
