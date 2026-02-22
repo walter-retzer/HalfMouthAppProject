@@ -10,6 +10,7 @@ import halfmouthappproject.composeapp.generated.resources.login_graph_name
 import halfmouthappproject.composeapp.generated.resources.login_route
 import halfmouthappproject.composeapp.generated.resources.production_route
 import halfmouthappproject.composeapp.generated.resources.profile_route
+import halfmouthappproject.composeapp.generated.resources.setpoint_route
 import halfmouthappproject.composeapp.generated.resources.sign_in_route
 import halfmouthappproject.composeapp.generated.resources.splash_screen_route
 import halfmouthappproject.composeapp.generated.resources.ticket_route
@@ -26,6 +27,7 @@ enum class AppNavigation(val title: StringResource) {
     ContactRoute(title = Res.string.contact_route),
     ChartLineRoute(title = Res.string.chart_line_route),
     TicketRoute(title = Res.string.ticket_route),
+    SetpointRoute(title = Res.string.setpoint_route),
 }
 
 enum class AppGraphNav(val title: StringResource) {

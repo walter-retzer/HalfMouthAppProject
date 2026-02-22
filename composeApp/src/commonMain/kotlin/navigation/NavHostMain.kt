@@ -42,6 +42,7 @@ import screens.discounts.DiscountsScreen
 import screens.home.HomeScreen
 import screens.production.ProductionScreen
 import screens.profile.ProfileScreen
+import screens.setpoint.SetpopintScreen
 import screens.splash.SplashScreen
 import screens.tickets.TicketScreen
 
@@ -142,7 +143,7 @@ private fun NavGraphBuilder.homeNavGraph(
             listOf(
                 NavItem.Home,
                 NavItem.Production,
-                NavItem.Discounts,
+                NavItem.Setpoint,
                 NavItem.Contact
             )
         }
@@ -254,6 +255,20 @@ private fun NavGraphBuilder.homeNavGraph(
                         fieldResult = fieldResult.toString(),
                         onNavigateToProduction = {
                             navController.navigate(AppNavigation.ProductionRoute.name)
+                        },
+                        onNavigateFromDrawerMenu = { route ->
+                            navController.navigate(route)
+                        },
+                    )
+                }
+
+                composable(
+                    route = AppNavigation.SetpointRoute.name,
+                ) {
+                    SetpopintScreen(
+                        ticketDao = ticketDao,
+                        onNavigateToProfile = {
+                            navController.navigate(AppNavigation.ProfileRoute.name)
                         },
                         onNavigateFromDrawerMenu = { route ->
                             navController.navigate(route)

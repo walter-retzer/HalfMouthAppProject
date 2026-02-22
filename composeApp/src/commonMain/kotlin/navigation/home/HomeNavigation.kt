@@ -41,9 +41,9 @@ sealed class NavItem {
             icon = Res.drawable.icon_beer
         )
 
-    object Discounts :
+    object Setpoint :
         Item(
-            pathRoute = AppNavigation.DiscountsRoute.name,
+            pathRoute = AppNavigation.SetpointRoute.name,
             title = NavTitle.DISCOUNTS,
             icon = Res.drawable.icon_discount
         )
