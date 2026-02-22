@@ -94,7 +94,7 @@ fun TemperatureScreen(
             snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
             topBar = {
                 MenuToolbar(
-                    title = "Produção",
+                    title = "Temperaturas",
                     onNavigationToMenu = {
                         scope.launch {
                             drawerState.open()

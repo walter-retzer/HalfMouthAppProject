@@ -50,7 +50,7 @@ import org.koin.compose.koinInject
 import theme.mainYellowColor
 import theme.onBackgroundDark
 import theme.onSurfaceVariantDark
-import util.adjustString
+import util.adjustStatusString
 import util.formattedAsDate
 import util.formattedAsTime
 import util.snackBarOnlyMessage
@@ -94,7 +94,7 @@ fun DigitalInputsScreen(
             snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
             topBar = {
                 MenuToolbar(
-                    title = "Produção",
+                    title = "Status Digital Input",
                     onNavigationToMenu = {
                         scope.launch {
                             drawerState.open()
@@ -174,7 +174,7 @@ fun DigitalInputsScreen(
                                         style = MaterialTheme.typography.bodyMedium,
                                     )
 
-                                    it.fieldValue?.adjustString()?.let { value ->
+                                    it.fieldValue?.adjustStatusString()?.let { value ->
                                         Text(
                                             text = value,
                                             style = MaterialTheme.typography.bodyMedium,

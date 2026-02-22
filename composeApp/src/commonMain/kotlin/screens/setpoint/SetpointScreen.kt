@@ -68,7 +68,7 @@ fun SetpopintScreen(
             snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
             topBar = {
                 MenuToolbar(
-                    title = "Setpoint",
+                    title = "Ajuste de Setpoint",
                     onNavigationToMenu = {
                         scope.launch {
                             drawerState.open()
