@@ -144,7 +144,8 @@ private fun NavGraphBuilder.homeNavGraph(
                 NavItem.Home,
                 NavItem.Production,
                 NavItem.Setpoint,
-                NavItem.Contact
+                NavItem.Temperature,
+                NavItem.Status
             )
         }
         val navController = rememberNavController()
@@ -264,6 +265,34 @@ private fun NavGraphBuilder.homeNavGraph(
 
                 composable(
                     route = AppNavigation.SetpointRoute.name,
+                ) {
+                    SetpopintScreen(
+                        ticketDao = ticketDao,
+                        onNavigateToProfile = {
+                            navController.navigate(AppNavigation.ProfileRoute.name)
+                        },
+                        onNavigateFromDrawerMenu = { route ->
+                            navController.navigate(route)
+                        },
+                    )
+                }
+
+                composable(
+                    route = AppNavigation.TemperatureRoute.name,
+                ) {
+                    SetpopintScreen(
+                        ticketDao = ticketDao,
+                        onNavigateToProfile = {
+                            navController.navigate(AppNavigation.ProfileRoute.name)
+                        },
+                        onNavigateFromDrawerMenu = { route ->
+                            navController.navigate(route)
+                        },
+                    )
+                }
+
+                composable(
+                    route = AppNavigation.DigitalInputRoute.name,
                 ) {
                     SetpopintScreen(
                         ticketDao = ticketDao,

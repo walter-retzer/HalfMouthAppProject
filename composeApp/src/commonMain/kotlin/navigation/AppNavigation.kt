@@ -3,6 +3,7 @@ package navigation
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.chart_line_route
 import halfmouthappproject.composeapp.generated.resources.contact_route
+import halfmouthappproject.composeapp.generated.resources.digital_inputs_route
 import halfmouthappproject.composeapp.generated.resources.discounts_route
 import halfmouthappproject.composeapp.generated.resources.home_graph_name
 import halfmouthappproject.composeapp.generated.resources.home_route
@@ -13,6 +14,7 @@ import halfmouthappproject.composeapp.generated.resources.profile_route
 import halfmouthappproject.composeapp.generated.resources.setpoint_route
 import halfmouthappproject.composeapp.generated.resources.sign_in_route
 import halfmouthappproject.composeapp.generated.resources.splash_screen_route
+import halfmouthappproject.composeapp.generated.resources.temperature_route
 import halfmouthappproject.composeapp.generated.resources.ticket_route
 import org.jetbrains.compose.resources.StringResource
 
@@ -28,6 +30,8 @@ enum class AppNavigation(val title: StringResource) {
     ChartLineRoute(title = Res.string.chart_line_route),
     TicketRoute(title = Res.string.ticket_route),
     SetpointRoute(title = Res.string.setpoint_route),
+    TemperatureRoute(title = Res.string.temperature_route),
+    DigitalInputRoute(title = Res.string.digital_inputs_route)
 }
 
 enum class AppGraphNav(val title: StringResource) {
