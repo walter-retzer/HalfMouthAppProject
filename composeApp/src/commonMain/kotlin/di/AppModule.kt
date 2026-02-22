@@ -7,6 +7,7 @@ import viewmodel.HomeViewModel
 import viewmodel.LoginUserViewModel
 import viewmodel.ProductionViewModel
 import viewmodel.ProfileViewModel
+import viewmodel.SetpointAdjustViewModel
 import viewmodel.SignInViewModel
 
 val appModule = module {
@@ -17,4 +18,5 @@ val appModule = module {
     single<DiscountsViewModel> { DiscountsViewModel(get()) }
     factory<ProductionViewModel> { ProductionViewModel(get()) }
     factory<ChartLineViewModel> { ChartLineViewModel(get()) }
+    factory<SetpointAdjustViewModel> { SetpointAdjustViewModel(get()) }
 }

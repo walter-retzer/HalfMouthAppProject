@@ -10,6 +10,7 @@ import viewmodel.LoginUserViewModel
 import viewmodel.ProductionViewModel
 import viewmodel.ProfileViewModel
 import viewmodel.SignInViewModel
+import viewmodel.SetpointAdjustViewModel
 
 actual val viewModelModule = module{
     singleOf(::LoginUserViewModel)
@@ -19,4 +20,5 @@ actual val viewModelModule = module{
     singleOf(::DiscountsViewModel)
     factoryOf(::ProductionViewModel)
     factoryOf(::ChartLineViewModel)
+    factoryOf(::SetpointAdjustViewModel)
 }
