@@ -38,12 +38,14 @@ import screens.account.LoginScreen
 import screens.account.SignInScreen
 import screens.charts.ChartLineScreen
 import screens.contactInfo.ContactInfoScreen
+import screens.digitalInputs.DigitalInputsScreen
 import screens.discounts.DiscountsScreen
 import screens.home.HomeScreen
 import screens.production.ProductionScreen
 import screens.profile.ProfileScreen
 import screens.setpoint.SetpopintScreen
 import screens.splash.SplashScreen
+import screens.temperature.TemperatureScreen
 import screens.tickets.TicketScreen
 
 
@@ -280,7 +282,7 @@ private fun NavGraphBuilder.homeNavGraph(
                 composable(
                     route = AppNavigation.TemperatureRoute.name,
                 ) {
-                    SetpopintScreen(
+                    TemperatureScreen(
                         ticketDao = ticketDao,
                         onNavigateToProfile = {
                             navController.navigate(AppNavigation.ProfileRoute.name)
@@ -294,7 +296,7 @@ private fun NavGraphBuilder.homeNavGraph(
                 composable(
                     route = AppNavigation.DigitalInputRoute.name,
                 ) {
-                    SetpopintScreen(
+                    DigitalInputsScreen(
                         ticketDao = ticketDao,
                         onNavigateToProfile = {
                             navController.navigate(AppNavigation.ProfileRoute.name)

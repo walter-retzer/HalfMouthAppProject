@@ -2,11 +2,13 @@ package navigation.home
 
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.icon_beer
+import halfmouthappproject.composeapp.generated.resources.icon_equipaments
 import halfmouthappproject.composeapp.generated.resources.icon_home
 import halfmouthappproject.composeapp.generated.resources.icon_input_value
 import halfmouthappproject.composeapp.generated.resources.icon_motor
 import halfmouthappproject.composeapp.generated.resources.icon_phone
 import halfmouthappproject.composeapp.generated.resources.icon_temperature
+import halfmouthappproject.composeapp.generated.resources.icon_thermostat
 import navigation.AppNavigation
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -16,7 +18,7 @@ object NavTitle {
     const val HOME = "Menu"
     const val PRODUCTION = "Produção"
     const val SETPPOINT = "Setpoint"
-    const val TEMPERATURA = "Temperature"
+    const val TEMPERATURA = "Valores"
     const val STATUS = "Status"
 }
 
@@ -52,15 +54,15 @@ sealed class NavItem {
 
     object Temperature :
         Item(
-            pathRoute = AppNavigation.ContactRoute.name,
+            pathRoute = AppNavigation.TemperatureRoute.name,
             title = NavTitle.TEMPERATURA,
-            icon = Res.drawable.icon_temperature
+            icon = Res.drawable.icon_thermostat
         )
 
     object Status :
         Item(
-            pathRoute = AppNavigation.ContactRoute.name,
+            pathRoute = AppNavigation.DigitalInputRoute.name,
             title = NavTitle.STATUS,
-            icon = Res.drawable.icon_motor
+            icon = Res.drawable.icon_equipaments
         )
 }
