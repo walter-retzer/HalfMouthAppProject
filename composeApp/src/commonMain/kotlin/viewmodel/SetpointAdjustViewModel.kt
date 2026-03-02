@@ -20,6 +20,21 @@ class SetpointAdjustViewModel(private val repository: NetworkRepository) : ViewM
     private val konnection = Konnection.instance
     private val hasNetworkConnection = konnection.isConnected()
 
+    private val _newUserSignInState = MutableStateFlow(NewUserContact())
+    val newUserSignInState = _newUserSignInState.asStateFlow()
+
+    private val _emailError = MutableStateFlow(false)
+    val emailError = _emailError.asStateFlow()
+
+    private val _passwordError = MutableStateFlow(false)
+    val passwordError = _passwordError.asStateFlow()
+
+    private val _nameError = MutableStateFlow(false)
+    val nameError = _nameError.asStateFlow()
+
+    private val _phoneNumberError = MutableStateFlow(false)
+    val phoneNumberError = _phoneNumberError.asStateFlow()
+
     init { updateValuesOnThingSpeak() }
 
     private fun updateValuesOnThingSpeak() {
