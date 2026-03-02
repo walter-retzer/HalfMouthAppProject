@@ -1,22 +1,17 @@
 package screens.setpoint
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -41,10 +36,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -55,12 +47,8 @@ import components.MenuToolbar
 import components.MyAppCircularProgressIndicator
 import components.ProgressButton
 import database.TicketDao
-import halfmouthappproject.composeapp.generated.resources.Res
-import halfmouthappproject.composeapp.generated.resources.splashscreenlogo
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
-import util.ConstantsApp
 import util.MaskVisualTransformation
 import util.snackBarOnlyMessage
 import viewmodel.SetpointAdjustViewModel
@@ -167,21 +155,20 @@ fun SetpopintScreen(
                         isSnackBarOpen = true
                     }
 
-                    BoxWithConstraints(
-                        modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
                     ) {
-                        val width = this.maxWidth
-                        val finalModifier =
-                            if (width >= 780.dp) modifier.width(400.dp) else modifier.fillMaxWidth()
                         Column(
-                            modifier = finalModifier.padding(start = 16.dp, end = 16.dp)
-                                .fillMaxHeight(),
-                                //.verticalScroll(rememberScrollState()),
-                            verticalArrangement = Arrangement.Top,
+                            modifier = Modifier
+                                .padding(start = 16.dp, end = 16.dp)
+                                .windowInsetsPadding(WindowInsets.safeDrawing)
+                                .verticalScroll(rememberScrollState())
+                                .fillMaxSize(),
+                            verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-
-                            Spacer(modifier = Modifier.height(16.dp))
 
                             Spacer(modifier = Modifier.height(16.dp))
 
@@ -372,10 +359,12 @@ fun SetpopintScreen(
 
                             ProgressButton(
                                 modifier = Modifier.padding(top = 16.dp).fillMaxWidth(),
-                                text = "Cadastrar",
+                                text = "Enviar",
                                 isLoading = progressButtonIsActivated,
                                 onClick = { }
                             )
+
+                            Spacer(modifier = Modifier.height(20.dp))
                         }
                     }
                 }
