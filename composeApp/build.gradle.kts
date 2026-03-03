@@ -55,12 +55,15 @@ kotlin {
                 |object BuildConfig {
                 |  const val API_KEY_READ_SETPOINT = "${secretProperties.getPropertyValue("API_KEY_READ_SETPOINT")}"
                 |  const val API_KEY_READ_TEMPERATURE = "${secretProperties.getPropertyValue("API_KEY_READ_TEMPERATURE")}"
-                |  const val API_KEY_READ_DIGITAL_INPUTS = "${secretProperties.getPropertyValue("API_KEY_READ_DIGITAL_INPUTS")}"
+                |  const val API_KEY_READ_STATUS = "${secretProperties.getPropertyValue("API_KEY_READ_STATUS")}"
+                |  const val API_KEY_READ_CONTROLE = "${secretProperties.getPropertyValue("API_KEY_READ_CONTROLE")}"
                 |  const val API_KEY_WRITE_SETPOINT = "${secretProperties.getPropertyValue("API_KEY_WRITE_SETPOINT")}"
-                |  const val API_KEY_WRITE_DIGITAL_INPUTS = "${secretProperties.getPropertyValue("API_KEY_WRITE_DIGITAL_INPUTS")}"
+                |  const val API_KEY_WRITE_STATUS = "${secretProperties.getPropertyValue("API_KEY_WRITE_STATUS")}"
+                |  const val API_KEY_WRITE_CONTROLE = "${secretProperties.getPropertyValue("API_KEY_WRITE_CONTROLE")}"
                 |  const val API_KEY_WRITE_TEMPERATURE = "${secretProperties.getPropertyValue("API_KEY_WRITE_TEMPERATURE")}"
                 |  const val CHANNEL_ID_READ_SETPOINT = "${secretProperties.getPropertyValue("CHANNEL_ID_READ_SETPOINT")}"
-                |  const val CHANNEL_ID_READ_DIGITAL_INPUT = "${secretProperties.getPropertyValue("CHANNEL_ID_READ_DIGITAL_INPUT")}"
+                |  const val CHANNEL_ID_READ_STATUS = "${secretProperties.getPropertyValue("CHANNEL_ID_READ_STATUS")}"
+                |  const val CHANNEL_ID_READ_CONTROLE = "${secretProperties.getPropertyValue("CHANNEL_ID_READ_CONTROLE")}"
                 |  const val CHANNEL_ID_READ_TEMPERATURE = "${secretProperties.getPropertyValue("CHANNEL_ID_READ_TEMPERATURE")}"
                 |  const val RESULTS = "${secretProperties.getPropertyValue("RESULTS")}"
                 |}

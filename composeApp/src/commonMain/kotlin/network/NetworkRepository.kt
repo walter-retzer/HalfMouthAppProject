@@ -64,8 +64,8 @@ class NetworkRepository(private val client: HttpClient) {
     suspend fun getThingSpeakDigitalInputValues(): ResultNetwork<ThingSpeakResponse> =
         makeRequest {
             client.get{
-                url(HttpRoutes.REQUEST_URL_READ_DIGITAL_INPUT)
-                parameter("api_key", BuildConfig.API_KEY_READ_DIGITAL_INPUTS)
+                url(HttpRoutes.REQUEST_URL_READ_STATUS)
+                parameter("api_key", BuildConfig.API_KEY_READ_STATUS)
                 parameter("results", BuildConfig.RESULTS)
             }
         }
