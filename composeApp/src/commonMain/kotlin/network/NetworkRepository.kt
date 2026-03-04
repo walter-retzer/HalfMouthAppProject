@@ -25,20 +25,27 @@ class NetworkRepository(private val client: HttpClient) {
         fieldNumber6: Int = 6,
         fieldNumber7: Int = 7,
         fieldNumber8: Int = 8,
-        value: Int = 20
+        setpointField1: Double,
+        setpointField2: Double,
+        setpointField3: Double,
+        setpointField4: Double,
+        setpointField5: Double,
+        setpointField6: Double,
+        setpointField7: Double,
+        setpointField8: Double,
     ): ResultNetwork<Int> =
         makeRequest {
             client.get{
                 url(HttpRoutes.REQUEST_URL_UPDATE_FIELDS)
                 parameter("api_key", BuildConfig.API_KEY_WRITE_SETPOINT)
-                parameter("field$fieldNumber1", value.toString())
-                parameter("field$fieldNumber2", value.toString())
-                parameter("field$fieldNumber3", value.toString())
-                parameter("field$fieldNumber4", value.toString())
-                parameter("field$fieldNumber5", value.toString())
-                parameter("field$fieldNumber6", value.toString())
-                parameter("field$fieldNumber7", value.toString())
-                parameter("field$fieldNumber8", value.toString())
+                parameter("field$fieldNumber1", setpointField1.toString())
+                parameter("field$fieldNumber2", setpointField2.toString())
+                parameter("field$fieldNumber3", setpointField3.toString())
+                parameter("field$fieldNumber4", setpointField4.toString())
+                parameter("field$fieldNumber5", setpointField5.toString())
+                parameter("field$fieldNumber6", setpointField6.toString())
+                parameter("field$fieldNumber7", setpointField7.toString())
+                parameter("field$fieldNumber8", setpointField8.toString())
             }
         }
 

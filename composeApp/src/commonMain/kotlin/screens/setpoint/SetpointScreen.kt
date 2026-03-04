@@ -64,24 +64,23 @@ fun SetpopintScreen(
 ) {
     val listOfTickets by ticketDao.getAllTickets().collectAsState(initial = emptyList())
     val uiState by viewModel.uiState.collectAsState()
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+    val newSetpoint by viewModel.newSetpointInState.collectAsState()
+    val errorSetpointField1 by viewModel.newSetpointField1Error.collectAsState()
+    val errorSetpointField2 by viewModel.newSetpointField2Error.collectAsState()
+    val errorSetpointField3 by viewModel.newSetpointField3Error.collectAsState()
+    val errorSetpointField4 by viewModel.newSetpointField4Error.collectAsState()
+    val errorSetpointField5 by viewModel.newSetpointField5Error.collectAsState()
+    val errorSetpointField6 by viewModel.newSetpointField6Error.collectAsState()
+    val errorSetpointField7 by viewModel.newSetpointField7Error.collectAsState()
+    val errorSetpointField8 by viewModel.newSetpointField8Error.collectAsState()
+    val scrollBehavior =
+        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val snackBarHostState = remember { SnackbarHostState() }
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     var isSnackBarOpen by remember { mutableStateOf(false) }
     var isSnackBarMessageErrorApiOpen by remember { mutableStateOf(false) }
-
-
-    val nameError by viewModel.nameError.collectAsState()
-    val phoneError by viewModel.phoneNumberError.collectAsState()
-    val emailError by viewModel.emailError.collectAsState()
-    val passwordError by viewModel.passwordError.collectAsState()
-
-    val newSetpoint by viewModel.newSetpointInState.collectAsState()
-    val errorSetpointField1 by viewModel.newSetpointField1Error.collectAsState()
-
     var progressButtonIsActivated by remember { mutableStateOf(false) }
-    var snackBarIsActivated by remember { mutableStateOf(false) }
 
 
     ModalNavigationDrawer(
@@ -90,7 +89,7 @@ fun SetpopintScreen(
                 scope = scope,
                 drawerState = drawerState,
                 tickets = listOfTickets.size,
-                onNavigateFromDrawerMenu = { route->
+                onNavigateFromDrawerMenu = { route ->
                     onNavigateFromDrawerMenu(route)
                 }
             )
@@ -117,14 +116,14 @@ fun SetpopintScreen(
             when (val state = uiState) {
 
                 is SetpointAdjustViewModelState.Error -> {
-                   if(!isSnackBarMessageErrorApiOpen) {
-                       snackBarOnlyMessage(
-                           snackBarHostState = snackBarHostState,
-                           coroutineScope = scope,
-                           message = state.message
-                       )
-                       isSnackBarMessageErrorApiOpen = true
-                   }
+                    if (!isSnackBarMessageErrorApiOpen) {
+                        snackBarOnlyMessage(
+                            snackBarHostState = snackBarHostState,
+                            coroutineScope = scope,
+                            message = state.message
+                        )
+                        isSnackBarMessageErrorApiOpen = true
+                    }
                 }
 
                 is SetpointAdjustViewModelState.Loading -> {
@@ -137,7 +136,7 @@ fun SetpopintScreen(
                 }
 
                 is SetpointAdjustViewModelState.ErrorNetworkConnection -> {
-                    if(!isSnackBarOpen) {
+                    if (!isSnackBarOpen) {
                         snackBarOnlyMessage(
                             snackBarHostState = snackBarHostState,
                             coroutineScope = scope,
@@ -148,7 +147,7 @@ fun SetpopintScreen(
                 }
 
                 is SetpointAdjustViewModelState.SuccessUpdateSetpoint -> {
-                    if(!isSnackBarOpen) {
+                    if (!isSnackBarOpen) {
                         snackBarOnlyMessage(
                             snackBarHostState = snackBarHostState,
                             coroutineScope = scope,
@@ -195,165 +194,183 @@ fun SetpopintScreen(
                                 value = newSetpoint.setpointField1.toString(),
                                 isError = errorSetpointField1,
                                 supportingText = {
-                                    if (errorSetpointField1) Text(text = viewModel.validateSetpointField1(newSetpoint.setpointField1!!))
+                                    if (errorSetpointField1) Text(
+                                        text = viewModel.validateSetpointField1(
+                                            newSetpoint.setpointField1!!
+                                        )
+                                    )
                                 },
                                 placeholder = { Text("${state.feeds[0].fieldName} = ${state.feeds[0].fieldValue} °C") },
-                                onValueChange = { viewModel.onSetpointField1(it.toDouble())}
+                                onValueChange = { viewModel.onSetpointField1(it.toDouble()) }
                             )
 
                             Spacer(modifier = Modifier.height(6.dp))
 
-//                            OutlinedTextField(
-//                                modifier = Modifier.fillMaxWidth(),
-//                                keyboardOptions = KeyboardOptions(
-//                                    capitalization = KeyboardCapitalization.None,
-//                                    autoCorrect = true,
-//                                    keyboardType = KeyboardType.Phone,
-//                                    imeAction = ImeAction.Next
-//                                ),
-//                                shape = RoundedCornerShape(20.dp),
-//                                value = newUserSignInState.phoneNumber,
-//                                isError = phoneError,
-//                                supportingText = {
-//                                    if (phoneError) Text(" phone")
-//                                },
-//                                placeholder = { Text("Celular") },
-//                                onValueChange = { },
-//                                visualTransformation = MaskVisualTransformation(
-//                                    MaskVisualTransformation.PHONE
-//                                )
-//                            )
-//
-//                            Spacer(modifier = Modifier.height(6.dp))
-//
-//                            OutlinedTextField(
-//                                modifier = Modifier.fillMaxWidth(),
-//                                keyboardOptions = KeyboardOptions(
-//                                    capitalization = KeyboardCapitalization.None,
-//                                    autoCorrect = true,
-//                                    keyboardType = KeyboardType.Email,
-//                                    imeAction = ImeAction.Next
-//                                ),
-//                                shape = RoundedCornerShape(20.dp),
-//                                value = newUserSignInState.email,
-//                                isError = emailError,
-//                                supportingText = {
-//                                    if (emailError) Text("erro"
-//                                    )
-//                                },
-//                                placeholder = { Text(text = "Email") },
-//                                onValueChange = {  },
-//                            )
-//
-//                            Spacer(modifier = Modifier.height(6.dp))
-//
-//                            OutlinedTextField(
-//                                modifier = Modifier.fillMaxWidth(),
-//                                keyboardOptions = KeyboardOptions(
-//                                    capitalization = KeyboardCapitalization.None,
-//                                    autoCorrect = true,
-//                                    keyboardType = KeyboardType.NumberPassword,
-//                                    imeAction = ImeAction.Done
-//                                ),
-//                                shape = RoundedCornerShape(20.dp),
-//                                value = newUserSignInState.password,
-//                                isError = passwordError,
-//                                supportingText = {
-//                                    if (passwordError)
-//                                        Text(text = "Errro")
-//                                },
-//                                visualTransformation = PasswordVisualTransformation(),
-//                                placeholder = { Text("Senha") },
-//                                onValueChange = { }
-//                            )
-//
-//                            Spacer(modifier = Modifier.height(10.dp))
-//
-//                            OutlinedTextField(
-//                                modifier = Modifier.fillMaxWidth(),
-//                                keyboardOptions = KeyboardOptions(
-//                                    capitalization = KeyboardCapitalization.Words,
-//                                    autoCorrect = true,
-//                                    keyboardType = KeyboardType.Text,
-//                                    imeAction = ImeAction.Next
-//                                ),
-//                                shape = RoundedCornerShape(20.dp),
-//                                value = newUserSignInState.name,
-//                                isError = nameError,
-//                                supportingText = {
-//                                    if (nameError) Text(
-//                                        text = "Texy"
-//                                    )
-//                                },
-//                                placeholder = { Text("Nome") },
-//                                onValueChange = { }
-//                            )
-//
-//                            Spacer(modifier = Modifier.height(6.dp))
-//
-//                            OutlinedTextField(
-//                                modifier = Modifier.fillMaxWidth(),
-//                                keyboardOptions = KeyboardOptions(
-//                                    capitalization = KeyboardCapitalization.None,
-//                                    autoCorrect = true,
-//                                    keyboardType = KeyboardType.Phone,
-//                                    imeAction = ImeAction.Next
-//                                ),
-//                                shape = RoundedCornerShape(20.dp),
-//                                value = newUserSignInState.phoneNumber,
-//                                isError = phoneError,
-//                                supportingText = {
-//                                    if (phoneError) Text(" phone")
-//                                },
-//                                placeholder = { Text("Celular") },
-//                                onValueChange = { },
-//                                visualTransformation = MaskVisualTransformation(
-//                                    MaskVisualTransformation.PHONE
-//                                )
-//                            )
-//
-//                            Spacer(modifier = Modifier.height(6.dp))
-//
-//                            OutlinedTextField(
-//                                modifier = Modifier.fillMaxWidth(),
-//                                keyboardOptions = KeyboardOptions(
-//                                    capitalization = KeyboardCapitalization.None,
-//                                    autoCorrect = true,
-//                                    keyboardType = KeyboardType.Email,
-//                                    imeAction = ImeAction.Next
-//                                ),
-//                                shape = RoundedCornerShape(20.dp),
-//                                value = newUserSignInState.email,
-//                                isError = emailError,
-//                                supportingText = {
-//                                    if (emailError) Text("erro"
-//                                    )
-//                                },
-//                                placeholder = { Text(text = "Email") },
-//                                onValueChange = {  },
-//                            )
-//
-//                            Spacer(modifier = Modifier.height(6.dp))
-//
-//                            OutlinedTextField(
-//                                modifier = Modifier.fillMaxWidth(),
-//                                keyboardOptions = KeyboardOptions(
-//                                    capitalization = KeyboardCapitalization.None,
-//                                    autoCorrect = true,
-//                                    keyboardType = KeyboardType.NumberPassword,
-//                                    imeAction = ImeAction.Done
-//                                ),
-//                                shape = RoundedCornerShape(20.dp),
-//                                value = newUserSignInState.password,
-//                                isError = passwordError,
-//                                supportingText = {
-//                                    if (passwordError)
-//                                        Text(text = "Errro")
-//                                },
-//                                visualTransformation = PasswordVisualTransformation(),
-//                                placeholder = { Text("Senha") },
-//                                onValueChange = { }
-//                            )
+                            OutlinedTextField(
+                                modifier = Modifier.fillMaxWidth(),
+                                keyboardOptions = KeyboardOptions(
+                                    capitalization = KeyboardCapitalization.Words,
+                                    autoCorrect = true,
+                                    keyboardType = KeyboardType.Decimal,
+                                    imeAction = ImeAction.Next
+                                ),
+                                shape = RoundedCornerShape(20.dp),
+                                value = newSetpoint.setpointField2.toString(),
+                                isError = errorSetpointField2,
+                                supportingText = {
+                                    if (errorSetpointField2) Text(
+                                        text = viewModel.validateSetpointField2(
+                                            newSetpoint.setpointField2!!
+                                        )
+                                    )
+                                },
+                                placeholder = { Text("${state.feeds[1].fieldName} = ${state.feeds[1].fieldValue} °C") },
+                                onValueChange = { viewModel.onSetpointField2(it.toDouble()) }
+                            )
+
+                            Spacer(modifier = Modifier.height(6.dp))
+
+                            OutlinedTextField(
+                                modifier = Modifier.fillMaxWidth(),
+                                keyboardOptions = KeyboardOptions(
+                                    capitalization = KeyboardCapitalization.Words,
+                                    autoCorrect = true,
+                                    keyboardType = KeyboardType.Decimal,
+                                    imeAction = ImeAction.Next
+                                ),
+                                shape = RoundedCornerShape(20.dp),
+                                value = newSetpoint.setpointField3.toString(),
+                                isError = errorSetpointField3,
+                                supportingText = {
+                                    if (errorSetpointField3) Text(
+                                        text = viewModel.validateSetpointField3(
+                                            newSetpoint.setpointField3!!
+                                        )
+                                    )
+                                },
+                                placeholder = { Text("${state.feeds[2].fieldName} = ${state.feeds[2].fieldValue} °C") },
+                                onValueChange = { viewModel.onSetpointField3(it.toDouble()) }
+                            )
+
+                            Spacer(modifier = Modifier.height(6.dp))
+
+                            OutlinedTextField(
+                                modifier = Modifier.fillMaxWidth(),
+                                keyboardOptions = KeyboardOptions(
+                                    capitalization = KeyboardCapitalization.Words,
+                                    autoCorrect = true,
+                                    keyboardType = KeyboardType.Decimal,
+                                    imeAction = ImeAction.Next
+                                ),
+                                shape = RoundedCornerShape(20.dp),
+                                value = newSetpoint.setpointField4.toString(),
+                                isError = errorSetpointField4,
+                                supportingText = {
+                                    if (errorSetpointField4) Text(
+                                        text = viewModel.validateSetpointField4(
+                                            newSetpoint.setpointField4!!
+                                        )
+                                    )
+                                },
+                                placeholder = { Text("${state.feeds[3].fieldName} = ${state.feeds[3].fieldValue} °C") },
+                                onValueChange = { viewModel.onSetpointField4(it.toDouble()) }
+                            )
+
+                            Spacer(modifier = Modifier.height(6.dp))
+
+                            OutlinedTextField(
+                                modifier = Modifier.fillMaxWidth(),
+                                keyboardOptions = KeyboardOptions(
+                                    capitalization = KeyboardCapitalization.Words,
+                                    autoCorrect = true,
+                                    keyboardType = KeyboardType.Decimal,
+                                    imeAction = ImeAction.Next
+                                ),
+                                shape = RoundedCornerShape(20.dp),
+                                value = newSetpoint.setpointField5.toString(),
+                                isError = errorSetpointField5,
+                                supportingText = {
+                                    if (errorSetpointField5) Text(
+                                        text = viewModel.validateSetpointField5(
+                                            newSetpoint.setpointField5!!
+                                        )
+                                    )
+                                },
+                                placeholder = { Text("${state.feeds[4].fieldName} = ${state.feeds[4].fieldValue} °C") },
+                                onValueChange = { viewModel.onSetpointField5(it.toDouble()) }
+                            )
+
+                            Spacer(modifier = Modifier.height(6.dp))
+
+                            OutlinedTextField(
+                                modifier = Modifier.fillMaxWidth(),
+                                keyboardOptions = KeyboardOptions(
+                                    capitalization = KeyboardCapitalization.Words,
+                                    autoCorrect = true,
+                                    keyboardType = KeyboardType.Decimal,
+                                    imeAction = ImeAction.Next
+                                ),
+                                shape = RoundedCornerShape(20.dp),
+                                value = newSetpoint.setpointField6.toString(),
+                                isError = errorSetpointField6,
+                                supportingText = {
+                                    if (errorSetpointField6) Text(
+                                        text = viewModel.validateSetpointField6(
+                                            newSetpoint.setpointField6!!
+                                        )
+                                    )
+                                },
+                                placeholder = { Text("${state.feeds[5].fieldName} = ${state.feeds[5].fieldValue} °C") },
+                                onValueChange = { viewModel.onSetpointField6(it.toDouble()) }
+                            )
+
+                            Spacer(modifier = Modifier.height(6.dp))
+
+                            OutlinedTextField(
+                                modifier = Modifier.fillMaxWidth(),
+                                keyboardOptions = KeyboardOptions(
+                                    capitalization = KeyboardCapitalization.Words,
+                                    autoCorrect = true,
+                                    keyboardType = KeyboardType.Decimal,
+                                    imeAction = ImeAction.Next
+                                ),
+                                shape = RoundedCornerShape(20.dp),
+                                value = newSetpoint.setpointField7.toString(),
+                                isError = errorSetpointField7,
+                                supportingText = {
+                                    if (errorSetpointField7) Text(
+                                        text = viewModel.validateSetpointField7(
+                                            newSetpoint.setpointField7!!
+                                        )
+                                    )
+                                },
+                                placeholder = { Text("${state.feeds[6].fieldName} = ${state.feeds[6].fieldValue} °C") },
+                                onValueChange = { viewModel.onSetpointField7(it.toDouble()) }
+                            )
+
+                            Spacer(modifier = Modifier.height(6.dp))
+
+                            OutlinedTextField(
+                                modifier = Modifier.fillMaxWidth(),
+                                keyboardOptions = KeyboardOptions(
+                                    capitalization = KeyboardCapitalization.Words,
+                                    autoCorrect = true,
+                                    keyboardType = KeyboardType.Decimal,
+                                    imeAction = ImeAction.Next
+                                ),
+                                shape = RoundedCornerShape(20.dp),
+                                value = newSetpoint.setpointField8.toString(),
+                                isError = errorSetpointField8,
+                                supportingText = {
+                                    if (errorSetpointField8) Text(
+                                        text = viewModel.validateSetpointField8(
+                                            newSetpoint.setpointField8!!
+                                        )
+                                    )
+                                },
+                                placeholder = { Text("${state.feeds[7].fieldName} = ${state.feeds[7].fieldValue} °C") },
+                                onValueChange = { viewModel.onSetpointField8(it.toDouble()) }
+                            )
 
                             Spacer(modifier = Modifier.height(10.dp))
 
@@ -361,7 +378,63 @@ fun SetpopintScreen(
                                 modifier = Modifier.padding(top = 16.dp).fillMaxWidth(),
                                 text = "Enviar",
                                 isLoading = progressButtonIsActivated,
-                                onClick = { viewModel.writeSetpoint() }
+                                onClick = {
+                                    newSetpoint.setpointField1?.let {
+                                        viewModel.validateSetpointField1(
+                                            it
+                                        )
+                                    }
+                                    newSetpoint.setpointField2?.let {
+                                        viewModel.validateSetpointField2(
+                                            it
+                                        )
+                                    }
+                                    newSetpoint.setpointField3?.let {
+                                        viewModel.validateSetpointField3(
+                                            it
+                                        )
+                                    }
+                                    newSetpoint.setpointField4?.let {
+                                        viewModel.validateSetpointField4(
+                                            it
+                                        )
+                                    }
+                                    newSetpoint.setpointField5?.let {
+                                        viewModel.validateSetpointField5(
+                                            it
+                                        )
+                                    }
+                                    newSetpoint.setpointField6?.let {
+                                        viewModel.validateSetpointField6(
+                                            it
+                                        )
+                                    }
+                                    newSetpoint.setpointField7?.let {
+                                        viewModel.validateSetpointField7(
+                                            it
+                                        )
+                                    }
+                                    newSetpoint.setpointField8?.let {
+                                        viewModel.validateSetpointField8(
+                                            it
+                                        )
+                                    }
+
+                                    if (!errorSetpointField1 && !errorSetpointField2 &&
+                                        !errorSetpointField3 && !errorSetpointField4 &&
+                                        !errorSetpointField5 && !errorSetpointField6 &&
+                                        !errorSetpointField7 && !errorSetpointField8
+                                    ) viewModel.writeSetpoint(
+                                        setpointField1 = newSetpoint.setpointField1!!,
+                                        setpointField2 = newSetpoint.setpointField2!!,
+                                        setpointField3 = newSetpoint.setpointField3!!,
+                                        setpointField4 = newSetpoint.setpointField4!!,
+                                        setpointField5 = newSetpoint.setpointField5!!,
+                                        setpointField6 = newSetpoint.setpointField6!!,
+                                        setpointField7 = newSetpoint.setpointField7!!,
+                                        setpointField8 = newSetpoint.setpointField8!!,
+                                    )
+                                }
                             )
 
                             Spacer(modifier = Modifier.height(20.dp))
