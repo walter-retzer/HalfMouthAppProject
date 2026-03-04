@@ -17,38 +17,15 @@ import util.ConstantsApp.Companion.ERROR_CONNECTION_MESSAGE
 
 class SetpointAdjustViewModel(private val repository: NetworkRepository) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<SetpointAdjustViewModelState>(SetpointAdjustViewModelState.Loading)
-    val uiState: StateFlow<SetpointAdjustViewModelState> = _uiState.asStateFlow()
     private val konnection = Konnection.instance
     private val hasNetworkConnection = konnection.isConnected()
     private val range = -50.0..50.0
 
-    private val _newSetpointInState = MutableStateFlow(NewSetpoint())
-    val newSetpointInState = _newSetpointInState.asStateFlow()
+    private val _uiState = MutableStateFlow<SetpointAdjustViewModelState>(SetpointAdjustViewModelState.Loading)
+    val uiState: StateFlow<SetpointAdjustViewModelState> = _uiState.asStateFlow()
 
-    private val _newSetpointField1Error = MutableStateFlow(false)
-    val newSetpointField1Error = _newSetpointField1Error.asStateFlow()
-
-    private val _newSetpointField2Error = MutableStateFlow(false)
-    val newSetpointField2Error = _newSetpointField2Error.asStateFlow()
-
-    private val _newSetpointField3Error = MutableStateFlow(false)
-    val newSetpointField3Error = _newSetpointField3Error.asStateFlow()
-
-    private val _newSetpointField4Error = MutableStateFlow(false)
-    val newSetpointField4Error = _newSetpointField4Error.asStateFlow()
-
-    private val _newSetpointField5Error = MutableStateFlow(false)
-    val newSetpointField5Error = _newSetpointField5Error.asStateFlow()
-
-    private val _newSetpointField6Error = MutableStateFlow(false)
-    val newSetpointField6Error = _newSetpointField6Error.asStateFlow()
-
-    private val _newSetpointField7Error = MutableStateFlow(false)
-    val newSetpointField7Error = _newSetpointField7Error.asStateFlow()
-
-    private val _newSetpointField8Error = MutableStateFlow(false)
-    val newSetpointField8Error = _newSetpointField8Error.asStateFlow()
+    private val _setpointUiState = MutableStateFlow(SetpointsUiState())
+    val setpointUiState: StateFlow<SetpointsUiState> = _setpointUiState.asStateFlow()
 
     init { updateValuesOnThingSpeak() }
 
@@ -73,97 +50,59 @@ class SetpointAdjustViewModel(private val repository: NetworkRepository) : ViewM
                 setpointField7 = setpointField7,
                 setpointField8 = setpointField8
             )
-            _uiState.value = SetpointAdjustViewModelState.ErrorNetworkConnection(response.toString())
+            _uiState.value = SetpointAdjustViewModelState.SuccessWriteSetpoint(response.toString())
         }
     }
 
-    fun onSetpointField1(newValue: Double) {
-        _newSetpointInState.update { it.copy(setpointField1 = newValue) }
-        //reset error when the user types another character
-        if (newValue in range) _newSetpointField1Error.value = false
+    // 1) sanitiza (aceita dígitos, 1 separador . ou , e - só no começo)
+    private fun sanitizeDecimal(raw: String): String {
+        val cleaned = raw.filter { it.isDigit() || it == '.' || it == ',' || it == '-' }
+        val sb = StringBuilder()
+        var sepUsed = false
+        var minusUsed = false
+
+        cleaned.forEachIndexed { idx, c ->
+            when (c) {
+                '-' -> if (!minusUsed && idx == 0) { sb.append('-'); minusUsed = true }
+                '.', ',' -> if (!sepUsed) { sb.append(c); sepUsed = true }
+                else -> sb.append(c)
+            }
+        }
+        return sb.toString()
     }
 
-    fun onSetpointField2(newValue: Double) {
-        _newSetpointInState.update { it.copy(setpointField2 = newValue) }
-        //reset error when the user types another character
-        if (newValue in range) _newSetpointField2Error.value = false
+    // 2) parse seguro pt-BR (vírgula -> ponto)
+    private fun parsePtBr(text: String): Double? {
+        val normalized = text.replace(',', '.')
+        if (normalized.isBlank() || normalized == "-" || normalized == "." || normalized == "-.") return null
+        return normalized.toDoubleOrNull()
     }
 
-    fun onSetpointField3(newValue: Double) {
-        _newSetpointInState.update { it.copy(setpointField3 = newValue) }
-        //reset error when the user types another character
-        if (newValue in range) _newSetpointField3Error.value = false
+    fun onTextChange(index: Int, raw: String) {
+        val text = sanitizeDecimal(raw)
+        val value = parsePtBr(text)
+
+        _setpointUiState.update { s ->
+            val newTexts = s.texts.toMutableList().apply { this[index] = text }
+            val newValues = s.values.toMutableList().apply { this[index] = value }
+
+            // erro só quando há número e está fora do range
+            val newErrors = s.errors.toMutableList().apply {
+                this[index] = (value != null && value !in range)
+            }
+
+            s.copy(texts = newTexts, values = newValues, errors = newErrors)
+        }
     }
 
-    fun onSetpointField4(newValue: Double) {
-        _newSetpointInState.update { it.copy(setpointField4 = newValue) }
-        //reset error when the user types another character
-        if (newValue in range) _newSetpointField4Error.value = false
+    fun validateAll(): Boolean {
+        val values = _setpointUiState.value.values
+        val newErrors = values.map { v -> v == null || v !in range }
+        _setpointUiState.update { it.copy(errors = newErrors) }
+        return newErrors.none { it }
     }
 
-    fun onSetpointField5(newValue: Double) {
-        _newSetpointInState.update { it.copy(setpointField5 = newValue) }
-        //reset error when the user types another character
-        if (newValue in range) _newSetpointField5Error.value = false
-    }
-
-    fun onSetpointField6(newValue: Double) {
-        _newSetpointInState.update { it.copy(setpointField6 = newValue) }
-        //reset error when the user types another character
-        if (newValue in range) _newSetpointField6Error.value = false
-    }
-
-    fun onSetpointField7(newValue: Double) {
-        _newSetpointInState.update { it.copy(setpointField7 = newValue) }
-        //reset error when the user types another character
-        if (newValue in range) _newSetpointField7Error.value = false
-    }
-
-    fun onSetpointField8(newValue: Double) {
-        _newSetpointInState.update { it.copy(setpointField8 = newValue) }
-        //reset error when the user types another character
-        if (newValue in range) _newSetpointField8Error.value = false
-    }
-
-    fun validateSetpointField1(setpointField1: Double): String {
-        if(setpointField1 !in range) _newSetpointField1Error.value = true
-        return "Verifique o valor digitado!"
-    }
-
-    fun validateSetpointField2(setpointField2: Double): String {
-        if(setpointField2 !in range) _newSetpointField2Error.value = true
-        return "Verifique o valor digitado!"
-    }
-
-    fun validateSetpointField3(setpointField3: Double): String {
-        if(setpointField3 !in range) _newSetpointField3Error.value = true
-        return "Verifique o valor digitado!"
-    }
-
-    fun validateSetpointField4(setpointField4: Double): String {
-        if(setpointField4 !in range) _newSetpointField4Error.value = true
-        return "Verifique o valor digitado!"
-    }
-
-    fun validateSetpointField5(setpointField5: Double): String {
-        if(setpointField5 !in range) _newSetpointField5Error.value = true
-        return "Verifique o valor digitado!"
-    }
-
-    fun validateSetpointField6(setpointField6: Double): String {
-        if(setpointField6 !in range) _newSetpointField6Error.value = true
-        return "Verifique o valor digitado!"
-    }
-
-    fun validateSetpointField7(setpointField7: Double): String {
-        if(setpointField7 !in range) _newSetpointField7Error.value = true
-        return "Verifique o valor digitado!"
-    }
-
-    fun validateSetpointField8(setpointField8: Double): String {
-        if(setpointField8 !in range) _newSetpointField8Error.value = true
-        return "Verifique o valor digitado!"
-    }
+    fun errorMessage(): String = "Verifique o valor digitado! Valores aceitos: -50 a 50°C"
 
     private fun updateValuesOnThingSpeak() {
         if (!hasNetworkConnection){
@@ -190,15 +129,16 @@ class SetpointAdjustViewModel(private val repository: NetworkRepository) : ViewM
             _uiState.value = SetpointAdjustViewModelState.Error(ConstantsApp.ERROR_API_UPDATE_VALUE)
             return
         }
+
         listReceive.forEach { response ->
-            response.feeds.first()?.field1?.toDouble()?.let { onSetpointField1(it) }
-            response.feeds.first()?.field2?.toDouble()?.let { onSetpointField2(it) }
-            response.feeds.first()?.field3?.toDouble()?.let { onSetpointField3(it) }
-            response.feeds.first()?.field4?.toDouble()?.let { onSetpointField4(it) }
-            response.feeds.first()?.field5?.toDouble()?.let { onSetpointField5(it) }
-            response.feeds.first()?.field6?.toDouble()?.let { onSetpointField6(it) }
-            response.feeds.first()?.field7?.toDouble()?.let { onSetpointField7(it) }
-            response.feeds.first()?.field8?.toDouble()?.let { onSetpointField8(it) }
+            response.feeds.first()?.field1?.let { onTextChange(0, it) }
+            response.feeds.first()?.field2?.let { onTextChange(1, it) }
+            response.feeds.first()?.field3?.let { onTextChange(2, it) }
+            response.feeds.first()?.field4?.let { onTextChange(3, it) }
+            response.feeds.first()?.field5?.let { onTextChange(4, it) }
+            response.feeds.first()?.field6?.let { onTextChange(5, it)}
+            response.feeds.first()?.field7?.let { onTextChange(6, it) }
+            response.feeds.first()?.field8?.let { onTextChange(7, it) }
 
             val newFeedList = mutableListOf(
                 Feeds(
@@ -247,17 +187,12 @@ class SetpointAdjustViewModel(private val repository: NetworkRepository) : ViewM
     }
 }
 
-
-data class NewSetpoint(
-    val setpointField1: Double? = 0.0,
-    val setpointField2: Double? = 0.0,
-    val setpointField3: Double? = 0.0,
-    val setpointField4: Double? = 0.0,
-    val setpointField5: Double? = 0.0,
-    val setpointField6: Double? = 0.0,
-    val setpointField7: Double? = 0.0,
-    val setpointField8: Double? = 0.0,
+data class SetpointsUiState(
+    val texts: List<String> = List(8) { "" },
+    val values: List<Double?> = List(8) { null },
+    val errors: List<Boolean> = List(8) { false },
 )
+
 
 sealed interface SetpointAdjustViewModelState {
     data class Error(val message: String) : SetpointAdjustViewModelState
@@ -267,4 +202,6 @@ sealed interface SetpointAdjustViewModelState {
     data object Loading : SetpointAdjustViewModelState
 
     data class SuccessUpdateSetpoint (val feeds: MutableList<Feeds> = mutableListOf()) : SetpointAdjustViewModelState
+
+    data class SuccessWriteSetpoint (val message: String) : SetpointAdjustViewModelState
 }
