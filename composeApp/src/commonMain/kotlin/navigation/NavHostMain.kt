@@ -270,8 +270,8 @@ private fun NavGraphBuilder.homeNavGraph(
                 ) {
                     SetpopintScreen(
                         ticketDao = ticketDao,
-                        onNavigateToProfile = {
-                            navController.navigate(AppNavigation.ProfileRoute.name)
+                        onNavigateToHome = {
+                            navController.navigate(AppNavigation.HomeRoute.name)
                         },
                         onNavigateFromDrawerMenu = { route ->
                             navController.navigate(route)
