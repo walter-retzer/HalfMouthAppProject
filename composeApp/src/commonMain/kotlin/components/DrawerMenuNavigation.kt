@@ -19,15 +19,12 @@ import androidx.compose.ui.unit.dp
 import data.items
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.vectorResource
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun DrawerMenuNavigation(
     scope: CoroutineScope,
     drawerState: DrawerState,
-    tickets: Int,
     onNavigateFromDrawerMenu: (route: String) -> Unit
 ) {
     var selectedItemIndex by rememberSaveable { mutableStateOf(0) }
@@ -56,11 +53,6 @@ fun DrawerMenuNavigation(
                         } else vectorResource(item.unselectedIcon),
                         contentDescription = item.title
                     )
-                },
-                badge = {
-                    if (item.isBadgeCountActivated) {
-                        Text(text = tickets.toString())
-                    }
                 },
                 modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
             )

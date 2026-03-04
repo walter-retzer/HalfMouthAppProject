@@ -6,6 +6,8 @@ import halfmouthappproject.composeapp.generated.resources.beer_craft_glass
 import halfmouthappproject.composeapp.generated.resources.beer_growler
 import halfmouthappproject.composeapp.generated.resources.beer_mug_ipa
 import halfmouthappproject.composeapp.generated.resources.brewingbeer
+import halfmouthappproject.composeapp.generated.resources.icon_account
+import halfmouthappproject.composeapp.generated.resources.icon_account_off
 import halfmouthappproject.composeapp.generated.resources.icon_home_menu
 import halfmouthappproject.composeapp.generated.resources.icon_home_on
 import halfmouthappproject.composeapp.generated.resources.icon_settings_menu
@@ -17,23 +19,22 @@ import halfmouthappproject.composeapp.generated.resources.lupulo
 import halfmouthappproject.composeapp.generated.resources.malte
 import navigation.AppNavigation
 import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 
-data class Ingredients @OptIn(ExperimentalResourceApi::class) constructor(
+data class Ingredients(
     val name: String,
     val description: String,
     val image: DrawableResource
 )
 
-data class BeerType @OptIn(ExperimentalResourceApi::class) constructor(
+data class BeerType (
     val title: String,
     val subtitle: String,
     val info: String,
     val imageId: DrawableResource,
 )
 
-data class NavigationMenuDrawerItem @OptIn(ExperimentalResourceApi::class) constructor(
+data class NavigationMenuDrawerItem (
     val title: String,
     val route: String,
     val selectedIcon: DrawableResource,
@@ -41,7 +42,6 @@ data class NavigationMenuDrawerItem @OptIn(ExperimentalResourceApi::class) const
     val isBadgeCountActivated: Boolean = false
 )
 
-@OptIn(ExperimentalResourceApi::class)
 val listOfIngredients = listOf(
     Ingredients("Lúpulo", "", Res.drawable.lupulo),
     Ingredients("Malte", "", Res.drawable.malte),
@@ -49,7 +49,6 @@ val listOfIngredients = listOf(
     Ingredients("Agua", "", Res.drawable.agua),
 )
 
-@OptIn(ExperimentalResourceApi::class)
 val beerTypeList = listOf(
     BeerType(
         "HalfMouth\nIpa",
@@ -89,7 +88,6 @@ val beerTypeList = listOf(
     ),
 )
 
-@OptIn(ExperimentalResourceApi::class)
 val items = listOf(
     NavigationMenuDrawerItem(
         title = "Menu",
@@ -98,11 +96,10 @@ val items = listOf(
         unselectedIcon = Res.drawable.icon_home_menu,
     ),
     NavigationMenuDrawerItem(
-        title = "Meus Cupons",
-        route = AppNavigation.TicketRoute.name,
-        selectedIcon = Res.drawable.icon_tickets_on,
-        unselectedIcon = Res.drawable.icon_tickets_off,
-        isBadgeCountActivated = true
+        title = "Profile",
+        route = AppNavigation.ProfileRoute.name,
+        selectedIcon = Res.drawable.icon_account,
+        unselectedIcon = Res.drawable.icon_account_off,
     ),
     NavigationMenuDrawerItem(
         title = "Configurações",
