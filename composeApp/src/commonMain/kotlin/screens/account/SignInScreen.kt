@@ -47,7 +47,6 @@ import components.ProgressButton
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.splashscreenlogo
 import kotlinx.coroutines.delay
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
@@ -58,7 +57,6 @@ import viewmodel.SignInViewModel
 import viewmodel.SignInViewState
 
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 @Preview
 fun SignInScreen(
