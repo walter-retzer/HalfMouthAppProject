@@ -40,7 +40,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import components.DrawerMenuNavigation
 import components.MenuToolbar
 import components.MyAppCircularProgressIndicator
-import database.TicketDao
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.icon_chart_line2
 import halfmouthappproject.composeapp.generated.resources.icon_temperature
@@ -61,12 +60,10 @@ import viewmodel.DigitalInputViewModelState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DigitalInputsScreen(
-    ticketDao: TicketDao,
     onNavigateToProfile: () -> Unit,
     onNavigateFromDrawerMenu: (route: String) -> Unit,
     viewModel: DigitalInputViewModel = koinInject()
 ) {
-    val listOfTickets by ticketDao.getAllTickets().collectAsState(initial = emptyList())
     val uiState by viewModel.uiState.collectAsState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val snackBarHostState = remember { SnackbarHostState() }
@@ -81,7 +78,6 @@ fun DigitalInputsScreen(
             DrawerMenuNavigation(
                 scope = scope,
                 drawerState = drawerState,
-                tickets = listOfTickets.size,
                 onNavigateFromDrawerMenu = { route->
                     onNavigateFromDrawerMenu(route)
                 }

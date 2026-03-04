@@ -61,7 +61,6 @@ import data.Ingredients
 import data.UserPreferences
 import data.beerTypeList
 import data.listOfIngredients
-import database.TicketDao
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.splashscreenlogo
 import kotlinx.coroutines.launch
@@ -80,13 +79,11 @@ import viewmodel.HomeViewModel
 @Composable
 @Preview
 fun HomeScreen(
-    ticketDao: TicketDao,
     onNavigateToProfile: () -> Unit,
     onNavigateFromDrawerMenu: (route: String) -> Unit,
     viewModel: HomeViewModel = koinInject()
 ) {
     val messageNotification by viewModel.notificationMessage.collectAsState()
-    val listOfTickets by ticketDao.getAllTickets().collectAsState(initial = emptyList())
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val snackBarHostState = remember { SnackbarHostState() }
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -101,7 +98,6 @@ fun HomeScreen(
             DrawerMenuNavigation(
                 scope = scope,
                 drawerState = drawerState,
-                tickets = listOfTickets.size,
                 onNavigateFromDrawerMenu = { route->
                     onNavigateFromDrawerMenu(route)
                 }

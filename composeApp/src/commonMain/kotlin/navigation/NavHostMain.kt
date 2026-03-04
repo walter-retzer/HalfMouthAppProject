@@ -17,7 +17,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import components.AppBottomNavigationBar
-import database.TicketDao
 import navigation.ArgumentsKey.FIELD_ID_KEY
 import navigation.ArgumentsKey.FIELD_ID_NAME
 import navigation.ArgumentsKey.FIELD_ID_RESULTS
@@ -31,22 +30,18 @@ import navigation.home.NavItem
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinContext
 import org.koin.compose.currentKoinScope
-import org.koin.compose.koinInject
-import org.koin.core.parameter.parametersOf
 import presentation.ScreenTheme
 import screens.account.LoginScreen
 import screens.account.SignInScreen
 import screens.charts.ChartLineScreen
 import screens.contactInfo.ContactInfoScreen
 import screens.digitalInputs.DigitalInputsScreen
-import screens.discounts.DiscountsScreen
 import screens.home.HomeScreen
 import screens.production.ProductionScreen
 import screens.profile.ProfileScreen
-import screens.setpoint.SetpopintScreen
+import screens.setpoint.SetpointScreen
 import screens.splash.SplashScreen
 import screens.temperature.TemperatureScreen
-import screens.tickets.TicketScreen
 
 
 @Composable
@@ -54,7 +49,6 @@ import screens.tickets.TicketScreen
 fun NavHostMain(
     darkTheme: Boolean,
     dynamicColor: Boolean,
-    ticketDao: TicketDao,
     navController: NavHostController = rememberNavController()
 ) {
     KoinContext {
@@ -71,7 +65,7 @@ fun NavHostMain(
                     popEnterTransition = popEnterRightAnimation,
                     popExitTransition = popExitRightAnimation
                 ) {
-                    loginNavGraph(navController, ticketDao)
+                    loginNavGraph(navController)
                 }
             }
         }
@@ -80,8 +74,7 @@ fun NavHostMain(
 
 
 private fun NavGraphBuilder.loginNavGraph(
-    navController: NavHostController,
-    ticketDao: TicketDao,
+    navController: NavHostController
 ) {
     navigation(
         route = AppGraphNav.LoginGraph.name,
@@ -126,13 +119,11 @@ private fun NavGraphBuilder.loginNavGraph(
                 }
             )
         }
-        homeNavGraph(ticketDao)
+        homeNavGraph()
     }
 }
 
-private fun NavGraphBuilder.homeNavGraph(
-    ticketDao: TicketDao
-) {
+private fun NavGraphBuilder.homeNavGraph() {
     composable(
         route = AppGraphNav.HomeGraph.name,
         enterTransition = slideFadeInAnimation,
@@ -160,7 +151,6 @@ private fun NavGraphBuilder.homeNavGraph(
             ) {
                 composable(route = AppNavigation.HomeRoute.name) {
                     HomeScreen(
-                        ticketDao = ticketDao,
                         onNavigateFromDrawerMenu = { route ->
                             navController.navigate(route)
                         },
@@ -174,7 +164,6 @@ private fun NavGraphBuilder.homeNavGraph(
                     route = AppNavigation.ProductionRoute.name,
                 ) {
                     ProductionScreen(
-                        ticketDao = ticketDao,
                         onNavigateToProfile = {
                             navController.navigate(AppNavigation.ProfileRoute.name)
                         },
@@ -186,21 +175,6 @@ private fun NavGraphBuilder.homeNavGraph(
                         onNavigateFromDrawerMenu = { route ->
                             navController.navigate(route)
                         },
-                    )
-                }
-
-                composable(
-                    route = AppNavigation.DiscountsRoute.name,
-                ) {
-                    DiscountsScreen(
-                        ticketDao = ticketDao,
-                        onNavigateFromDrawerMenu = { route ->
-                            navController.navigate(route)
-                        },
-                        onNavigateBack = {
-                            navController.navigateUp()
-                        },
-                        viewModel = koinInject(parameters = { parametersOf(ticketDao) })
                     )
                 }
 
@@ -218,23 +192,12 @@ private fun NavGraphBuilder.homeNavGraph(
                     route = AppNavigation.ContactRoute.name,
                 ) {
                     ContactInfoScreen(
-                        ticketDao = ticketDao,
                         onNavigateToProfile = {
                             navController.navigate(AppNavigation.ProfileRoute.name)
                         },
                         onNavigateFromDrawerMenu = { route ->
                             navController.navigate(route)
                         },
-                    )
-                }
-
-                composable(
-                    route = AppNavigation.TicketRoute.name,
-                ) {
-                    TicketScreen(
-                        ticketDao = ticketDao,
-                        onNavigateBack = { navController.navigateUp() },
-                        onNavigateClose = { navController.navigate(AppNavigation.HomeRoute.name) }
                     )
                 }
 
@@ -252,7 +215,6 @@ private fun NavGraphBuilder.homeNavGraph(
                     val fieldResult = arguments.getString(FIELD_ID_RESULTS)
 
                     ChartLineScreen(
-                        ticketDao = ticketDao,
                         fieldId = fieldId.toString(),
                         fieldName = fieldName.toString(),
                         fieldResult = fieldResult.toString(),
@@ -268,14 +230,16 @@ private fun NavGraphBuilder.homeNavGraph(
                 composable(
                     route = AppNavigation.SetpointRoute.name,
                 ) {
-                    SetpopintScreen(
-                        ticketDao = ticketDao,
+                    SetpointScreen(
                         onNavigateToHome = {
                             navController.navigate(AppNavigation.HomeRoute.name)
                         },
                         onNavigateFromDrawerMenu = { route ->
                             navController.navigate(route)
                         },
+                        onNavigateToProfile = {
+                            navController.navigate(AppNavigation.ProfileRoute.name)
+                        }
                     )
                 }
 
@@ -283,7 +247,6 @@ private fun NavGraphBuilder.homeNavGraph(
                     route = AppNavigation.TemperatureRoute.name,
                 ) {
                     TemperatureScreen(
-                        ticketDao = ticketDao,
                         onNavigateToProfile = {
                             navController.navigate(AppNavigation.ProfileRoute.name)
                         },
@@ -297,7 +260,6 @@ private fun NavGraphBuilder.homeNavGraph(
                     route = AppNavigation.DigitalInputRoute.name,
                 ) {
                     DigitalInputsScreen(
-                        ticketDao = ticketDao,
                         onNavigateToProfile = {
                             navController.navigate(AppNavigation.ProfileRoute.name)
                         },

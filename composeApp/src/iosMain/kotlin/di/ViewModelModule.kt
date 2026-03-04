@@ -4,7 +4,6 @@ import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 import viewmodel.ChartLineViewModel
-import viewmodel.DiscountsViewModel
 import viewmodel.HomeViewModel
 import viewmodel.LoginUserViewModel
 import viewmodel.ProductionViewModel
@@ -17,7 +16,6 @@ actual val viewModelModule = module{
     singleOf(::SignInViewModel)
     singleOf(::HomeViewModel)
     singleOf(::ProfileViewModel)
-    singleOf(::DiscountsViewModel)
     factoryOf(::ProductionViewModel)
     factoryOf(::ChartLineViewModel)
     factoryOf(::SetpointAdjustViewModel)

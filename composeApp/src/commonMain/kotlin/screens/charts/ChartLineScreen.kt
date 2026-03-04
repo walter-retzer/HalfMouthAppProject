@@ -39,7 +39,6 @@ import com.aay.compose.lineChart.model.LineType
 import components.DrawerMenuNavigation
 import components.MyAppCircularProgressIndicator
 import components.SimpleToolbar
-import database.TicketDao
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.Roboto_Bold
 import kotlinx.coroutines.launch
@@ -68,7 +67,6 @@ import viewmodel.ChartLineViewState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChartLineScreen(
-    ticketDao: TicketDao,
     fieldId: String,
     fieldName: String,
     fieldResult: String,
@@ -76,7 +74,6 @@ fun ChartLineScreen(
     onNavigateFromDrawerMenu: (route: String) -> Unit,
     viewModel: ChartLineViewModel = koinInject()
 ) {
-    val listOfTickets by ticketDao.getAllTickets().collectAsState(initial = emptyList())
     val uiState by viewModel.uiState.collectAsState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val snackBarHostState = remember { SnackbarHostState() }
@@ -90,7 +87,6 @@ fun ChartLineScreen(
             DrawerMenuNavigation(
                 scope = scope,
                 drawerState = drawerState,
-                tickets = listOfTickets.size,
                 onNavigateFromDrawerMenu = { route ->
                     onNavigateFromDrawerMenu(route)
                 }

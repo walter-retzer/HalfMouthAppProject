@@ -6,7 +6,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.core.view.WindowCompat
-import database.getTicketDataBase
 import navigation.NavHostMain
 
 
@@ -20,13 +19,10 @@ class MainActivity : ComponentActivity() {
         window.statusBarColor= Color.BLACK
         WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = false
 
-        val ticketDao = getTicketDataBase(applicationContext).ticketDao()
-
         setContent {
             NavHostMain(
                 darkTheme = isSystemInDarkTheme(),
                 dynamicColor = false,
-                ticketDao = ticketDao
             )
         }
     }

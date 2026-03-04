@@ -48,7 +48,6 @@ import components.DrawerMenuNavigation
 import components.MenuToolbar
 import components.MyAppCircularProgressIndicator
 import components.ProgressButton
-import database.TicketDao
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
@@ -59,13 +58,12 @@ import viewmodel.SetpointAdjustViewModelState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SetpopintScreen(
-    ticketDao: TicketDao,
+fun SetpointScreen(
     onNavigateToHome: () -> Unit,
+    onNavigateToProfile: () -> Unit,
     onNavigateFromDrawerMenu: (route: String) -> Unit,
     viewModel: SetpointAdjustViewModel = koinInject()
 ) {
-    val listOfTickets by ticketDao.getAllTickets().collectAsState(initial = emptyList())
     val uiState by viewModel.uiState.collectAsState()
     val setpointUiState by viewModel.setpointUiState.collectAsState()
     val focusManager = LocalFocusManager.current
@@ -84,7 +82,6 @@ fun SetpopintScreen(
             DrawerMenuNavigation(
                 scope = scope,
                 drawerState = drawerState,
-                tickets = listOfTickets.size,
                 onNavigateFromDrawerMenu = { route ->
                     onNavigateFromDrawerMenu(route)
                 }
@@ -103,7 +100,7 @@ fun SetpopintScreen(
                             drawerState.open()
                         }
                     },
-                    onNavigationToProfile = { onNavigateToHome() },
+                    onNavigationToProfile = { onNavigateToProfile() },
                     onNavigateToNotifications = { },
                     scrollBehavior = scrollBehavior
                 )

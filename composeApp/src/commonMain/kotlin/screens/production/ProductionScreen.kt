@@ -41,7 +41,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import components.DrawerMenuNavigation
 import components.MenuToolbar
 import components.MyAppCircularProgressIndicator
-import database.TicketDao
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.icon_chart_line2
 import halfmouthappproject.composeapp.generated.resources.icon_freezer
@@ -66,13 +65,11 @@ import viewmodel.ProductionViewState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductionScreen(
-    ticketDao: TicketDao,
     onNavigateToProfile: () -> Unit,
     onNavigateToChartLine: (fieldId: String, fieldName: String, fieldResult: String) -> Unit,
     onNavigateFromDrawerMenu: (route: String) -> Unit,
     viewModel: ProductionViewModel = koinInject()
 ) {
-    val listOfTickets by ticketDao.getAllTickets().collectAsState(initial = emptyList())
     val uiState by viewModel.uiState.collectAsState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val snackBarHostState = remember { SnackbarHostState() }
@@ -87,7 +84,6 @@ fun ProductionScreen(
             DrawerMenuNavigation(
                 scope = scope,
                 drawerState = drawerState,
-                tickets = listOfTickets.size,
                 onNavigateFromDrawerMenu = { route->
                     onNavigateFromDrawerMenu(route)
                 }
