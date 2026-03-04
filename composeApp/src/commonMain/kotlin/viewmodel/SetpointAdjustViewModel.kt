@@ -8,12 +8,12 @@ import dev.tmapps.konnection.Konnection
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import network.NetworkRepository
 import network.ResultNetwork
 import util.ConstantsApp
 import util.ConstantsApp.Companion.ERROR_CONNECTION_MESSAGE
-import util.ConstantsApp.Companion.ERROR_UPDATE_MESSAGE
 
 class SetpointAdjustViewModel(private val repository: NetworkRepository) : ViewModel() {
 
@@ -22,8 +22,14 @@ class SetpointAdjustViewModel(private val repository: NetworkRepository) : ViewM
     private val konnection = Konnection.instance
     private val hasNetworkConnection = konnection.isConnected()
 
-    private val _newUserSignInState = MutableStateFlow(NewUserContact())
-    val newUserSignInState = _newUserSignInState.asStateFlow()
+
+
+    private val _newSetpointInState = MutableStateFlow(NewSetpoint())
+    val newSetpointInState = _newSetpointInState.asStateFlow()
+
+    private val _newSetpointField1Error = MutableStateFlow(false)
+    val newSetpointField1Error = _newSetpointField1Error.asStateFlow()
+
 
     private val _emailError = MutableStateFlow(false)
     val emailError = _emailError.asStateFlow()
@@ -44,6 +50,19 @@ class SetpointAdjustViewModel(private val repository: NetworkRepository) : ViewM
             val response = repository.updateFieldSetpointValue()
             _uiState.value = SetpointAdjustViewModelState.ErrorNetworkConnection(response.toString())
         }
+    }
+
+    fun onSetpointField1(newValue: Double) {
+        _newSetpointInState.update { it.copy(setpointField1 = newValue) }
+        //reset error when the user types another character
+        if (newValue > 50.00 || newValue < -50.00) _newSetpointField1Error.value = false
+    }
+
+    fun validateSetpointField1(setpointField1: Double): String {
+        if(setpointField1 < 50.00 || setpointField1 > -50.00) {
+            _newSetpointField1Error.value = true
+        }
+        return "Verifique o valor digitado!"
     }
 
     private fun updateValuesOnThingSpeak() {
@@ -72,6 +91,9 @@ class SetpointAdjustViewModel(private val repository: NetworkRepository) : ViewM
             return
         }
         listReceive.forEach { response ->
+            onSetpointField1(response.feeds.first()?.field1!!.toDouble())
+
+
             val newFeedList = mutableListOf(
                 Feeds(
                     fieldName = response.channel?.field1,
@@ -119,6 +141,12 @@ class SetpointAdjustViewModel(private val repository: NetworkRepository) : ViewM
     }
 }
 
+
+data class NewSetpoint(
+    val setpointField1: Double? = 0.0,
+    val setpointField2: String = "",
+
+)
 
 sealed interface SetpointAdjustViewModelState {
     data class Error(val message: String) : SetpointAdjustViewModelState

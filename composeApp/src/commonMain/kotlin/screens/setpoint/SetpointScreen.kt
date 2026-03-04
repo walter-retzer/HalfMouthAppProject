@@ -40,7 +40,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import components.DrawerMenuNavigation
 import components.MenuToolbar
@@ -49,7 +48,6 @@ import components.ProgressButton
 import database.TicketDao
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
-import util.MaskVisualTransformation
 import util.snackBarOnlyMessage
 import viewmodel.SetpointAdjustViewModel
 import viewmodel.SetpointAdjustViewModelState
@@ -73,11 +71,15 @@ fun SetpopintScreen(
     var isSnackBarOpen by remember { mutableStateOf(false) }
     var isSnackBarMessageErrorApiOpen by remember { mutableStateOf(false) }
 
-    val newUserSignInState by viewModel.newUserSignInState.collectAsState()
+
     val nameError by viewModel.nameError.collectAsState()
     val phoneError by viewModel.phoneNumberError.collectAsState()
     val emailError by viewModel.emailError.collectAsState()
     val passwordError by viewModel.passwordError.collectAsState()
+
+    val newSetpoint by viewModel.newSetpointInState.collectAsState()
+    val errorSetpointField1 by viewModel.newSetpointField1Error.collectAsState()
+
     var progressButtonIsActivated by remember { mutableStateOf(false) }
     var snackBarIsActivated by remember { mutableStateOf(false) }
 
@@ -186,174 +188,172 @@ fun SetpopintScreen(
                                 keyboardOptions = KeyboardOptions(
                                     capitalization = KeyboardCapitalization.Words,
                                     autoCorrect = true,
-                                    keyboardType = KeyboardType.Text,
+                                    keyboardType = KeyboardType.Decimal,
                                     imeAction = ImeAction.Next
                                 ),
                                 shape = RoundedCornerShape(20.dp),
-                                value = newUserSignInState.name,
-                                isError = nameError,
+                                value = newSetpoint.setpointField1.toString(),
+                                isError = errorSetpointField1,
                                 supportingText = {
-                                    if (nameError) Text(
-                                        text = "Texy"
-                                    )
+                                    if (errorSetpointField1) Text(text = viewModel.validateSetpointField1(newSetpoint.setpointField1!!))
                                 },
-                                placeholder = { Text("Nome") },
-                                onValueChange = { }
+                                placeholder = { Text("${state.feeds[0].fieldName} = ${state.feeds[0].fieldValue} °C") },
+                                onValueChange = { viewModel.onSetpointField1(it.toDouble())}
                             )
 
                             Spacer(modifier = Modifier.height(6.dp))
 
-                            OutlinedTextField(
-                                modifier = Modifier.fillMaxWidth(),
-                                keyboardOptions = KeyboardOptions(
-                                    capitalization = KeyboardCapitalization.None,
-                                    autoCorrect = true,
-                                    keyboardType = KeyboardType.Phone,
-                                    imeAction = ImeAction.Next
-                                ),
-                                shape = RoundedCornerShape(20.dp),
-                                value = newUserSignInState.phoneNumber,
-                                isError = phoneError,
-                                supportingText = {
-                                    if (phoneError) Text(" phone")
-                                },
-                                placeholder = { Text("Celular") },
-                                onValueChange = { },
-                                visualTransformation = MaskVisualTransformation(
-                                    MaskVisualTransformation.PHONE
-                                )
-                            )
-
-                            Spacer(modifier = Modifier.height(6.dp))
-
-                            OutlinedTextField(
-                                modifier = Modifier.fillMaxWidth(),
-                                keyboardOptions = KeyboardOptions(
-                                    capitalization = KeyboardCapitalization.None,
-                                    autoCorrect = true,
-                                    keyboardType = KeyboardType.Email,
-                                    imeAction = ImeAction.Next
-                                ),
-                                shape = RoundedCornerShape(20.dp),
-                                value = newUserSignInState.email,
-                                isError = emailError,
-                                supportingText = {
-                                    if (emailError) Text("erro"
-                                    )
-                                },
-                                placeholder = { Text(text = "Email") },
-                                onValueChange = {  },
-                            )
-
-                            Spacer(modifier = Modifier.height(6.dp))
-
-                            OutlinedTextField(
-                                modifier = Modifier.fillMaxWidth(),
-                                keyboardOptions = KeyboardOptions(
-                                    capitalization = KeyboardCapitalization.None,
-                                    autoCorrect = true,
-                                    keyboardType = KeyboardType.NumberPassword,
-                                    imeAction = ImeAction.Done
-                                ),
-                                shape = RoundedCornerShape(20.dp),
-                                value = newUserSignInState.password,
-                                isError = passwordError,
-                                supportingText = {
-                                    if (passwordError)
-                                        Text(text = "Errro")
-                                },
-                                visualTransformation = PasswordVisualTransformation(),
-                                placeholder = { Text("Senha") },
-                                onValueChange = { }
-                            )
-
-                            Spacer(modifier = Modifier.height(10.dp))
-
-                            OutlinedTextField(
-                                modifier = Modifier.fillMaxWidth(),
-                                keyboardOptions = KeyboardOptions(
-                                    capitalization = KeyboardCapitalization.Words,
-                                    autoCorrect = true,
-                                    keyboardType = KeyboardType.Text,
-                                    imeAction = ImeAction.Next
-                                ),
-                                shape = RoundedCornerShape(20.dp),
-                                value = newUserSignInState.name,
-                                isError = nameError,
-                                supportingText = {
-                                    if (nameError) Text(
-                                        text = "Texy"
-                                    )
-                                },
-                                placeholder = { Text("Nome") },
-                                onValueChange = { }
-                            )
-
-                            Spacer(modifier = Modifier.height(6.dp))
-
-                            OutlinedTextField(
-                                modifier = Modifier.fillMaxWidth(),
-                                keyboardOptions = KeyboardOptions(
-                                    capitalization = KeyboardCapitalization.None,
-                                    autoCorrect = true,
-                                    keyboardType = KeyboardType.Phone,
-                                    imeAction = ImeAction.Next
-                                ),
-                                shape = RoundedCornerShape(20.dp),
-                                value = newUserSignInState.phoneNumber,
-                                isError = phoneError,
-                                supportingText = {
-                                    if (phoneError) Text(" phone")
-                                },
-                                placeholder = { Text("Celular") },
-                                onValueChange = { },
-                                visualTransformation = MaskVisualTransformation(
-                                    MaskVisualTransformation.PHONE
-                                )
-                            )
-
-                            Spacer(modifier = Modifier.height(6.dp))
-
-                            OutlinedTextField(
-                                modifier = Modifier.fillMaxWidth(),
-                                keyboardOptions = KeyboardOptions(
-                                    capitalization = KeyboardCapitalization.None,
-                                    autoCorrect = true,
-                                    keyboardType = KeyboardType.Email,
-                                    imeAction = ImeAction.Next
-                                ),
-                                shape = RoundedCornerShape(20.dp),
-                                value = newUserSignInState.email,
-                                isError = emailError,
-                                supportingText = {
-                                    if (emailError) Text("erro"
-                                    )
-                                },
-                                placeholder = { Text(text = "Email") },
-                                onValueChange = {  },
-                            )
-
-                            Spacer(modifier = Modifier.height(6.dp))
-
-                            OutlinedTextField(
-                                modifier = Modifier.fillMaxWidth(),
-                                keyboardOptions = KeyboardOptions(
-                                    capitalization = KeyboardCapitalization.None,
-                                    autoCorrect = true,
-                                    keyboardType = KeyboardType.NumberPassword,
-                                    imeAction = ImeAction.Done
-                                ),
-                                shape = RoundedCornerShape(20.dp),
-                                value = newUserSignInState.password,
-                                isError = passwordError,
-                                supportingText = {
-                                    if (passwordError)
-                                        Text(text = "Errro")
-                                },
-                                visualTransformation = PasswordVisualTransformation(),
-                                placeholder = { Text("Senha") },
-                                onValueChange = { }
-                            )
+//                            OutlinedTextField(
+//                                modifier = Modifier.fillMaxWidth(),
+//                                keyboardOptions = KeyboardOptions(
+//                                    capitalization = KeyboardCapitalization.None,
+//                                    autoCorrect = true,
+//                                    keyboardType = KeyboardType.Phone,
+//                                    imeAction = ImeAction.Next
+//                                ),
+//                                shape = RoundedCornerShape(20.dp),
+//                                value = newUserSignInState.phoneNumber,
+//                                isError = phoneError,
+//                                supportingText = {
+//                                    if (phoneError) Text(" phone")
+//                                },
+//                                placeholder = { Text("Celular") },
+//                                onValueChange = { },
+//                                visualTransformation = MaskVisualTransformation(
+//                                    MaskVisualTransformation.PHONE
+//                                )
+//                            )
+//
+//                            Spacer(modifier = Modifier.height(6.dp))
+//
+//                            OutlinedTextField(
+//                                modifier = Modifier.fillMaxWidth(),
+//                                keyboardOptions = KeyboardOptions(
+//                                    capitalization = KeyboardCapitalization.None,
+//                                    autoCorrect = true,
+//                                    keyboardType = KeyboardType.Email,
+//                                    imeAction = ImeAction.Next
+//                                ),
+//                                shape = RoundedCornerShape(20.dp),
+//                                value = newUserSignInState.email,
+//                                isError = emailError,
+//                                supportingText = {
+//                                    if (emailError) Text("erro"
+//                                    )
+//                                },
+//                                placeholder = { Text(text = "Email") },
+//                                onValueChange = {  },
+//                            )
+//
+//                            Spacer(modifier = Modifier.height(6.dp))
+//
+//                            OutlinedTextField(
+//                                modifier = Modifier.fillMaxWidth(),
+//                                keyboardOptions = KeyboardOptions(
+//                                    capitalization = KeyboardCapitalization.None,
+//                                    autoCorrect = true,
+//                                    keyboardType = KeyboardType.NumberPassword,
+//                                    imeAction = ImeAction.Done
+//                                ),
+//                                shape = RoundedCornerShape(20.dp),
+//                                value = newUserSignInState.password,
+//                                isError = passwordError,
+//                                supportingText = {
+//                                    if (passwordError)
+//                                        Text(text = "Errro")
+//                                },
+//                                visualTransformation = PasswordVisualTransformation(),
+//                                placeholder = { Text("Senha") },
+//                                onValueChange = { }
+//                            )
+//
+//                            Spacer(modifier = Modifier.height(10.dp))
+//
+//                            OutlinedTextField(
+//                                modifier = Modifier.fillMaxWidth(),
+//                                keyboardOptions = KeyboardOptions(
+//                                    capitalization = KeyboardCapitalization.Words,
+//                                    autoCorrect = true,
+//                                    keyboardType = KeyboardType.Text,
+//                                    imeAction = ImeAction.Next
+//                                ),
+//                                shape = RoundedCornerShape(20.dp),
+//                                value = newUserSignInState.name,
+//                                isError = nameError,
+//                                supportingText = {
+//                                    if (nameError) Text(
+//                                        text = "Texy"
+//                                    )
+//                                },
+//                                placeholder = { Text("Nome") },
+//                                onValueChange = { }
+//                            )
+//
+//                            Spacer(modifier = Modifier.height(6.dp))
+//
+//                            OutlinedTextField(
+//                                modifier = Modifier.fillMaxWidth(),
+//                                keyboardOptions = KeyboardOptions(
+//                                    capitalization = KeyboardCapitalization.None,
+//                                    autoCorrect = true,
+//                                    keyboardType = KeyboardType.Phone,
+//                                    imeAction = ImeAction.Next
+//                                ),
+//                                shape = RoundedCornerShape(20.dp),
+//                                value = newUserSignInState.phoneNumber,
+//                                isError = phoneError,
+//                                supportingText = {
+//                                    if (phoneError) Text(" phone")
+//                                },
+//                                placeholder = { Text("Celular") },
+//                                onValueChange = { },
+//                                visualTransformation = MaskVisualTransformation(
+//                                    MaskVisualTransformation.PHONE
+//                                )
+//                            )
+//
+//                            Spacer(modifier = Modifier.height(6.dp))
+//
+//                            OutlinedTextField(
+//                                modifier = Modifier.fillMaxWidth(),
+//                                keyboardOptions = KeyboardOptions(
+//                                    capitalization = KeyboardCapitalization.None,
+//                                    autoCorrect = true,
+//                                    keyboardType = KeyboardType.Email,
+//                                    imeAction = ImeAction.Next
+//                                ),
+//                                shape = RoundedCornerShape(20.dp),
+//                                value = newUserSignInState.email,
+//                                isError = emailError,
+//                                supportingText = {
+//                                    if (emailError) Text("erro"
+//                                    )
+//                                },
+//                                placeholder = { Text(text = "Email") },
+//                                onValueChange = {  },
+//                            )
+//
+//                            Spacer(modifier = Modifier.height(6.dp))
+//
+//                            OutlinedTextField(
+//                                modifier = Modifier.fillMaxWidth(),
+//                                keyboardOptions = KeyboardOptions(
+//                                    capitalization = KeyboardCapitalization.None,
+//                                    autoCorrect = true,
+//                                    keyboardType = KeyboardType.NumberPassword,
+//                                    imeAction = ImeAction.Done
+//                                ),
+//                                shape = RoundedCornerShape(20.dp),
+//                                value = newUserSignInState.password,
+//                                isError = passwordError,
+//                                supportingText = {
+//                                    if (passwordError)
+//                                        Text(text = "Errro")
+//                                },
+//                                visualTransformation = PasswordVisualTransformation(),
+//                                placeholder = { Text("Senha") },
+//                                onValueChange = { }
+//                            )
 
                             Spacer(modifier = Modifier.height(10.dp))
 
