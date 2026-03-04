@@ -145,12 +145,12 @@ fun SetpopintScreen(
                     }
                 }
 
-                is SetpointAdjustViewModelState.SuccessUpdateValues -> {
+                is SetpointAdjustViewModelState.SuccessUpdateSetpoint -> {
                     if(!isSnackBarOpen) {
                         snackBarOnlyMessage(
                             snackBarHostState = snackBarHostState,
                             coroutineScope = scope,
-                            message = state.value.toString()
+                            message = state.feeds.toString()
                         )
                         isSnackBarOpen = true
                     }
@@ -361,7 +361,7 @@ fun SetpopintScreen(
                                 modifier = Modifier.padding(top = 16.dp).fillMaxWidth(),
                                 text = "Enviar",
                                 isLoading = progressButtonIsActivated,
-                                onClick = { }
+                                onClick = { viewModel.writeSetpoint() }
                             )
 
                             Spacer(modifier = Modifier.height(20.dp))

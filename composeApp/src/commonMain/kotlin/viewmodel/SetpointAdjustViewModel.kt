@@ -2,6 +2,8 @@ package viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import data.Feeds
+import data.ThingSpeakResponse
 import dev.tmapps.konnection.Konnection
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -37,21 +39,82 @@ class SetpointAdjustViewModel(private val repository: NetworkRepository) : ViewM
 
     init { updateValuesOnThingSpeak() }
 
+    fun writeSetpoint() {
+        viewModelScope.launch {
+            val response = repository.updateFieldSetpointValue()
+            _uiState.value = SetpointAdjustViewModelState.ErrorNetworkConnection(response.toString())
+        }
+    }
+
     private fun updateValuesOnThingSpeak() {
         if (!hasNetworkConnection){
             _uiState.value = SetpointAdjustViewModelState.ErrorNetworkConnection(ERROR_CONNECTION_MESSAGE)
             return
         }
         viewModelScope.launch {
-            when (val responseApi = repository.updateFieldValue()) {
-                is ResultNetwork.Failure -> {
-                    _uiState.value = SetpointAdjustViewModelState.ErrorNetworkConnection(ERROR_UPDATE_MESSAGE)
-                }
-                is ResultNetwork.Success -> {
-                    if (responseApi.data == 0) _uiState.value = SetpointAdjustViewModelState.Error(ConstantsApp.ERROR_API_UPDATE_VALUE)
-                    else _uiState.value = SetpointAdjustViewModelState.SuccessUpdateValues(responseApi.data)
-                }
-            }
+            val responseApi = repository.getThingSpeakSetPointValues()
+            val thingSpeakResponse = handleResponseApi(responseApi)
+            adjustValuesInListFeed(mutableListOf(thingSpeakResponse))
+        }
+    }
+
+    private fun handleResponseApi(responseApi: ResultNetwork<ThingSpeakResponse>): ThingSpeakResponse {
+        return when (responseApi) {
+            is ResultNetwork.Failure -> ThingSpeakResponse(null, emptyList())
+            is ResultNetwork.Success -> responseApi.data
+        }
+    }
+
+    private fun adjustValuesInListFeed(listReceive: List<ThingSpeakResponse>){
+
+        if (listReceive.first().feeds.isEmpty() || listReceive.first().channel == null) {
+            _uiState.value = SetpointAdjustViewModelState.Error(ConstantsApp.ERROR_API_UPDATE_VALUE)
+            return
+        }
+        listReceive.forEach { response ->
+            val newFeedList = mutableListOf(
+                Feeds(
+                    fieldName = response.channel?.field1,
+                    fieldValue = response.feeds.first()?.field1,
+                    fieldData = response.feeds.first()?.created_at
+                ),
+                Feeds(
+                    fieldName = response.channel?.field2,
+                    fieldValue = response.feeds.first()?.field2,
+                    fieldData = response.feeds.first()?.created_at
+                ),
+                Feeds(
+                    fieldName = response.channel?.field3,
+                    fieldValue = response.feeds.first()?.field3,
+                    fieldData = response.feeds.first()?.created_at
+                ),
+                Feeds(
+                    fieldName = response.channel?.field4,
+                    fieldValue = response.feeds.first()?.field4,
+                    fieldData = response.feeds.first()?.created_at
+                ),
+                Feeds(
+                    fieldName = response.channel?.field5,
+                    fieldValue = response.feeds.first()?.field5,
+                    fieldData = response.feeds.first()?.created_at
+                ),
+                Feeds(
+                    fieldName = response.channel?.field6,
+                    fieldValue = response.feeds.first()?.field6,
+                    fieldData = response.feeds.first()?.created_at
+                ),
+                Feeds(
+                    fieldName = response.channel?.field7,
+                    fieldValue = response.feeds.first()?.field7,
+                    fieldData = response.feeds.first()?.created_at
+                ),
+                Feeds(
+                    fieldName = response.channel?.field8,
+                    fieldValue = response.feeds.first()?.field8,
+                    fieldData = response.feeds.first()?.created_at
+                ),
+            )
+            _uiState.value = SetpointAdjustViewModelState.SuccessUpdateSetpoint(newFeedList)
         }
     }
 }
@@ -64,5 +127,5 @@ sealed interface SetpointAdjustViewModelState {
 
     data object Loading : SetpointAdjustViewModelState
 
-    data class SuccessUpdateValues (val value: Int) : SetpointAdjustViewModelState
+    data class SuccessUpdateSetpoint (val feeds: MutableList<Feeds> = mutableListOf()) : SetpointAdjustViewModelState
 }

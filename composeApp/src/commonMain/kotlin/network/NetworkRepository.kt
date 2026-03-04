@@ -16,7 +16,7 @@ import secrets.BuildConfig
 
 class NetworkRepository(private val client: HttpClient) {
 
-    suspend fun updateFieldValue(
+    suspend fun updateFieldSetpointValue(
         fieldNumber1: Int = 1,
         fieldNumber2: Int = 2,
         fieldNumber3: Int = 3,
@@ -25,12 +25,12 @@ class NetworkRepository(private val client: HttpClient) {
         fieldNumber6: Int = 6,
         fieldNumber7: Int = 7,
         fieldNumber8: Int = 8,
-        value: Int = 10
+        value: Int = 20
     ): ResultNetwork<Int> =
         makeRequest {
             client.get{
                 url(HttpRoutes.REQUEST_URL_UPDATE_FIELDS)
-                parameter("api_key", BuildConfig.API_KEY_WRITE_TEMPERATURE)
+                parameter("api_key", BuildConfig.API_KEY_WRITE_SETPOINT)
                 parameter("field$fieldNumber1", value.toString())
                 parameter("field$fieldNumber2", value.toString())
                 parameter("field$fieldNumber3", value.toString())
