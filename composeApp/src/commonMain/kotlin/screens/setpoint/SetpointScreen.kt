@@ -207,6 +207,7 @@ fun ShowSetpoints(
 ) {
     var progressButtonIsActivated by remember { mutableStateOf(false) }
     var isVisible by remember { mutableStateOf(false) }
+    val decimalRegex = Regex("^-?\\d*(\\.\\d?)?$")
 
     Box(
         modifier = Modifier
@@ -263,7 +264,11 @@ fun ShowSetpoints(
                             if (setpointUiState.errors[i]) Text(viewModel.errorMessage())
                         },
                         placeholder = { Text("${feeds[i].fieldValue}°C") },
-                        onValueChange = { viewModel.onTextChange(i, it) },
+                        onValueChange = { newValue ->
+                            if (decimalRegex.matches(newValue)) {
+                                viewModel.onTextChange(i, newValue)
+                            }
+                        },
                         textStyle = TextStyle(
                             textAlign = TextAlign.Center
                         )
