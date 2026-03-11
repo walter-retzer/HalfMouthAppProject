@@ -1,11 +1,14 @@
 package navigation
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Surface
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
@@ -56,16 +59,26 @@ fun NavHostMain(
             darkTheme = darkTheme,
             dynamicColor = dynamicColor
         ) {
-            Surface(modifier = Modifier.fillMaxSize()) {
-                NavHost(
-                    navController = navController,
-                    startDestination = AppGraphNav.LoginGraph.name,
-                    enterTransition = slideLeftEnterAnimation,
-                    exitTransition = slideLeftExitAnimation,
-                    popEnterTransition = popEnterRightAnimation,
-                    popExitTransition = popExitRightAnimation
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .safeDrawingPadding()
                 ) {
-                    loginNavGraph(navController)
+                    NavHost(
+                        navController = navController,
+                        startDestination = AppGraphNav.LoginGraph.name,
+                        enterTransition = slideLeftEnterAnimation,
+                        exitTransition = slideLeftExitAnimation,
+                        popEnterTransition = popEnterRightAnimation,
+                        popExitTransition = popExitRightAnimation
+                    ) {
+                        loginNavGraph(navController)
+                    }
                 }
             }
         }
