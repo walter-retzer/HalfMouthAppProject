@@ -6,8 +6,9 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import theme.AppTypography
 import theme.darkScheme
-import theme.typography
+
 
 @Composable
 actual fun ScreenTheme(
@@ -26,7 +27,7 @@ actual fun ScreenTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = typography,
+        typography = AppTypography(),
         content = content
     )
 }
