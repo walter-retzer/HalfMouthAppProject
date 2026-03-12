@@ -20,14 +20,15 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import halfmouthappproject.composeapp.generated.resources.Res
 import halfmouthappproject.composeapp.generated.resources.icon_notifications
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.vectorResource
 import theme.primaryDark
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MenuToolbar(
     color: Color = Color.Black,
@@ -45,7 +46,7 @@ fun MenuToolbar(
             scrolledContainerColor = color,
             titleContentColor = titleColor,
         ),
-        title = { Text(title) },
+        title = { Text(title, fontWeight = FontWeight.Bold) },
         navigationIcon = {
             IconButton(onClick = { onNavigationToMenu() }) {
                 Icon(
@@ -100,7 +101,7 @@ fun SimpleToolbar(
             scrolledContainerColor = color,
             titleContentColor = titleColor,
         ),
-        title = { Text(title) },
+        title = { Text(title, fontWeight = FontWeight.Bold) },
         navigationIcon = {
             IconButton(onClick = { onNavigationToMenu() }) {
                 Icon(
@@ -136,7 +137,7 @@ fun ProfileToolbar(
             scrolledContainerColor = color,
             titleContentColor = titleColor,
         ),
-        title = { Text(title) },
+        title = { Text(title, fontWeight = FontWeight.Bold) },
         navigationIcon = {
             IconButton(onClick = { onNavigationIconBack() }) {
                 Icon(
@@ -154,40 +155,5 @@ fun ProfileToolbar(
             }
         },
         scrollBehavior = scrollBehavior
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TicketsToolbar(
-    color: Color = Color.Black,
-    titleColor: Color = primaryDark,
-    title: String,
-    onNavigationIconBack: () -> Unit,
-    onNavigationIconClose: () -> Unit,
-) {
-    CenterAlignedTopAppBar(
-        colors = TopAppBarDefaults.largeTopAppBarColors(
-            containerColor = color,
-            scrolledContainerColor = color,
-            titleContentColor = titleColor,
-        ),
-        title = { Text(title) },
-        navigationIcon = {
-            IconButton(onClick = { onNavigationIconBack() }) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Localized description"
-                )
-            }
-        },
-        actions = {
-            IconButton(onClick = { onNavigationIconClose() }) {
-                Icon(
-                    imageVector = Icons.Default.Close,
-                    contentDescription = "Localized description"
-                )
-            }
-        }
     )
 }
